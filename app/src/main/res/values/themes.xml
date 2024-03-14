@@ -5,6 +5,7 @@
         <item name="colorPrimary">@color/blue1</item>
         <item name="colorPrimaryVariant">@color/blue1</item>
         <item name="android:statusBarColor">@color/blue1</item>
+
     </style>
 
     <style name="Theme.WeatherApplication" parent="Base.Theme.WeatherApplication" />
