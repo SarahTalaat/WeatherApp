@@ -10,7 +10,7 @@ import com.example.productsmvvm.FavouriteProducts.FavouriteProductsViewModel.Fav
 import com.example.productsmvvm.FavouriteProducts.FavouriteProductsViewModel.FavouriteProductsViewModelFactory_LDS
 import com.example.productsmvvm.Model.Products
 import com.example.productsmvvm.Model.ProductsRepositoryImplementation
-import com.example.productsmvvm.Network.ProductsRemoteDataSourceImplementation
+import com.example.productsmvvm.Network.WeatherRemoteDataSourceImplementation
 import com.example.productsmvvm.R
 import java.util.ArrayList
 
@@ -29,7 +29,7 @@ class FavouriteProductsActivity : AppCompatActivity() , OnFavouriteClickListener
         setContentView(R.layout.activity_favourite_products)
 
         favouriteProductsViewModelFactory_Instance_LDS_InFavouriteProductsActivity = FavouriteProductsViewModelFactory_LDS(ProductsRepositoryImplementation.getProductsRepositoryImplementationInstance(
-            ProductsRemoteDataSourceImplementation.getProductsRemoteDataSourceImplementationInstance(),
+            WeatherRemoteDataSourceImplementation.getProductsRemoteDataSourceImplementationInstance(),
             ProductsLocalDataSourceImplementation(this)
         ))
 
