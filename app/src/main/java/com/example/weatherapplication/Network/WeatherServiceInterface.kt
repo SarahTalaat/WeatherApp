@@ -1,7 +1,7 @@
 package com.example.productsmvvm.Network
 
 import com.example.weatherapplication.Model.Forecast
-import com.example.weatherapplication.sampledata.Utils
+import com.example.weatherapplication.Constants.Utils
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

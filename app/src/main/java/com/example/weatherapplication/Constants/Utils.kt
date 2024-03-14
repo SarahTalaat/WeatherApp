@@ -1,4 +1,4 @@
-package com.example.weatherapplication.sampledata
+package com.example.weatherapplication.Constants
 
 class Utils {
 
