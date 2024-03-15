@@ -97,7 +97,7 @@ class CurrentWeatherAdapter: RecyclerView.Adapter<CurrentWeatherAdapter.MyViewHo
 
     var context_Instance_InCurrentWeatherAdapter: Context
     var weatherArrayList_InCurrentWeatherAdapter: ArrayList<Model_WeatherArrayList>
-
+    var timeListSplit: List<String>? = listOf()
   
 
     public constructor(context_Instance_ConstructorParameter_InCurrentWeatherAdapter: Context,
@@ -113,7 +113,7 @@ class CurrentWeatherAdapter: RecyclerView.Adapter<CurrentWeatherAdapter.MyViewHo
         viewType: Int
     ): MyViewHolder_InCurrentWeatherAdapter {
         var inflater: LayoutInflater = context_Instance_InCurrentWeatherAdapter.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as (LayoutInflater)
-        var view: View = inflater.inflate(R.layout.current_day_card,parent,false)
+        var view: View = inflater.inflate(R.layout.card_home_hour,parent,false)
         var myViewHolder_InCurrentWeatherAdapter: MyViewHolder_InCurrentWeatherAdapter = MyViewHolder_InCurrentWeatherAdapter(view)
         return  myViewHolder_InCurrentWeatherAdapter
     }
@@ -124,7 +124,8 @@ class CurrentWeatherAdapter: RecyclerView.Adapter<CurrentWeatherAdapter.MyViewHo
 
     fun settingWeatherArrayList_InCurrentWeatherAdapter(weatherArrayList: ArrayList<Model_WeatherArrayList>){
         Log.i("TAG", "settingWeatherArrayList_InCurrentWeatherAdapter: WeatherArrayList :" + weatherArrayList)
-        this.weatherArrayList_InCurrentWeatherAdapter = weatherArrayList
+        var firstFourElementsOfweatherArrayList: List<Model_WeatherArrayList> = weatherArrayList.take(4)
+        this.weatherArrayList_InCurrentWeatherAdapter = firstFourElementsOfweatherArrayList as ArrayList<Model_WeatherArrayList>
         notifyDataSetChanged()
     }
 
@@ -144,11 +145,16 @@ class CurrentWeatherAdapter: RecyclerView.Adapter<CurrentWeatherAdapter.MyViewHo
 //https://openweathermap.org/img/wn/10d@2x.png
 
     override fun onBindViewHolder(holder: MyViewHolder_InCurrentWeatherAdapter, position: Int) {
-        var imageIconCode: String? = weatherArrayList_InCurrentWeatherAdapter.get(position).modelWeather.get(0).icon
-        var imageUrl_InMyViewHolder_InCurrentWeatherAdapter: String? = "ttps://openweathermap.org/img/wn/$imageIconCode@2x.png"
-        Glide.with(context_Instance_InCurrentWeatherAdapter).load(imageUrl_InMyViewHolder_InCurrentWeatherAdapter).into(holder.img_weatherStatus)
-        holder.tv_time.setText(weatherArrayList_InCurrentWeatherAdapter.get(position).dtTxt)
-        holder.tv_WeatherTempratureDegree.setText(weatherArrayList_InCurrentWeatherAdapter.get(position).modelWind?.deg.toString())
+
+
+            timeListSplit =weatherArrayList_InCurrentWeatherAdapter.get(position).dtTxt?.split(" ")
+            var imageIconCode: String? = weatherArrayList_InCurrentWeatherAdapter.get(position).modelWeather.get(0).icon
+            var imageUrl_InMyViewHolder_InCurrentWeatherAdapter: String? = "https://openweathermap.org/img/wn/$imageIconCode@2x.png"
+            Glide.with(context_Instance_InCurrentWeatherAdapter).load(imageUrl_InMyViewHolder_InCurrentWeatherAdapter).into(holder.img_weatherStatus)
+            holder.tv_time.setText(timeListSplit?.get(1))
+            holder.tv_WeatherTempratureDegree.setText(weatherArrayList_InCurrentWeatherAdapter.get(position).modelWind?.deg.toString() + "°C")
+
+
 
 /*
         holder.btn_addToFavourite_CurrentWeather.setOnClickListener(){

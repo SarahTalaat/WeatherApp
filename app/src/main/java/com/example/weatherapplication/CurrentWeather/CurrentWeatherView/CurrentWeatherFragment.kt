@@ -1,6 +1,7 @@
 package com.example.weatherapplication.CurrentWeather.CurrentWeatherView
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -37,9 +38,13 @@ class CurrentWeatherFragment : Fragment() {
     ): View? {
 
         var view: View = inflater.inflate(R.layout.fragment_home, container, false)
+        var lat_Egypt = "30.033333"
+        var lon_Egypt = "31.233334"
 
-        var x:TextView = view.findViewById(R.id.tv_Date)
-
+        var tv_date_InCurrentWeatherFagment:TextView = view.findViewById(R.id.tv_Date)
+        var tv_country_InCurrentWeatherFagment: TextView = view.findViewById(R.id.tv_Country)
+        var tv_weatherStatus_InCurrentWeatherFagment: TextView = view.findViewById(R.id.tv_weatherState)
+        var tv_degreeOfTemprature_InCurrentWeatherFagment: TextView = view.findViewById(R.id.tv_degreeOfTemprature)
 
         currentWeatherViewModelFactory_Instance_RDS_InCurrentWeatherFragment = CurrentWeatherViewModelFactory_RDS(
             WeatherRepositoryImplementation.getWeatherRepositoryImplementationInstance(
@@ -60,13 +65,38 @@ class CurrentWeatherFragment : Fragment() {
             adapter_Instance_InCurrentWeatherFragment.notifyDataSetChanged()
         }
 
-        var lat_Egypt = "30.033333"
-        var lon_Egypt = "31.233334"
 
-        x.setText(currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getCnt_FromRetrofit_InCurrentWeatherViewModel(lat_Egypt,lon_Egypt,Utils.API_KEY).toString())
+        currentWeatherViewModel_Instance_InCurrentWeatherFragmet.weatherArrayListLiveDataList_InCurrentWeatherViewModel .observe(viewLifecycleOwner){
+                weatherArrayList ->
+            var dateAndTimeFromWeatherArrayList = weatherArrayList.get(8).dtTxt?.split(" ")
+          /*
+            var dateFromDateAndTimeFromWeatherArrayList = dateAndTimeFromWeatherArrayList?.get(0)?.split("-")
+
+            var year = dateFromDateAndTimeFromWeatherArrayList?.get(0)
+            var month = dateFromDateAndTimeFromWeatherArrayList?.get(1)
+            var day = dateFromDateAndTimeFromWeatherArrayList?.get(2)
+           */
+            Log.i("TAG", "onCreateView: weatherStatus: "+ weatherArrayList.get(2).modelWeather.get(0).description)
+            tv_date_InCurrentWeatherFagment.setText(dateAndTimeFromWeatherArrayList?.get(0))
+            tv_weatherStatus_InCurrentWeatherFagment.setText(weatherArrayList.get(2).modelWeather.get(0).description)
+
+        }
+
+        currentWeatherViewModel_Instance_InCurrentWeatherFragmet.cityLiveDataList_InCurrentWeatherViewModel.observe(viewLifecycleOwner){
+            city ->
+            var cityObject = city
+            var city_name = city.name
+            var city_country = city.country
+            var city_coord_lat = city.modelCoord?.lat
+            var city_coord_lon = city.modelCoord?.lon
+
+            Log.i("TAG", "onCreateView: country name: "+city_country)
+            tv_country_InCurrentWeatherFagment.setText(city_country)
+        }
+
 
         currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getList_FromRetrofit_InCurrentWeatherViewModel(lat_Egypt,lon_Egypt,Utils.API_KEY)
-
+        currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getCity_FromRetrofit_InCurrentWeatherViewModel("Al ‘Atabah",Utils.API_KEY)
 
         return view
     }
@@ -84,7 +114,7 @@ class CurrentWeatherFragment : Fragment() {
 
     private fun setUpRecyclerView_InCurrentWeatherActivity(){
         layoutManager_Instance_InCurrentWeatherFragment = LinearLayoutManager(requireContext())
-        layoutManager_Instance_InCurrentWeatherFragment.orientation = RecyclerView.VERTICAL
+        layoutManager_Instance_InCurrentWeatherFragment.orientation = RecyclerView.HORIZONTAL
         adapter_Instance_InCurrentWeatherFragment = CurrentWeatherAdapter(requireContext(), ArrayList())
         recyclerView_Instance_InCurrentWeatherFragment.adapter = adapter_Instance_InCurrentWeatherFragment
         recyclerView_Instance_InCurrentWeatherFragment.layoutManager = layoutManager_Instance_InCurrentWeatherFragment
