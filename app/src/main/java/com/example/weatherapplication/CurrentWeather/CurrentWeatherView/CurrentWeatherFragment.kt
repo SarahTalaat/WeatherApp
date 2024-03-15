@@ -1,7 +1,6 @@
 package com.example.weatherapplication.CurrentWeather.CurrentWeatherView
 
 import android.os.Bundle
-import android.provider.SyncStateContract.Constants
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -41,8 +40,9 @@ class CurrentWeatherFragment : Fragment() {
 
         var x:TextView = view.findViewById(R.id.tv_Date)
 
+
         currentWeatherViewModelFactory_Instance_RDS_InCurrentWeatherFragment = CurrentWeatherViewModelFactory_RDS(
-            WeatherRepositoryImplementation.getProductsRepositoryImplementationInstance(
+            WeatherRepositoryImplementation.getWeatherRepositoryImplementationInstance(
                 WeatherRemoteDataSourceImplementation.getCurrentWeatherRemoteDataSourceImplementation_Instance()
             )
         )
@@ -54,7 +54,7 @@ class CurrentWeatherFragment : Fragment() {
         setUpRecyclerView_InCurrentWeatherActivity()
 
 
-        currentWeatherViewModel_Instance_InCurrentWeatherFragmet.intLiveDataList_InCurrentWeatherViewModel.observe(viewLifecycleOwner){
+        currentWeatherViewModel_Instance_InCurrentWeatherFragmet.weatherArrayListLiveDataList_InCurrentWeatherViewModel.observe(viewLifecycleOwner){
                 weatherArrayList ->
             adapter_Instance_InCurrentWeatherFragment.settingWeatherArrayList_InCurrentWeatherAdapter(weatherArrayList as ArrayList<Model_WeatherArrayList>)
             adapter_Instance_InCurrentWeatherFragment.notifyDataSetChanged()
@@ -62,6 +62,8 @@ class CurrentWeatherFragment : Fragment() {
 
         var lat_Egypt = "30.033333"
         var lon_Egypt = "31.233334"
+
+        x.setText(currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getCnt_FromRetrofit_InCurrentWeatherViewModel(lat_Egypt,lon_Egypt,Utils.API_KEY).toString())
 
         currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getList_FromRetrofit_InCurrentWeatherViewModel(lat_Egypt,lon_Egypt,Utils.API_KEY)
 

@@ -14,7 +14,7 @@ class WeatherRepositoryImplementation private constructor(
 {
     companion object{
         private var instance: WeatherRepositoryImplementation? = null
-        fun getProductsRepositoryImplementationInstance(
+        fun getWeatherRepositoryImplementationInstance(
             weatherRemoteDataSourceInterface: WeatherRemoteDataSourceInterface,
        //     weatherLocalDataSourceInterface: WeatherLocalDataSourceInterface
         ): WeatherRepositoryImplementation{
