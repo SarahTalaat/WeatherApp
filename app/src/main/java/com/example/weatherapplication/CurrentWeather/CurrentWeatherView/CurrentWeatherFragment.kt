@@ -96,7 +96,7 @@ class CurrentWeatherFragment : Fragment() {
 
 
         currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getList_FromRetrofit_InCurrentWeatherViewModel(lat_Egypt,lon_Egypt,Utils.API_KEY)
-        currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getCity_FromRetrofit_InCurrentWeatherViewModel("Al ‘Atabah",Utils.API_KEY)
+        currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getCity_FromRetrofit_InCurrentWeatherViewModel("Boulder Creek",Utils.API_KEY)// ‘Al Atabah
 
         return view
     }
