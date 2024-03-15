@@ -144,7 +144,7 @@ class CurrentWeatherAdapter: RecyclerView.Adapter<CurrentWeatherAdapter.MyViewHo
 //https://openweathermap.org/img/wn/10d@2x.png
 
     override fun onBindViewHolder(holder: MyViewHolder_InCurrentWeatherAdapter, position: Int) {
-        var imageIconCode: String? = weatherArrayList_InCurrentWeatherAdapter.get(position).modelWeather.get(position).icon
+        var imageIconCode: String? = weatherArrayList_InCurrentWeatherAdapter.get(position).modelWeather.get(0).icon
         var imageUrl_InMyViewHolder_InCurrentWeatherAdapter: String? = "ttps://openweathermap.org/img/wn/$imageIconCode@2x.png"
         Glide.with(context_Instance_InCurrentWeatherAdapter).load(imageUrl_InMyViewHolder_InCurrentWeatherAdapter).into(holder.img_weatherStatus)
         holder.tv_time.setText(weatherArrayList_InCurrentWeatherAdapter.get(position).dtTxt)
