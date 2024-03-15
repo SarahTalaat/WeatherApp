@@ -1,5 +1,5 @@
 package com.example.productsmvvm.Database
-
+/*
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
@@ -10,7 +10,7 @@ import com.example.productsmvvm.Model.Products
 @Database(entities = arrayOf(Products::class) , version = 1)
 abstract class AppDatabase: RoomDatabase() {
                 //productsDao
-    abstract fun getAllProducts_FromDAO_InAppDatabase(): ProductsDAOInterface
+    abstract fun getAllProducts_FromDAO_InAppDatabase(): WeatherDAOInterface
 
     companion object{
     //    @Volatile
@@ -30,3 +30,5 @@ abstract class AppDatabase: RoomDatabase() {
     }
 
 }
+
+ */
