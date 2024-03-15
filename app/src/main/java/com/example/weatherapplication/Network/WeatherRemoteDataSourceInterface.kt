@@ -1,5 +1,6 @@
 package com.example.productsmvvm.Network
 
+import com.example.weatherapplication.Model.Model_Forecast
 import com.example.weatherapplication.Model_City
 import com.example.weatherapplication.Model_WeatherArrayList
 
@@ -11,6 +12,7 @@ interface WeatherRemoteDataSourceInterface {
 
    // suspend fun getCurrentWeatherOverNetwork_InRDS(): Model_Forecast
 
+    suspend fun getForecast_OverNetwork_InRDS(lat: String, lon: String, appid: String): Model_Forecast?
     suspend fun getCod_OverNetwork_InRDS(lat: String, lon: String, appid: String): String?
     suspend fun getMessage_OverNetwork_InRDS(lat: String, lon: String, appid: String): Int?
     suspend fun getCnt_OverNetwork_InRDS(lat: String, lon: String, appid: String): Int?

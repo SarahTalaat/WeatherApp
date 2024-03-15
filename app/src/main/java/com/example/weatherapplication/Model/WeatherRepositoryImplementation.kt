@@ -3,6 +3,7 @@ package com.example.productsmvvm.Model
 //import com.example.productsmvvm.Database.WeatherLocalDataSourceInterface
 import android.util.Log
 import com.example.productsmvvm.Network.WeatherRemoteDataSourceInterface
+import com.example.weatherapplication.Model.Model_Forecast
 import com.example.weatherapplication.Model_City
 import com.example.weatherapplication.Model_WeatherArrayList
 
@@ -72,6 +73,15 @@ class WeatherRepositoryImplementation private constructor(
     ): Model_City? {
         Log.i("TAG", "getCity_FromRDS_InProductsRepository: " + weatherRemoteDataSourceInterface_Instance.getCity_OverNetwork_InRDS(city, appid))
         return weatherRemoteDataSourceInterface_Instance.getCity_OverNetwork_InRDS(city, appid)
+    }
+
+    override suspend fun getForecast_FromRDS_InProductsRepository(
+        lat: String,
+        lon: String,
+        appid: String
+    ): Model_Forecast? {
+        Log.i("TAG", "getForecast_FromRDS_InProductsRepository: "+  weatherRemoteDataSourceInterface_Instance.getForecast_OverNetwork_InRDS(lat, lon, appid))
+        return  weatherRemoteDataSourceInterface_Instance.getForecast_OverNetwork_InRDS(lat, lon, appid)
     }
 
 

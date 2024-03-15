@@ -1,6 +1,7 @@
 package com.example.productsmvvm.Network
 
 import android.util.Log
+import com.example.weatherapplication.Model.Model_Forecast
 import com.example.weatherapplication.Model_City
 import com.example.weatherapplication.Model_WeatherArrayList
 
@@ -30,6 +31,16 @@ class WeatherRemoteDataSourceImplementation private constructor() : WeatherRemot
                 temp
             }
         }
+    }
+
+    override suspend fun getForecast_OverNetwork_InRDS(
+        lat: String,
+        lon: String,
+        appid: String
+    ): Model_Forecast? {
+        val response = weatherService.getCurrentWeather_FromApiEndPoint_InWeatherService(lat,lon,appid)
+        Log.i("TAG", "getForecast_OverNetwork_InRDS: response: " + response)
+        return response
     }
 
     override suspend fun getCod_OverNetwork_InRDS(lat: String, lon: String, appid: String): String? {

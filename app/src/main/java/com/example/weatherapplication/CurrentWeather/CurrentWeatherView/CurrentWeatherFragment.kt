@@ -37,7 +37,7 @@ class CurrentWeatherFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        var view: View = inflater.inflate(R.layout.fragment_home, container, false)
+        var view: View = inflater.inflate(R.layout.fragment_home_2, container, false)
         var lat_Egypt = "30.033333"
         var lon_Egypt = "31.233334"
 
@@ -79,6 +79,8 @@ class CurrentWeatherFragment : Fragment() {
             Log.i("TAG", "onCreateView: weatherStatus: "+ weatherArrayList.get(2).modelWeather.get(0).description)
             tv_date_InCurrentWeatherFagment.setText(dateAndTimeFromWeatherArrayList?.get(0))
             tv_weatherStatus_InCurrentWeatherFagment.setText(weatherArrayList.get(2).modelWeather.get(0).description)
+
+          //  var tempratureFehrenheit = weatherArrayList.get()
 
         }
 
