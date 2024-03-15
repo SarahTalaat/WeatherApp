@@ -3,7 +3,7 @@ package com.example.productsmvvm.Model
 //import com.example.productsmvvm.Database.WeatherLocalDataSourceInterface
 import com.example.productsmvvm.Network.WeatherRemoteDataSourceInterface
 import com.example.weatherapplication.Model_City
-import com.example.weatherapplication.Model_WeatherList
+import com.example.weatherapplication.Model_WeatherArrayList
 
 //Singleton
 class WeatherRepositoryImplementation private constructor(
@@ -56,7 +56,7 @@ class WeatherRepositoryImplementation private constructor(
         lat: String,
         lon: String,
         appid: String
-    ): ArrayList<Model_WeatherList> {
+    ): ArrayList<Model_WeatherArrayList> {
         return  weatherRemoteDataSourceInterface_Instance.getList_OverNetwork_InRDS(lat, lon, appid)
     }
 

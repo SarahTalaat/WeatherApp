@@ -1,21 +1,16 @@
 package com.example.productsmvvm.AllProducts.AllProductsView
 
 import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.productsmvvm.AllProducts.AllProductsViewModel.CurrentWeatherViewModel
 import com.example.productsmvvm.AllProducts.AllProductsViewModel.CurrentWeatherViewModelFactory_RDS
-import com.example.productsmvvm.Database.WeatherLocalDataSourceImplementation
-import com.example.productsmvvm.FavouriteProducts.FavouriteProductsViewModel.FavouriteProductsViewModel
-import com.example.productsmvvm.FavouriteProducts.FavouriteProductsViewModel.FavouriteProductsViewModelFactory_LDS
-import com.example.productsmvvm.Model.Products
-import com.example.productsmvvm.Model.WeatherRepositoryImplementation
-import com.example.productsmvvm.Network.WeatherRemoteDataSourceImplementation
-import com.example.weatherapplication.R
-import java.util.ArrayList
+//import com.example.productsmvvm.Database.WeatherLocalDataSourceImplementation
+//import com.example.productsmvvm.FavouriteProducts.FavouriteProductsViewModel.FavouriteProductsViewModel
+//import com.example.productsmvvm.FavouriteProducts.FavouriteProductsViewModel.FavouriteProductsViewModelFactory_LDS
+//import com.example.productsmvvm.Model.Products
 
+/*
 class CurrentCurrentWeatherActivity : AppCompatActivity() , OnCurrentWeatherClickListenerInterface{
     private lateinit var favouriteProductsViewModelFactory_Instance_LDS_InAllProductsActivity: FavouriteProductsViewModelFactory_LDS
     private lateinit var allProductsViewModelFactory_Instance_RDS_InAllProductsActivity: CurrentWeatherViewModelFactory_RDS
@@ -54,7 +49,7 @@ class CurrentCurrentWeatherActivity : AppCompatActivity() , OnCurrentWeatherClic
         initUI_InAllProductsActivity()
         setUpRecyclerView_InAllProductsActivity()
 
-        allProductsViewModel_Instance_InCrrentWeatherActivity.forecastLiveDataList_InAllProductsViewModel.observe(this){
+        allProductsViewModel_Instance_InCrrentWeatherActivity.intLiveDataList_InAllProductsViewModel.observe(this){
                 products ->
             adapter_Instance_InAllProductsActivity.setProductList_InAllProductsAdapter(products as ArrayList<Products>)
             adapter_Instance_InAllProductsActivity.notifyDataSetChanged()
@@ -80,3 +75,4 @@ class CurrentCurrentWeatherActivity : AppCompatActivity() , OnCurrentWeatherClic
         allProductsViewModel_Instance_InCrrentWeatherActivity.insertProduct_InAllProductsViewModel(product)
     }
 }
+*/
