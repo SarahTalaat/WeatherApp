@@ -5,13 +5,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.weatherapplication.Model_City
 import com.example.weatherapplication.Model_WeatherArrayList
 import com.example.weatherapplication.R
 //import com.example.productsmvvm.Model.Products
@@ -98,27 +96,15 @@ class CurrentWeatherAdapter: RecyclerView.Adapter<CurrentWeatherAdapter.MyViewHo
     private final var tab: String = "team"
 
     var context_Instance_InCurrentWeatherAdapter: Context
-    var cod_InCurrentWeatherAdapter: String
-    var message_InCurrentWeatherAdapter: Int
-    var cnt_InCurrentWeatherAdapter: Int
     var weatherArrayList_InCurrentWeatherAdapter: ArrayList<Model_WeatherArrayList>
-    var city_InCurrentWeatherAdapter: Model_City
+
   
 
     public constructor(context_Instance_ConstructorParameter_InCurrentWeatherAdapter: Context,
-                       cod_Instance_ConstructorParameter_InCurrentWeatherAdapter:String,
-                       message_Instance_ConstructorParameter_InCurrentWeatherAdapter: Int,
-                       cnt_Instance_ConstructorParameter_InCurrentWeatherAdapter: Int,
                        weatherArrayList_ConstructorParameter_InCurrentWeatherAdapter: ArrayList<Model_WeatherArrayList>,
-                       city_Instance_ConstructorParameter_InCurrentWeatherAdapter: Model_City){
-
+                       ){
         this.context_Instance_InCurrentWeatherAdapter=context_Instance_ConstructorParameter_InCurrentWeatherAdapter
-        this.cod_InCurrentWeatherAdapter = cod_Instance_ConstructorParameter_InCurrentWeatherAdapter
-        this.message_InCurrentWeatherAdapter = message_Instance_ConstructorParameter_InCurrentWeatherAdapter
-        this.cnt_InCurrentWeatherAdapter = cnt_Instance_ConstructorParameter_InCurrentWeatherAdapter
         this.weatherArrayList_InCurrentWeatherAdapter=weatherArrayList_ConstructorParameter_InCurrentWeatherAdapter
-        this.city_InCurrentWeatherAdapter = city_Instance_ConstructorParameter_InCurrentWeatherAdapter
-
     }
 
 
@@ -136,33 +122,9 @@ class CurrentWeatherAdapter: RecyclerView.Adapter<CurrentWeatherAdapter.MyViewHo
         return weatherArrayList_InCurrentWeatherAdapter.size
     }
 
-    fun setWeatherArrayList_InCurrentWeatherAdapter(weaterArrayList: ArrayList<Model_WeatherArrayList>){
-        Log.i("TAG", "setWeatherArrayList_InCurrentWeatherAdapter: WeatherArrayList :" + weaterArrayList)
-        this.weatherArrayList_InCurrentWeatherAdapter = weaterArrayList
-        notifyDataSetChanged()
-    }
-
-    fun setCod_InCurrentWeatherAdapter(cod: String){
-        Log.i("TAG", "setCod_InCurrentWeatherAdapter: cod:  " + cod)
-        cod_InCurrentWeatherAdapter = cod
-        notifyDataSetChanged()
-    }
-
-    fun setMessage_InCurrentWeatherAdapter(message: Int){
-        Log.i("TAG", "setMessage_InCurrentWeatherAdapter: message :" + message)
-        message_InCurrentWeatherAdapter = message
-        notifyDataSetChanged()
-    }
-
-    fun setCnt_InCurrentWeatherAdapter(cnt: Int){
-        Log.i("TAG", "setCnt_InCurrentWeatherAdapter: cnt :" + cnt)
-        cnt_InCurrentWeatherAdapter=cnt
-        notifyDataSetChanged()
-    }
-
-    fun setCity_InCurrentWeatherAdapter(city: Model_City){
-        Log.i("TAG", "setCity_InCurrentWeatherAdapter: city :" + city)
-        city_InCurrentWeatherAdapter=city
+    fun setWeatherArrayList_InCurrentWeatherAdapter(weatherArrayList: ArrayList<Model_WeatherArrayList>){
+        Log.i("TAG", "setWeatherArrayList_InCurrentWeatherAdapter: WeatherArrayList :" + weatherArrayList)
+        this.weatherArrayList_InCurrentWeatherAdapter = weatherArrayList
         notifyDataSetChanged()
     }
 
@@ -181,7 +143,7 @@ class CurrentWeatherAdapter: RecyclerView.Adapter<CurrentWeatherAdapter.MyViewHo
     }
 
     override fun onBindViewHolder(holder: MyViewHolder_InCurrentWeatherAdapter, position: Int) {
-        var imageUrl_InMyViewHolder_InCurrentWeatherAdapter: String = weatherArrayList_InCurrentWeatherAdapter.get(position).thumbnail
+        var imageUrl_InMyViewHolder_InCurrentWeatherAdapter: String? = weatherArrayList_InCurrentWeatherAdapter.get(position).modelWeather.get(position).icon
         Glide.with(context_Instance_InCurrentWeatherAdapter).load(imageUrl_InMyViewHolder_InCurrentWeatherAdapter).into(holder.img_product_CurrentWeather)
 
         holder.tv_title_value_CurrentWeather.setText(weatherArrayList_InCurrentWeatherAdapter.get(position).title)
