@@ -80,9 +80,10 @@ class CurrentWeatherFragment : Fragment() {
             tv_date_InCurrentWeatherFagment.setText(dateAndTimeFromWeatherArrayList?.get(0))
             tv_weatherStatus_InCurrentWeatherFagment.setText(weatherArrayList.get(2).modelWeather.get(0).description)
 
+            
           //  var tempratureFehrenheit = weatherArrayList.get()
 
-            
+
         }
 
         currentWeatherViewModel_Instance_InCurrentWeatherFragmet.cityLiveDataList_InCurrentWeatherViewModel.observe(viewLifecycleOwner){
