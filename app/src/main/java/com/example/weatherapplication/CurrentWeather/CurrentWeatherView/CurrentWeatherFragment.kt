@@ -82,6 +82,7 @@ class CurrentWeatherFragment : Fragment() {
 
           //  var tempratureFehrenheit = weatherArrayList.get()
 
+            
         }
 
         currentWeatherViewModel_Instance_InCurrentWeatherFragmet.cityLiveDataList_InCurrentWeatherViewModel.observe(viewLifecycleOwner){
