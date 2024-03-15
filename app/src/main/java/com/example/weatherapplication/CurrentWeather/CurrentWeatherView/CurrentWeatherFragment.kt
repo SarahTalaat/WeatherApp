@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -38,6 +39,8 @@ class CurrentWeatherFragment : Fragment() {
 
         var view: View = inflater.inflate(R.layout.fragment_home, container, false)
 
+        var x:TextView = view.findViewById(R.id.tv_Date)
+
         currentWeatherViewModelFactory_Instance_RDS_InCurrentWeatherFragment = CurrentWeatherViewModelFactory_RDS(
             WeatherRepositoryImplementation.getProductsRepositoryImplementationInstance(
                 WeatherRemoteDataSourceImplementation.getCurrentWeatherRemoteDataSourceImplementation_Instance()
@@ -53,7 +56,7 @@ class CurrentWeatherFragment : Fragment() {
 
         currentWeatherViewModel_Instance_InCurrentWeatherFragmet.intLiveDataList_InCurrentWeatherViewModel.observe(viewLifecycleOwner){
                 weatherArrayList ->
-            adapter_Instance_InCurrentWeatherFragment.setWeatherArrayList_InCurrentWeatherAdapter(weatherArrayList as ArrayList<Model_WeatherArrayList>)
+            adapter_Instance_InCurrentWeatherFragment.settingWeatherArrayList_InCurrentWeatherAdapter(weatherArrayList as ArrayList<Model_WeatherArrayList>)
             adapter_Instance_InCurrentWeatherFragment.notifyDataSetChanged()
         }
 

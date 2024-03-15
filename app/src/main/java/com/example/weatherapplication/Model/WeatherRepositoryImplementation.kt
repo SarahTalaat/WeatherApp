@@ -1,6 +1,7 @@
 package com.example.productsmvvm.Model
 
 //import com.example.productsmvvm.Database.WeatherLocalDataSourceInterface
+import android.util.Log
 import com.example.productsmvvm.Network.WeatherRemoteDataSourceInterface
 import com.example.weatherapplication.Model_City
 import com.example.weatherapplication.Model_WeatherArrayList
@@ -23,6 +24,7 @@ class WeatherRepositoryImplementation private constructor(
                    // weatherLocalDataSourceInterface
                 )
                 instance = temp
+                Log.i("TAG", "getProductsRepositoryImplementationInstance: " + instance)
                 temp
             }
         }
@@ -33,6 +35,7 @@ class WeatherRepositoryImplementation private constructor(
         lon: String,
         appid: String
     ): String? {
+        Log.i("TAG", "getCod_FromRDS_InProductsRepository: "+weatherRemoteDataSourceInterface_Instance.getCod_OverNetwork_InRDS(lat, lon, appid))
         return weatherRemoteDataSourceInterface_Instance.getCod_OverNetwork_InRDS(lat, lon, appid)
     }
 
@@ -41,6 +44,7 @@ class WeatherRepositoryImplementation private constructor(
         lon: String,
         appid: String
     ): Int? {
+        Log.i("TAG", "getMessage_FromRDS_InProductsRepository: "+ weatherRemoteDataSourceInterface_Instance.getMessage_OverNetwork_InRDS(lat, lon, appid))
         return weatherRemoteDataSourceInterface_Instance.getMessage_OverNetwork_InRDS(lat, lon, appid)
     }
 
@@ -49,6 +53,7 @@ class WeatherRepositoryImplementation private constructor(
         lon: String,
         appid: String
     ): Int? {
+        Log.i("TAG", "getCnt_FromRDS_InProductsRepository: "+ weatherRemoteDataSourceInterface_Instance.getCnt_OverNetwork_InRDS(lat, lon, appid))
         return  weatherRemoteDataSourceInterface_Instance.getCnt_OverNetwork_InRDS(lat, lon, appid)
     }
 
@@ -57,6 +62,7 @@ class WeatherRepositoryImplementation private constructor(
         lon: String,
         appid: String
     ): ArrayList<Model_WeatherArrayList> {
+        Log.i("TAG", "getList_FromRDS_InProductsRepository: "+ weatherRemoteDataSourceInterface_Instance.getList_OverNetwork_InRDS(lat, lon, appid))
         return  weatherRemoteDataSourceInterface_Instance.getList_OverNetwork_InRDS(lat, lon, appid)
     }
 
@@ -64,6 +70,7 @@ class WeatherRepositoryImplementation private constructor(
         city: String,
         appid: String
     ): Model_City? {
+        Log.i("TAG", "getCity_FromRDS_InProductsRepository: " + weatherRemoteDataSourceInterface_Instance.getCity_OverNetwork_InRDS(city, appid))
         return weatherRemoteDataSourceInterface_Instance.getCity_OverNetwork_InRDS(city, appid)
     }
 

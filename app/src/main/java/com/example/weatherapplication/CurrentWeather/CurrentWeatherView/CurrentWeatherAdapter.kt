@@ -103,8 +103,8 @@ class CurrentWeatherAdapter: RecyclerView.Adapter<CurrentWeatherAdapter.MyViewHo
     public constructor(context_Instance_ConstructorParameter_InCurrentWeatherAdapter: Context,
                        weatherArrayList_ConstructorParameter_InCurrentWeatherAdapter: ArrayList<Model_WeatherArrayList>,
                        ){
-        this.context_Instance_InCurrentWeatherAdapter=context_Instance_ConstructorParameter_InCurrentWeatherAdapter
-        this.weatherArrayList_InCurrentWeatherAdapter=weatherArrayList_ConstructorParameter_InCurrentWeatherAdapter
+        this.context_Instance_InCurrentWeatherAdapter = context_Instance_ConstructorParameter_InCurrentWeatherAdapter
+        this.weatherArrayList_InCurrentWeatherAdapter = weatherArrayList_ConstructorParameter_InCurrentWeatherAdapter
     }
 
 
@@ -122,8 +122,8 @@ class CurrentWeatherAdapter: RecyclerView.Adapter<CurrentWeatherAdapter.MyViewHo
         return weatherArrayList_InCurrentWeatherAdapter.size
     }
 
-    fun setWeatherArrayList_InCurrentWeatherAdapter(weatherArrayList: ArrayList<Model_WeatherArrayList>){
-        Log.i("TAG", "setWeatherArrayList_InCurrentWeatherAdapter: WeatherArrayList :" + weatherArrayList)
+    fun settingWeatherArrayList_InCurrentWeatherAdapter(weatherArrayList: ArrayList<Model_WeatherArrayList>){
+        Log.i("TAG", "settingWeatherArrayList_InCurrentWeatherAdapter: WeatherArrayList :" + weatherArrayList)
         this.weatherArrayList_InCurrentWeatherAdapter = weatherArrayList
         notifyDataSetChanged()
     }
