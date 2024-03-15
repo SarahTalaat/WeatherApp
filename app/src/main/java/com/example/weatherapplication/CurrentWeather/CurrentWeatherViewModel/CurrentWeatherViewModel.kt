@@ -39,16 +39,16 @@ class CurrentWeatherViewModel(private val currentWeatherRepositoryInterface_Inst
 
 
     private var stringMutableLiveData_InCurrentWeatherViewModel: MutableLiveData<String> = MutableLiveData<String>()
-    val stringLiveDataList_InAllProductsViewModel: LiveData<String> = stringMutableLiveData_InCurrentWeatherViewModel
+    val stringLiveDataList_InCurrentWeatherViewModel: LiveData<String> = stringMutableLiveData_InCurrentWeatherViewModel
 
     private var intMutableLiveData_InCurrentWeatherViewModel: MutableLiveData<Int> = MutableLiveData<Int>()
-    val intLiveDataList_InAllProductsViewModel: LiveData<Int> = intMutableLiveData_InCurrentWeatherViewModel
+    val intLiveDataList_InCurrentWeatherViewModel: LiveData<Int> = intMutableLiveData_InCurrentWeatherViewModel
 
     private var weatherArrayListMutableLiveData_InCurrentWeatherViewModel: MutableLiveData<ArrayList<Model_WeatherArrayList>> = MutableLiveData<ArrayList<Model_WeatherArrayList>>()
-    val weatherArrayListLiveDataList_InAllProductsViewModel: LiveData<ArrayList<Model_WeatherArrayList>> = weatherArrayListMutableLiveData_InCurrentWeatherViewModel
+    val weatherArrayListLiveDataList_InCurrentWeatherViewModel: LiveData<ArrayList<Model_WeatherArrayList>> = weatherArrayListMutableLiveData_InCurrentWeatherViewModel
 
     private var cityMutableLiveData_InCurrentWeatherViewModel: MutableLiveData<Model_City> = MutableLiveData<Model_City>()
-    val cityLiveDataList_InAllProductsViewModel: LiveData<Model_City> = cityMutableLiveData_InCurrentWeatherViewModel
+    val cityLiveDataList_InCurrentWeatherViewModel: LiveData<Model_City> = cityMutableLiveData_InCurrentWeatherViewModel
 
 
     fun getCod_FromRetrofit_InCurrentWeatherViewModel(lat: String, lon: String, appid: String){

@@ -14,7 +14,7 @@ interface WeatherServiceInterface {
     ): Model_Forecast
 
 
-    @GET("weather?")
+    @GET("forecast?")
     suspend fun getWeatherByCity_FromApiEndPoint_InWeatherService(
         @Query("q") city: String,
         @Query("appid") appid: String = Utils.API_KEY
