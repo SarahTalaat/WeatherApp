@@ -1,5 +1,6 @@
 package com.example.productsmvvm.AllProducts.AllProductsViewModel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -39,34 +40,56 @@ class CurrentWeatherViewModel(private val currentWeatherRepositoryInterface_Inst
 
 
     private var stringMutableLiveData_InCurrentWeatherViewModel: MutableLiveData<String> = MutableLiveData<String>()
-    val stringLiveDataList_InAllProductsViewModel: LiveData<String> = stringMutableLiveData_InCurrentWeatherViewModel
+    val stringLiveDataList_InCurrentWeatherViewModel: LiveData<String> = stringMutableLiveData_InCurrentWeatherViewModel
 
     private var intMutableLiveData_InCurrentWeatherViewModel: MutableLiveData<Int> = MutableLiveData<Int>()
-    val intLiveDataList_InAllProductsViewModel: LiveData<Int> = intMutableLiveData_InCurrentWeatherViewModel
+    val intLiveDataList_InCurrentWeatherViewModel: LiveData<Int> = intMutableLiveData_InCurrentWeatherViewModel
 
     private var weatherArrayListMutableLiveData_InCurrentWeatherViewModel: MutableLiveData<ArrayList<Model_WeatherArrayList>> = MutableLiveData<ArrayList<Model_WeatherArrayList>>()
-    val weatherArrayListLiveDataList_InAllProductsViewModel: LiveData<ArrayList<Model_WeatherArrayList>> = weatherArrayListMutableLiveData_InCurrentWeatherViewModel
+    val weatherArrayListLiveDataList_InCurrentWeatherViewModel: LiveData<ArrayList<Model_WeatherArrayList>> = weatherArrayListMutableLiveData_InCurrentWeatherViewModel
 
     private var cityMutableLiveData_InCurrentWeatherViewModel: MutableLiveData<Model_City> = MutableLiveData<Model_City>()
-    val cityLiveDataList_InAllProductsViewModel: LiveData<Model_City> = cityMutableLiveData_InCurrentWeatherViewModel
+    val cityLiveDataList_InCurrentWeatherViewModel: LiveData<Model_City> = cityMutableLiveData_InCurrentWeatherViewModel
 
 
     fun getCod_FromRetrofit_InCurrentWeatherViewModel(lat: String, lon: String, appid: String){
+
+
         viewModelScope.launch(Dispatchers.IO){
+
+            Log.i("TAG", "getCod_FromRetrofit_InCurrentWeatherViewModel: (inside the viewModelScope): lat: $lat , lon: $lon , appid: $appid")
+            Log.i("TAG", "getCod_FromRetrofit_InCurrentWeatherViewModel: (inside the viewModelScope): "+  stringMutableLiveData_InCurrentWeatherViewModel.postValue(
+                currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getCod_FromRDS_InProductsRepository(lat, lon, appid)))
+
+
             stringMutableLiveData_InCurrentWeatherViewModel.postValue(
-                currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getCod_FromRDS_InProductsRepository(lat, lon, appid))
+                currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getCod_FromRDS_InProductsRepository(lat, lon, appid)
+            )
         }
     }
 
     fun getMessage_FromRetrofit_InCurrentWeatherViewModel(lat: String, lon: String, appid: String) {
         viewModelScope.launch(Dispatchers.IO) {
+
+            Log.i("TAG", "getMessage_FromRetrofit_InCurrentWeatherViewModel: (inside the viewModelScope):  lat: $lat , lon: $lon , appid: $appid ")
+            Log.i("TAG", "getMessage_FromRetrofit_InCurrentWeatherViewModel: (inside the viewModelScope): "+ intMutableLiveData_InCurrentWeatherViewModel.postValue(
+                currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getMessage_FromRDS_InProductsRepository(lat, lon, appid)))
+
+
             intMutableLiveData_InCurrentWeatherViewModel.postValue(
-                currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getMessage_FromRDS_InProductsRepository(lat, lon, appid))
+                currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getMessage_FromRDS_InProductsRepository(lat, lon, appid)
+            )
         }
     }
 
     fun getCnt_FromRetrofit_InCurrentWeatherViewModel(lat: String, lon: String, appid: String) {
         viewModelScope.launch(Dispatchers.IO) {
+
+            Log.i("TAG", "getCnt_FromRetrofit_InCurrentWeatherViewModel: (inside the viewModelScope): lat: $lat , lon: $lon , appid: $appid")
+            Log.i("TAG", "getCnt_FromRetrofit_InCurrentWeatherViewModel: (inside the viewModelScope): " + intMutableLiveData_InCurrentWeatherViewModel.postValue(
+                currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getCnt_FromRDS_InProductsRepository(lat, lon, appid)))
+
+
             intMutableLiveData_InCurrentWeatherViewModel.postValue(
                 currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getCnt_FromRDS_InProductsRepository(lat, lon, appid)
             )
@@ -74,7 +97,15 @@ class CurrentWeatherViewModel(private val currentWeatherRepositoryInterface_Inst
     }
 
     fun getList_FromRetrofit_InCurrentWeatherViewModel(lat: String, lon: String, appid: String){
+
+
         viewModelScope.launch(Dispatchers.IO) {
+
+            Log.i("TAG", "getList_FromRetrofit_InCurrentWeatherViewModel: (inside the viewModelScope):  lat: $lat , lon: $lon , appid: $appid")
+            Log.i("TAG", "getList_FromRetrofit_InCurrentWeatherViewModel: (inside the viewModelScope) : "+ weatherArrayListMutableLiveData_InCurrentWeatherViewModel.postValue(
+                currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getList_FromRDS_InProductsRepository(lat, lon, appid)))
+
+
             weatherArrayListMutableLiveData_InCurrentWeatherViewModel.postValue(
                 currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getList_FromRDS_InProductsRepository(lat, lon, appid)
             )
@@ -82,7 +113,16 @@ class CurrentWeatherViewModel(private val currentWeatherRepositoryInterface_Inst
     }
 
     fun getCity_FromRetrofit_InCurrentWeatherViewModel(city: String, appid:String){
+
+
+
         viewModelScope.launch(Dispatchers.IO) {
+
+            Log.i("TAG", "getCity_FromRetrofit_InCurrentWeatherViewModel: (inside the viewModelScope): city: $city , appid: $appid")
+            Log.i("TAG", "getCity_FromRetrofit_InCurrentWeatherViewModel: (inside the viewModelScope): " + cityMutableLiveData_InCurrentWeatherViewModel.postValue(
+                currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getCity_FromRDS_InProductsRepository(city, appid)
+            ))
+
             cityMutableLiveData_InCurrentWeatherViewModel.postValue(
                 currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getCity_FromRDS_InProductsRepository(city, appid)
             )

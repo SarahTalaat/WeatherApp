@@ -11,7 +11,7 @@ data class Model_WeatherArrayList (
   @SerializedName("clouds"     ) var modelClouds     : Model_Clouds?            = Model_Clouds(),
   @SerializedName("wind"       ) var modelWind       : Model_Wind?              = Model_Wind(),
   @SerializedName("visibility" ) var visibility : Int?               = null,
-  @SerializedName("pop"        ) var pop        : Int?               = null,
+  @SerializedName("pop"        ) var pop        : Float?               = null,
   @SerializedName("sys"        ) var modelSys        : Model_Sys?               = Model_Sys(),
   @SerializedName("dt_txt"     ) var dtTxt      : String?            = null
 

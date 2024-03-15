@@ -9,7 +9,7 @@ class CurrentWeatherViewModelFactory_RDS(private val  weatherRepositoryInterface
         return if (modelClass.isAssignableFrom(CurrentWeatherViewModel::class.java)){
             CurrentWeatherViewModel(weatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModelFactory) as T
         }else{
-            throw IllegalArgumentException("Current Weater ViewModel class not found")
+            throw IllegalArgumentException("Current Weather ViewModel class not found")
         }
     }
 }
