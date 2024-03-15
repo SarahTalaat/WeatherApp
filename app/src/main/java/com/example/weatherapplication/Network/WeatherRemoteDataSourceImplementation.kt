@@ -1,7 +1,7 @@
 package com.example.productsmvvm.Network
 
 import com.example.weatherapplication.Model_City
-import com.example.weatherapplication.Model_WeatherList
+import com.example.weatherapplication.Model_WeatherArrayList
 
 private const val TAB = "AllProductsFeature"
 class WeatherRemoteDataSourceImplementation private constructor() : WeatherRemoteDataSourceInterface{
@@ -49,8 +49,8 @@ class WeatherRemoteDataSourceImplementation private constructor() : WeatherRemot
         lat: String,
         lon: String,
         appid: String
-    ): ArrayList<Model_WeatherList> {
-        val respone = weatherService.getCurrentWeather_FromApiEndPoint_InWeatherService(lat, lon, appid).modelWeatherList
+    ): ArrayList<Model_WeatherArrayList> {
+        val respone = weatherService.getCurrentWeather_FromApiEndPoint_InWeatherService(lat, lon, appid).modelWeatherArrayList
         return respone
     }
 

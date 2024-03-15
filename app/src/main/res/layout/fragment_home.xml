@@ -5,7 +5,7 @@
     android:id="@+id/ConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeFragment">
+    tools:context=".CurrentWeather.CurrentWeatherView.CurrentWeatherFragment">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -50,6 +50,7 @@
         android:layout_width="411dp"
         android:layout_height="94dp"
         android:layout_marginTop="35dp"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView" />
@@ -59,6 +60,7 @@
         android:layout_width="407dp"
         android:layout_height="223dp"
         android:layout_marginTop="26dp"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -1,8 +1,7 @@
 package com.example.productsmvvm.Model
 
-import com.example.weatherapplication.Model.Model_Forecast
 import com.example.weatherapplication.Model_City
-import com.example.weatherapplication.Model_WeatherList
+import com.example.weatherapplication.Model_WeatherArrayList
 
 interface WeatherRepositoryInterface {
 
@@ -16,7 +15,7 @@ interface WeatherRepositoryInterface {
     suspend fun getCod_FromRDS_InProductsRepository(lat: String, lon: String, appid: String): String?
     suspend fun getMessage_FromRDS_InProductsRepository(lat: String, lon: String, appid: String): Int?
     suspend fun getCnt_FromRDS_InProductsRepository(lat: String, lon: String, appid: String): Int?
-    suspend fun getList_FromRDS_InProductsRepository(lat: String, lon: String, appid: String): ArrayList<Model_WeatherList>
+    suspend fun getList_FromRDS_InProductsRepository(lat: String, lon: String, appid: String): ArrayList<Model_WeatherArrayList>
     suspend fun getCity_FromRDS_InProductsRepository(city: String, appid:String): Model_City?
 
 

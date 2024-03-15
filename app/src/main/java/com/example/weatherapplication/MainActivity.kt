@@ -2,7 +2,6 @@ package com.example.weatherapplication
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Gravity
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
@@ -10,6 +9,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import com.example.weatherapplication.CurrentWeather.CurrentWeatherView.CurrentWeatherFragment
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
         if (savedInstanceState==null){
-            replaceFragment(HomeFragment())
+            replaceFragment(CurrentWeatherFragment())
             navigationView.setCheckedItem(R.id.nav_home)
         }
     }
@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.nav_home -> replaceFragment(HomeFragment())
+            R.id.nav_home -> replaceFragment(CurrentWeatherFragment())
             R.id.nav_favourites -> replaceFragment(FavouriteFragment())
             R.id.nav_alerts -> replaceFragment(AlertsFragment())
             R.id.nav_settings -> replaceFragment(SettingsFragment())

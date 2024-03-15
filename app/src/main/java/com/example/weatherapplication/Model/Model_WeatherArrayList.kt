@@ -3,7 +3,7 @@ package com.example.weatherapplication
 import com.google.gson.annotations.SerializedName
 
 
-data class Model_WeatherList (
+data class Model_WeatherArrayList (
 
   @SerializedName("dt"         ) var dt         : Int?               = null,
   @SerializedName("main"       ) var modelMain       : Model_Main?              = Model_Main(),
