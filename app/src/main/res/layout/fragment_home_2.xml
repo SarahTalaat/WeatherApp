@@ -3,12 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:backgroundTint="#FFFFFF">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ConstraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/blue4"
+        android:backgroundTint="@color/blue4"
         tools:context=".CurrentWeather.CurrentWeatherView.CurrentWeatherFragment">
 
         <androidx.cardview.widget.CardView
@@ -43,9 +46,10 @@
                     android:id="@+id/tv_weatherState"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="116dp"
-                    android:layout_marginTop="36dp"
+                    android:layout_marginStart="88dp"
+                    android:layout_marginTop="20dp"
                     android:hint="Weather State"
+                    android:textSize="24sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -53,12 +57,24 @@
                     android:id="@+id/tv_degreeOfTemprature"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="52dp"
+                    android:layout_marginTop="10dp"
                     android:hint="DegreeOfTemprature"
-                    android:textSize="20sp"
+                    android:textSize="24sp"
                     app:layout_constraintEnd_toEndOf="@+id/tv_weatherState"
                     app:layout_constraintStart_toStartOf="@+id/tv_weatherState"
                     app:layout_constraintTop_toBottomOf="@+id/tv_weatherState" />
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="213dp"
+                    android:layout_height="91dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_degreeOfTemprature"
+                    app:layout_constraintHorizontal_bias="0.514"
+                    app:layout_constraintStart_toStartOf="@+id/tv_degreeOfTemprature"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_degreeOfTemprature"
+                    app:srcCompat="@drawable/weather_icon" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
@@ -66,7 +82,7 @@
             android:id="@+id/rv_hours"
             android:layout_width="405dp"
             android:layout_height="450dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="50dp"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -90,6 +106,7 @@
             android:layout_marginStart="168dp"
             android:layout_marginTop="50dp"
             android:hint="Country"
+            android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -99,8 +116,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
             android:hint="Date"
+            android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="@+id/tv_Country"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.371"
             app:layout_constraintStart_toStartOf="@+id/tv_Country"
             app:layout_constraintTop_toBottomOf="@+id/tv_Country" />
 

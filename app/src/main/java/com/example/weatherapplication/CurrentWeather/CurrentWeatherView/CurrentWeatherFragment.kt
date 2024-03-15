@@ -59,16 +59,16 @@ class CurrentWeatherFragment : Fragment() {
         setUpRecyclerView_InCurrentWeatherActivity()
 
 
-        currentWeatherViewModel_Instance_InCurrentWeatherFragmet.weatherArrayListLiveDataList_InCurrentWeatherViewModel.observe(viewLifecycleOwner){
-                weatherArrayList ->
-            adapter_Instance_InCurrentWeatherFragment.settingWeatherArrayList_InCurrentWeatherAdapter(weatherArrayList as ArrayList<Model_WeatherArrayList>)
+        currentWeatherViewModel_Instance_InCurrentWeatherFragmet.forecastLiveDataList_InCurrentWeatherViewModel.observe(viewLifecycleOwner){
+                forecastModel ->
+            adapter_Instance_InCurrentWeatherFragment.settingWeatherArrayList_InCurrentWeatherAdapter(forecastModel.modelWeatherArrayList)
             adapter_Instance_InCurrentWeatherFragment.notifyDataSetChanged()
         }
 
 
-        currentWeatherViewModel_Instance_InCurrentWeatherFragmet.weatherArrayListLiveDataList_InCurrentWeatherViewModel .observe(viewLifecycleOwner){
-                weatherArrayList ->
-            var dateAndTimeFromWeatherArrayList = weatherArrayList.get(8).dtTxt?.split(" ")
+        currentWeatherViewModel_Instance_InCurrentWeatherFragmet.forecastLiveDataList_InCurrentWeatherViewModel.observe(viewLifecycleOwner){
+                forecastModel ->
+            var dateAndTimeFromWeatherArrayList = forecastModel.modelWeatherArrayList.get(8).dtTxt?.split(" ")
           /*
             var dateFromDateAndTimeFromWeatherArrayList = dateAndTimeFromWeatherArrayList?.get(0)?.split("-")
 
@@ -76,31 +76,27 @@ class CurrentWeatherFragment : Fragment() {
             var month = dateFromDateAndTimeFromWeatherArrayList?.get(1)
             var day = dateFromDateAndTimeFromWeatherArrayList?.get(2)
            */
-            Log.i("TAG", "onCreateView: weatherStatus: "+ weatherArrayList.get(2).modelWeather.get(0).description)
+            Log.i("TAG", "onCreateView: weatherStatus: "+ forecastModel.modelWeatherArrayList.get(2).modelWeather.get(0).description)
             tv_date_InCurrentWeatherFagment.setText(dateAndTimeFromWeatherArrayList?.get(0))
-            tv_weatherStatus_InCurrentWeatherFagment.setText(weatherArrayList.get(2).modelWeather.get(0).description)
+            tv_weatherStatus_InCurrentWeatherFagment.setText(forecastModel.modelWeatherArrayList.get(2).modelWeather.get(0).description)
 
-            
-          //  var tempratureFehrenheit = weatherArrayList.get()
-
-
+            var tempratureFehrenheit = forecastModel.modelWeatherArrayList.get(0).modelMain?.temp
+            var tempratureCelsius = tempratureFehrenheit?.minus(273.15)
+            val tempFormated = String.format("%.2f", tempratureCelsius)
+            tv_degreeOfTemprature_InCurrentWeatherFagment.setText(tempFormated+"°C")
         }
 
-        currentWeatherViewModel_Instance_InCurrentWeatherFragmet.cityLiveDataList_InCurrentWeatherViewModel.observe(viewLifecycleOwner){
-            city ->
-            var cityObject = city
-            var city_name = city.name
-            var city_country = city.country
-            var city_coord_lat = city.modelCoord?.lat
-            var city_coord_lon = city.modelCoord?.lon
+        currentWeatherViewModel_Instance_InCurrentWeatherFragmet.forecastLiveDataList_InCurrentWeatherViewModel.observe(viewLifecycleOwner){
+            forecastModel ->
 
-            Log.i("TAG", "onCreateView: country name: "+city_country)
-            tv_country_InCurrentWeatherFagment.setText(city_country)
+            var countryName = forecastModel.modelCity?.country
+            tv_country_InCurrentWeatherFagment.setText(countryName)
         }
 
 
         currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getList_FromRetrofit_InCurrentWeatherViewModel(lat_Egypt,lon_Egypt,Utils.API_KEY)
-        currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getCity_FromRetrofit_InCurrentWeatherViewModel("Boulder Creek",Utils.API_KEY)// ‘Al Atabah
+      //  currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getCity_FromRetrofit_InCurrentWeatherViewModel("Boulder Creek",Utils.API_KEY)// ‘Al Atabah
+        currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getForecast_FromRetrofit_InCurrentWeatherViewModel(lat_Egypt,lon_Egypt,Utils.API_KEY)
 
         return view
     }
@@ -122,6 +118,10 @@ class CurrentWeatherFragment : Fragment() {
         adapter_Instance_InCurrentWeatherFragment = CurrentWeatherAdapter(requireContext(), ArrayList())
         recyclerView_Instance_InCurrentWeatherFragment.adapter = adapter_Instance_InCurrentWeatherFragment
         recyclerView_Instance_InCurrentWeatherFragment.layoutManager = layoutManager_Instance_InCurrentWeatherFragment
+    }
+
+    fun setCardImage(view:View){
+
     }
 
 }

@@ -11,7 +11,7 @@
         android:id="@+id/cardView"
         android:layout_width="328dp"
         android:layout_height="210dp"
-        android:layout_marginStart="50dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="30dp"
         app:cardBackgroundColor="@color/blue3"
         app:cardCornerRadius="20dp"
