@@ -37,7 +37,7 @@ class CurrentWeatherFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        var view: View = inflater.inflate(R.layout.fragment_home, container, false)
+        var view: View = inflater.inflate(R.layout.fragment_home_2, container, false)
         var lat_Egypt = "30.033333"
         var lon_Egypt = "31.233334"
 
@@ -80,6 +80,9 @@ class CurrentWeatherFragment : Fragment() {
             tv_date_InCurrentWeatherFagment.setText(dateAndTimeFromWeatherArrayList?.get(0))
             tv_weatherStatus_InCurrentWeatherFagment.setText(weatherArrayList.get(2).modelWeather.get(0).description)
 
+          //  var tempratureFehrenheit = weatherArrayList.get()
+
+            
         }
 
         currentWeatherViewModel_Instance_InCurrentWeatherFragmet.cityLiveDataList_InCurrentWeatherViewModel.observe(viewLifecycleOwner){
@@ -96,7 +99,7 @@ class CurrentWeatherFragment : Fragment() {
 
 
         currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getList_FromRetrofit_InCurrentWeatherViewModel(lat_Egypt,lon_Egypt,Utils.API_KEY)
-        currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getCity_FromRetrofit_InCurrentWeatherViewModel("Al ‘Atabah",Utils.API_KEY)
+        currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getCity_FromRetrofit_InCurrentWeatherViewModel("Boulder Creek",Utils.API_KEY)// ‘Al Atabah
 
         return view
     }
