@@ -112,7 +112,7 @@ class CurrentWeatherAdapter_Day: RecyclerView.Adapter<CurrentWeatherAdapter_Day.
                 0
             ).description
         )
-
+ 
         var minTemp =
             weatherArrayList_InCurrentWeatherAdapter_Day.get(position + 1).modelMain?.tempMin.toString()
         var maxTemp =
