@@ -46,7 +46,7 @@ class CurrentWeatherAdapter_Day: RecyclerView.Adapter<CurrentWeatherAdapter_Day.
             context_Instance_InCurrentWeatherAdapter_Day.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE
             ) as (LayoutInflater)
-        var view: View = inflater.inflate(R.layout.card_hom_day, parent, false)
+        var view: View = inflater.inflate(R.layout.card_home_day, parent, false)
         var myViewHolder_InCurrentWeatherAdapterDay: MyViewHolder_InCurrentWeatherAdapter_Day =
             MyViewHolder_InCurrentWeatherAdapter_Day(view)
         return myViewHolder_InCurrentWeatherAdapterDay
@@ -61,6 +61,22 @@ class CurrentWeatherAdapter_Day: RecyclerView.Adapter<CurrentWeatherAdapter_Day.
             "TAG",
             "settingWeatherArrayList_InCurrentWeatherAdapter_Day: WeatherArrayList :" + weatherArrayList
         )
+/*
+        var dateAndTimeFromWeatherArrayList =
+            weatherArrayList_InCurrentWeatherAdapter_Day.get()
+        var dayToBeShownBasedOnTime = dateAndTimeFromWeatherArrayList?.get(1)
+        Log.i("TAG", "onBindViewHolder: Day adapter: dateAndTimeFromWeatherArrayList?.get(1): "+ dateAndTimeFromWeatherArrayList?.get(1) )
+        Log.i("TAG", "onBindViewHolder: Day adapter: dateAndTimeFromWeatherArrayList?.get(0): "+ dateAndTimeFromWeatherArrayList?.get(0) )
+
+ */
+
+        for(i in 0 until weatherArrayList.size){
+            var allDaysExceptFirstDayArrayList = weatherArrayList[i]
+            Log.i("TAG", "settingWeatherArrayList_InCurrentWeatherAdapter: Day Adapter: allDaysExceptFirstDayArrayList: "+ allDaysExceptFirstDayArrayList)
+        }
+
+
+
         this.weatherArrayList_InCurrentWeatherAdapter_Day = weatherArrayList
         notifyDataSetChanged()
     }
@@ -88,38 +104,53 @@ class CurrentWeatherAdapter_Day: RecyclerView.Adapter<CurrentWeatherAdapter_Day.
     override fun onBindViewHolder(holder: MyViewHolder_InCurrentWeatherAdapter_Day, position: Int) {
 
 
-        var imageIconCode: String? =
-            weatherArrayList_InCurrentWeatherAdapter_Day.get(position + 1).modelWeather.get(0).icon
-        var imageUrl_InMyViewHolder_InCurrentWeatherAdapter_Day: String? =
-            "https://openweathermap.org/img/wn/$imageIconCode@2x.png"
-        Glide.with(context_Instance_InCurrentWeatherAdapter_Day)
-            .load(imageUrl_InMyViewHolder_InCurrentWeatherAdapter_Day).into(holder.img_day)
-
-
         var dateAndTimeFromWeatherArrayList =
-            weatherArrayList_InCurrentWeatherAdapter_Day.get(position + 1).dtTxt?.split(" ")
-
-        var dtTxt = weatherArrayList_InCurrentWeatherAdapter_Day.get(position + 1).dtTxt
-
-        val firstApiFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-        val date = LocalDate.parse(dtTxt , firstApiFormat)
-
-        holder.tv_day.setText(date.dayOfWeek.toString())
+            weatherArrayList_InCurrentWeatherAdapter_Day.get(position + 8).dtTxt?.split(" ")
+        var dayToBeShownBasedOnTime = dateAndTimeFromWeatherArrayList?.get(1)
+        Log.i("TAG", "onBindViewHolder: Day adapter: dateAndTimeFromWeatherArrayList?.get(1): "+ dateAndTimeFromWeatherArrayList?.get(1) )
+        Log.i("TAG", "onBindViewHolder: Day adapter: dateAndTimeFromWeatherArrayList?.get(0): "+ dateAndTimeFromWeatherArrayList?.get(0) )
 
 
-        holder.tv_description.setText(
-            weatherArrayList_InCurrentWeatherAdapter_Day.get(position + 1).modelWeather.get(
-                0
-            ).description
-        )
- 
-        var minTemp =
-            weatherArrayList_InCurrentWeatherAdapter_Day.get(position + 1).modelMain?.tempMin.toString()
-        var maxTemp =
-            weatherArrayList_InCurrentWeatherAdapter_Day.get(position + 1).modelMain?.tempMax.toString()
 
-        holder.tv_minTemp.setText("$minTemp°C")
-        holder.tv_maxTemp.setText("$maxTemp°C")
+            var imageIconCode: String? =
+                weatherArrayList_InCurrentWeatherAdapter_Day.get(position + 8).modelWeather.get(0).icon
+            var imageUrl_InMyViewHolder_InCurrentWeatherAdapter_Day: String? =
+                "https://openweathermap.org/img/wn/$imageIconCode@2x.png"
+            Glide.with(context_Instance_InCurrentWeatherAdapter_Day)
+                .load(imageUrl_InMyViewHolder_InCurrentWeatherAdapter_Day).into(holder.img_day)
+
+            var dtTxt = weatherArrayList_InCurrentWeatherAdapter_Day.get(position + 8).dtTxt
+
+            val firstApiFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            val date = LocalDate.parse(dtTxt , firstApiFormat)
+
+            holder.tv_day.setText(date.dayOfWeek.toString())
+
+            holder.tv_description.setText(
+                weatherArrayList_InCurrentWeatherAdapter_Day.get(position + 8).modelWeather.get(
+                    0
+                ).description
+            )
+
+            var minTemp =
+                weatherArrayList_InCurrentWeatherAdapter_Day.get(position + 8).modelMain?.tempMin.toString()
+            var maxTemp =
+                weatherArrayList_InCurrentWeatherAdapter_Day.get(position + 8).modelMain?.tempMax.toString()
+
+        var tempratureFehrenheit_minTemp = weatherArrayList_InCurrentWeatherAdapter_Day.get(position+8).modelMain?.tempMin
+        var tempratureCelsius_minTemp = tempratureFehrenheit_minTemp?.minus(273.15)
+        var tempFormated_minTemp = String.format("%.2f", tempratureCelsius_minTemp)
+
+        var tempratureFehrenheit_maxTemp = weatherArrayList_InCurrentWeatherAdapter_Day.get(position+8).modelMain?.tempMax
+        var tempratureCelsius_maxTemp = tempratureFehrenheit_maxTemp?.minus(273.15)
+        var tempFormated_maxTemp = String.format("%.2f", tempratureCelsius_maxTemp)
+
+
+
+            holder.tv_minTemp.setText("$tempFormated_minTemp°C")
+            holder.tv_maxTemp.setText("$tempFormated_maxTemp°C")
+
+
 
 
     }
