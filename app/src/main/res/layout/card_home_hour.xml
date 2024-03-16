@@ -2,9 +2,10 @@
 
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="110dp"
     android:layout_height="174dp"
-    android:layout_marginStart="144dp"
+    android:layout_marginStart="20dp"
     android:layout_marginTop="10dp"
     app:cardBackgroundColor="@color/blue1"
     app:cardCornerRadius="50dp"
@@ -20,22 +21,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="16dp"
             android:text="TextView"
+            android:textAlignment="center"
             android:textColor="@color/blue4"
+            android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/img_weatherStatus"
-            android:layout_width="45dp"
-            android:layout_height="46dp"
-            android:layout_marginTop="12dp"
+            android:layout_width="74dp"
+            android:layout_height="67dp"
+            android:layout_marginTop="10dp"
             app:layout_constraintEnd_toEndOf="@+id/tv_time"
-            app:layout_constraintHorizontal_bias="0.23"
+            app:layout_constraintHorizontal_bias="0.375"
             app:layout_constraintStart_toStartOf="@+id/tv_time"
             app:layout_constraintTop_toBottomOf="@+id/tv_time"
-            app:srcCompat="@drawable/tend" />
+            app:srcCompat="@drawable/image_10d" />
 
         <TextView
             android:id="@+id/tv_WeatherTempratureDegree"
@@ -43,7 +46,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:text="TextView"
+            android:textAlignment="center"
             android:textColor="@color/blue4"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="@+id/img_weatherStatus"
             app:layout_constraintHorizontal_bias="0.538"
             app:layout_constraintStart_toStartOf="@+id/img_weatherStatus"
