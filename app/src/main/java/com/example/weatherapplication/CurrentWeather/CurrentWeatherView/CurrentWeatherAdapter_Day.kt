@@ -1,6 +1,7 @@
 package com.example.weatherapplication.CurrentWeather.CurrentWeatherView
 
 import android.content.Context
+import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -8,10 +9,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.NonNull
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.weatherapplication.Model_WeatherArrayList
 import com.example.weatherapplication.R
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.ArrayList
 
 class CurrentWeatherAdapter_Day: RecyclerView.Adapter<CurrentWeatherAdapter_Day.MyViewHolder_InCurrentWeatherAdapter_Day> {
@@ -66,17 +70,21 @@ class CurrentWeatherAdapter_Day: RecyclerView.Adapter<CurrentWeatherAdapter_Day.
         var tv_day: TextView
         var img_day: ImageView
         var tv_description: TextView
-        var tv_minMaxTemp: TextView
+        var tv_minTemp: TextView
+        var tv_maxTemp: TextView
+
 
         constructor(@NonNull itemView: View) : super(itemView) {
             tv_day = itemView.findViewById(R.id.tv_day)
             tv_description = itemView.findViewById(R.id.tv_description)
-            tv_minMaxTemp = itemView.findViewById(R.id.tv_MinMaxTemp)
+            tv_minTemp = itemView.findViewById(R.id.tv_Minemp)
             img_day = itemView.findViewById(R.id.img_day)
+            tv_maxTemp = itemView.findViewById(R.id.tv_maxTemp)
 
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: MyViewHolder_InCurrentWeatherAdapter_Day, position: Int) {
 
 
@@ -91,7 +99,13 @@ class CurrentWeatherAdapter_Day: RecyclerView.Adapter<CurrentWeatherAdapter_Day.
         var dateAndTimeFromWeatherArrayList =
             weatherArrayList_InCurrentWeatherAdapter_Day.get(position + 1).dtTxt?.split(" ")
 
-        holder.tv_day.setText(dateAndTimeFromWeatherArrayList?.get(1))
+        var dtTxt = weatherArrayList_InCurrentWeatherAdapter_Day.get(position + 1).dtTxt
+
+        val firstApiFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        val date = LocalDate.parse(dtTxt , firstApiFormat)
+
+        holder.tv_day.setText(date.dayOfWeek.toString())
+
 
         holder.tv_description.setText(
             weatherArrayList_InCurrentWeatherAdapter_Day.get(position + 1).modelWeather.get(
@@ -104,7 +118,8 @@ class CurrentWeatherAdapter_Day: RecyclerView.Adapter<CurrentWeatherAdapter_Day.
         var maxTemp =
             weatherArrayList_InCurrentWeatherAdapter_Day.get(position + 1).modelMain?.tempMax.toString()
 
-        holder.tv_minMaxTemp.setText("$minTemp°C / $maxTemp°C")
+        holder.tv_minTemp.setText("$minTemp°C")
+        holder.tv_maxTemp.setText("$maxTemp°C")
 
 
     }
