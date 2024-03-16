@@ -61,23 +61,21 @@ class CurrentWeatherAdapter_Day: RecyclerView.Adapter<CurrentWeatherAdapter_Day.
             "TAG",
             "settingWeatherArrayList_InCurrentWeatherAdapter_Day: WeatherArrayList :" + weatherArrayList
         )
-/*
-        var dateAndTimeFromWeatherArrayList =
-            weatherArrayList_InCurrentWeatherAdapter_Day.get()
-        var dayToBeShownBasedOnTime = dateAndTimeFromWeatherArrayList?.get(1)
-        Log.i("TAG", "onBindViewHolder: Day adapter: dateAndTimeFromWeatherArrayList?.get(1): "+ dateAndTimeFromWeatherArrayList?.get(1) )
-        Log.i("TAG", "onBindViewHolder: Day adapter: dateAndTimeFromWeatherArrayList?.get(0): "+ dateAndTimeFromWeatherArrayList?.get(0) )
-
- */
 
         for(i in 0 until weatherArrayList.size){
-            var allDaysExceptFirstDayArrayList = weatherArrayList[i]
-            Log.i("TAG", "settingWeatherArrayList_InCurrentWeatherAdapter: Day Adapter: allDaysExceptFirstDayArrayList: "+ allDaysExceptFirstDayArrayList)
+
+            var dtTxt_value = weatherArrayList.get(i).dtTxt
+
+            var dateAndTimeFromWeatherArrayList =
+                dtTxt_value?.split(" ")
+            var timeFromDateAndTime = dateAndTimeFromWeatherArrayList?.get(1)
+            Log.i("TAG", "settingWeatherArrayList_InCurrentWeatherAdapter: Day adapter: dateAndTimeFromWeatherArrayList?.get(1): "+ dateAndTimeFromWeatherArrayList?.get(1) )
+            Log.i("TAG", "settingWeatherArrayList_InCurrentWeatherAdapter: Day adapter: dateAndTimeFromWeatherArrayList?.get(0): "+ dateAndTimeFromWeatherArrayList?.get(0) )
+
+            if(timeFromDateAndTime == "03:00:00"){
+                this.weatherArrayList_InCurrentWeatherAdapter_Day.add(weatherArrayList.get(i))
+            }
         }
-
-
-
-        this.weatherArrayList_InCurrentWeatherAdapter_Day = weatherArrayList
         notifyDataSetChanged()
     }
 
