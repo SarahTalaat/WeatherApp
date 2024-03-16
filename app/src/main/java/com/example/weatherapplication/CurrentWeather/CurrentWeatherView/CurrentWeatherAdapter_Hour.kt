@@ -90,7 +90,7 @@ class CurrentWeatherAdapter: RecyclerView.Adapter<CurrentWeatherAdapter.MyViewHo
 
  */
 
-class CurrentWeatherAdapter: RecyclerView.Adapter<CurrentWeatherAdapter.MyViewHolder_InCurrentWeatherAdapter>  {
+class CurrentWeatherAdapter_Hour: RecyclerView.Adapter<CurrentWeatherAdapter_Hour.MyViewHolder_InCurrentWeatherAdapter_Hour>  {
 
 
     private final var tab: String = "team"
@@ -111,11 +111,11 @@ class CurrentWeatherAdapter: RecyclerView.Adapter<CurrentWeatherAdapter.MyViewHo
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): MyViewHolder_InCurrentWeatherAdapter {
+    ): MyViewHolder_InCurrentWeatherAdapter_Hour {
         var inflater: LayoutInflater = context_Instance_InCurrentWeatherAdapter.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as (LayoutInflater)
         var view: View = inflater.inflate(R.layout.card_home_hour,parent,false)
-        var myViewHolder_InCurrentWeatherAdapter: MyViewHolder_InCurrentWeatherAdapter = MyViewHolder_InCurrentWeatherAdapter(view)
-        return  myViewHolder_InCurrentWeatherAdapter
+        var myViewHolder_InCurrentWeatherAdapterHor: MyViewHolder_InCurrentWeatherAdapter_Hour = MyViewHolder_InCurrentWeatherAdapter_Hour(view)
+        return  myViewHolder_InCurrentWeatherAdapterHor
     }
 
     override fun getItemCount(): Int {
@@ -129,7 +129,7 @@ class CurrentWeatherAdapter: RecyclerView.Adapter<CurrentWeatherAdapter.MyViewHo
         notifyDataSetChanged()
     }
 
-    class MyViewHolder_InCurrentWeatherAdapter: RecyclerView.ViewHolder {
+    class MyViewHolder_InCurrentWeatherAdapter_Hour: RecyclerView.ViewHolder {
 
         var tv_time: TextView
         var img_weatherStatus: ImageView
@@ -142,17 +142,29 @@ class CurrentWeatherAdapter: RecyclerView.Adapter<CurrentWeatherAdapter.MyViewHo
 
         }
     }
-//https://openweathermap.org/img/wn/10d@2x.png
 
-    override fun onBindViewHolder(holder: MyViewHolder_InCurrentWeatherAdapter, position: Int) {
+    override fun onBindViewHolder(holder: MyViewHolder_InCurrentWeatherAdapter_Hour, position: Int) {
 
 
             timeListSplit =weatherArrayList_InCurrentWeatherAdapter.get(position).dtTxt?.split(" ")
             var imageIconCode: String? = weatherArrayList_InCurrentWeatherAdapter.get(position).modelWeather.get(0).icon
             var imageUrl_InMyViewHolder_InCurrentWeatherAdapter: String? = "https://openweathermap.org/img/wn/$imageIconCode@2x.png"
             Glide.with(context_Instance_InCurrentWeatherAdapter).load(imageUrl_InMyViewHolder_InCurrentWeatherAdapter).into(holder.img_weatherStatus)
-            holder.tv_time.setText(timeListSplit?.get(1))
-            holder.tv_WeatherTempratureDegree.setText(weatherArrayList_InCurrentWeatherAdapter.get(position).modelWind?.deg.toString() + "°C")
+            var hourText = timeListSplit?.get(1)
+            if(hourText!= null){
+                when(hourText){
+                    "00:00:00" -> holder.tv_time.setText("12 pm")
+                    "03:00:00" -> holder.tv_time.setText("3 pm")
+                    "06:00:00" -> holder.tv_time.setText("6 pm")
+                    "09:00:00" -> holder.tv_time.setText("9 pm")
+                }
+            }
+
+            var tempratureFehrenheit = weatherArrayList_InCurrentWeatherAdapter.get(0).modelMain?.temp
+            var tempratureCelsius = tempratureFehrenheit?.minus(273.15)
+            val tempFormated = String.format("%.2f", tempratureCelsius)
+
+            holder.tv_WeatherTempratureDegree.setText(tempFormated + "°C")
 
 
 
