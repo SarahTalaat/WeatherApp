@@ -124,7 +124,7 @@ class CurrentWeatherAdapter_Hour: RecyclerView.Adapter<CurrentWeatherAdapter_Hou
 
     fun settingWeatherArrayList_InCurrentWeatherAdapter(weatherArrayList: ArrayList<Model_WeatherArrayList>){
         Log.i("TAG", "settingWeatherArrayList_InCurrentWeatherAdapter: WeatherArrayList :" + weatherArrayList)
-        var firstFourElementsOfweatherArrayList: List<Model_WeatherArrayList> = weatherArrayList.take(4)
+        var firstFourElementsOfweatherArrayList: List<Model_WeatherArrayList> = weatherArrayList.take(8)
         this.weatherArrayList_InCurrentWeatherAdapter = firstFourElementsOfweatherArrayList as ArrayList<Model_WeatherArrayList>
         notifyDataSetChanged()
     }
@@ -153,10 +153,14 @@ class CurrentWeatherAdapter_Hour: RecyclerView.Adapter<CurrentWeatherAdapter_Hou
             var hourText = timeListSplit?.get(1)
             if(hourText!= null){
                 when(hourText){
-                    "00:00:00" -> holder.tv_time.setText("12 pm")
-                    "03:00:00" -> holder.tv_time.setText("3 pm")
-                    "06:00:00" -> holder.tv_time.setText("6 pm")
-                    "09:00:00" -> holder.tv_time.setText("9 pm")
+                    "00:00:00" -> holder.tv_time.setText("12 am")
+                    "03:00:00" -> holder.tv_time.setText("3 am")
+                    "06:00:00" -> holder.tv_time.setText("6 am")
+                    "09:00:00" -> holder.tv_time.setText("9 am")
+                    "12:00:00" -> holder.tv_time.setText("12 pm")
+                    "15:00:00" -> holder.tv_time.setText("3 pm")
+                    "18:00:00" -> holder.tv_time.setText("6 pm")
+                    "21:00:00" -> holder.tv_time.setText("9 pm")
                 }
             }
 

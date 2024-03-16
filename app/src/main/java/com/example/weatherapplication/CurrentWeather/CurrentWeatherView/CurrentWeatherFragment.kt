@@ -24,9 +24,15 @@ class CurrentWeatherFragment : Fragment() {
 
     private lateinit var currentWeatherViewModelFactory_Instance_RDS_InCurrentWeatherFragment: CurrentWeatherViewModelFactory_RDS
     private lateinit var currentWeatherViewModel_Instance_InCurrentWeatherFragmet: CurrentWeatherViewModel
-    private lateinit var recyclerView_Instance_InCurrentWeatherFragment: RecyclerView
-    private lateinit var adapter_hour_Instance_InCurrentWeatherFragment: CurrentWeatherAdapter_Hour
-    private lateinit var layoutManager_Instance_InCurrentWeatherFragment: LinearLayoutManager
+    private lateinit var recyclerView_Instance_Hour_InCurrentWeatherFragment: RecyclerView
+    private lateinit var adapter_Instance_Hour_InCurrentWeatherFragment: CurrentWeatherAdapter_Hour
+    private lateinit var layoutManager_Instance_Hour_InCurrentWeatherFragment: LinearLayoutManager
+
+    private lateinit var recyclerView_Instance_Day_InCurrentWeatherFragment: RecyclerView
+    private lateinit var adapter_Instance_Day_InCurrentWeatherFragment: CurrentWeatherAdapter_Day
+    private lateinit var layoutManager_Instance_Day_InCurrentWeatherFragment: LinearLayoutManager
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,19 +63,27 @@ class CurrentWeatherFragment : Fragment() {
         currentWeatherViewModel_Instance_InCurrentWeatherFragmet = ViewModelProvider(this,currentWeatherViewModelFactory_Instance_RDS_InCurrentWeatherFragment).get(
             CurrentWeatherViewModel::class.java)
 
-        initUI_InAllProductsActivity(view)
-        setUpRecyclerView_InCurrentWeatherActivity()
+        initUI_InCurrentWeatherFragment(view)
+        setUpRecyclerView_Hour_InCurrentWeatherFragment()
+        setUpRecyclerView_Day_InCurrentWeatherFragment()
 
         currentWeatherViewModel_Instance_InCurrentWeatherFragmet.forecastLiveDataList_InCurrentWeatherViewModel.observe(viewLifecycleOwner){
                 forecastModel ->
-            adapter_hour_Instance_InCurrentWeatherFragment.settingWeatherArrayList_InCurrentWeatherAdapter(forecastModel.modelWeatherArrayList)
-            adapter_hour_Instance_InCurrentWeatherFragment.notifyDataSetChanged()
+            adapter_Instance_Hour_InCurrentWeatherFragment.settingWeatherArrayList_InCurrentWeatherAdapter(forecastModel.modelWeatherArrayList)
+            adapter_Instance_Hour_InCurrentWeatherFragment.notifyDataSetChanged()
         }
 
 
         currentWeatherViewModel_Instance_InCurrentWeatherFragmet.forecastLiveDataList_InCurrentWeatherViewModel.observe(viewLifecycleOwner){
                 forecastModel ->
-            var dateAndTimeFromWeatherArrayList = forecastModel.modelWeatherArrayList.get(8).dtTxt?.split(" ")
+            adapter_Instance_Day_InCurrentWeatherFragment.settingWeatherArrayList_InCurrentWeatherAdapter(forecastModel.modelWeatherArrayList)
+            adapter_Instance_Day_InCurrentWeatherFragment.notifyDataSetChanged()
+        }
+
+
+        currentWeatherViewModel_Instance_InCurrentWeatherFragmet.forecastLiveDataList_InCurrentWeatherViewModel.observe(viewLifecycleOwner){
+                forecastModel ->
+            var dateAndTimeFromWeatherArrayList = forecastModel.modelWeatherArrayList.get(0).dtTxt?.split(" ")
 
             Log.i("TAG", "onCreateView: weatherStatus: "+ forecastModel.modelWeatherArrayList.get(2).modelWeather.get(0).description)
             tv_date_InCurrentWeatherFagment.setText(dateAndTimeFromWeatherArrayList?.get(0))
@@ -109,16 +123,25 @@ class CurrentWeatherFragment : Fragment() {
 
     }
 
-    private fun initUI_InAllProductsActivity(view: View){
-        recyclerView_Instance_InCurrentWeatherFragment = view.findViewById(R.id.rv_hours)
+    private fun initUI_InCurrentWeatherFragment(view: View){
+        recyclerView_Instance_Hour_InCurrentWeatherFragment = view.findViewById(R.id.rv_hours)
+        recyclerView_Instance_Day_InCurrentWeatherFragment = view.findViewById(R.id.rv_days)
     }
 
-    private fun setUpRecyclerView_InCurrentWeatherActivity(){
-        layoutManager_Instance_InCurrentWeatherFragment = LinearLayoutManager(requireContext())
-        layoutManager_Instance_InCurrentWeatherFragment.orientation = RecyclerView.HORIZONTAL
-        adapter_hour_Instance_InCurrentWeatherFragment = CurrentWeatherAdapter_Hour(requireContext(), ArrayList())
-        recyclerView_Instance_InCurrentWeatherFragment.adapter = adapter_hour_Instance_InCurrentWeatherFragment
-        recyclerView_Instance_InCurrentWeatherFragment.layoutManager = layoutManager_Instance_InCurrentWeatherFragment
+    private fun setUpRecyclerView_Hour_InCurrentWeatherFragment(){
+        layoutManager_Instance_Hour_InCurrentWeatherFragment = LinearLayoutManager(requireContext())
+        layoutManager_Instance_Hour_InCurrentWeatherFragment.orientation = RecyclerView.HORIZONTAL
+        adapter_Instance_Hour_InCurrentWeatherFragment = CurrentWeatherAdapter_Hour(requireContext(), ArrayList())
+        recyclerView_Instance_Hour_InCurrentWeatherFragment.adapter = adapter_Instance_Hour_InCurrentWeatherFragment
+        recyclerView_Instance_Hour_InCurrentWeatherFragment.layoutManager = layoutManager_Instance_Hour_InCurrentWeatherFragment
     }
 
+
+    private fun setUpRecyclerView_Day_InCurrentWeatherFragment(){
+        layoutManager_Instance_Day_InCurrentWeatherFragment = LinearLayoutManager(requireContext())
+        layoutManager_Instance_Day_InCurrentWeatherFragment.orientation = RecyclerView.VERTICAL
+        adapter_Instance_Day_InCurrentWeatherFragment = CurrentWeatherAdapter_Day(requireContext(), ArrayList())
+        recyclerView_Instance_Day_InCurrentWeatherFragment.adapter = adapter_Instance_Day_InCurrentWeatherFragment
+        recyclerView_Instance_Day_InCurrentWeatherFragment.layoutManager = layoutManager_Instance_Day_InCurrentWeatherFragment
+    }
 }
