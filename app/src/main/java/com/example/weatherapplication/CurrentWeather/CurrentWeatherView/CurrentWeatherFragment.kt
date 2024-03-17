@@ -19,6 +19,9 @@ import com.example.productsmvvm.Model.WeatherRepositoryImplementation
 import com.example.productsmvvm.Network.WeatherRemoteDataSourceImplementation
 import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.R
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 class CurrentWeatherFragment : Fragment() {
 
@@ -85,8 +88,20 @@ class CurrentWeatherFragment : Fragment() {
                 forecastModel ->
             var dateAndTimeFromWeatherArrayList = forecastModel.modelWeatherArrayList.get(0).dtTxt?.split(" ")
 
+
             Log.i("TAG", "onCreateView: weatherStatus: "+ forecastModel.modelWeatherArrayList.get(2).modelWeather.get(0).description)
-            tv_date_InCurrentWeatherFagment.setText(dateAndTimeFromWeatherArrayList?.get(0))
+
+
+            var dtTxt_value = forecastModel.modelWeatherArrayList.get(0).dtTxt
+            Log.i("TAG", "onCreateView: Current Weather Fragment: dtTxtValue : " + dtTxt_value)
+            val firstApiFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            val date = LocalDate.parse(dtTxt_value , firstApiFormat)
+
+            tv_date_InCurrentWeatherFagment.setText(date.dayOfWeek.toString())
+
+
+
+
             tv_weatherStatus_InCurrentWeatherFagment.setText(forecastModel.modelWeatherArrayList.get(2).modelWeather.get(0).description)
 
             var tempratureFehrenheit = forecastModel.modelWeatherArrayList.get(0).modelMain?.feelsLike
@@ -106,7 +121,9 @@ class CurrentWeatherFragment : Fragment() {
         currentWeatherViewModel_Instance_InCurrentWeatherFragmet.forecastLiveDataList_InCurrentWeatherViewModel.observe(viewLifecycleOwner){
             forecastModel ->
 
-            var countryName = forecastModel.modelCity?.country
+            var countryCode = forecastModel.modelCity?.country
+
+            var countryName = Locale("", countryCode).displayCountry
             tv_country_InCurrentWeatherFagment.setText(countryName)
         }
 
