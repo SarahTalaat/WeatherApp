@@ -57,6 +57,13 @@ class CurrentWeatherFragment : Fragment() {
         var img_weatherStatus_InCurrentWeatherFagment: ImageView = view.findViewById(R.id.img_weathertatus)
 
 
+        var tv_pressure_InCurrentWeatherFagment:TextView = view.findViewById(R.id.tv_pressure_value)
+        var tv_humidity_InCurrentWeatherFagment:TextView = view.findViewById(R.id.tv_humidity_value)
+        var tv_wind_InCurrentWeatherFagment:TextView = view.findViewById(R.id.tv_wind_value)
+        var tv_cloud_InCurrentWeatherFagment:TextView = view.findViewById(R.id.tv_cloud_value)
+        var tv_visibiliy_InCurrentWeatherFagment:TextView = view.findViewById(R.id.tv_visibility_value)
+
+
         currentWeatherViewModelFactory_Instance_RDS_InCurrentWeatherFragment = CurrentWeatherViewModelFactory_RDS(
             WeatherRepositoryImplementation.getWeatherRepositoryImplementationInstance(
                 WeatherRemoteDataSourceImplementation.getCurrentWeatherRemoteDataSourceImplementation_Instance()
@@ -86,8 +93,9 @@ class CurrentWeatherFragment : Fragment() {
 
         currentWeatherViewModel_Instance_InCurrentWeatherFragmet.forecastLiveDataList_InCurrentWeatherViewModel.observe(viewLifecycleOwner){
                 forecastModel ->
-            var dateAndTimeFromWeatherArrayList = forecastModel.modelWeatherArrayList.get(0).dtTxt?.split(" ")
 
+
+            var dateAndTimeFromWeatherArrayList = forecastModel.modelWeatherArrayList.get(0).dtTxt?.split(" ")
 
             Log.i("TAG", "onCreateView: weatherStatus: "+ forecastModel.modelWeatherArrayList.get(2).modelWeather.get(0).description)
 
@@ -97,10 +105,7 @@ class CurrentWeatherFragment : Fragment() {
             val firstApiFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
             val date = LocalDate.parse(dtTxt_value , firstApiFormat)
 
-            tv_date_InCurrentWeatherFagment.setText(date.dayOfWeek.toString())
-
-
-
+            tv_date_InCurrentWeatherFagment.setText(date.dayOfWeek.toString() + System.getProperty("line.separator") +"${dateAndTimeFromWeatherArrayList?.get(0)}")
 
             tv_weatherStatus_InCurrentWeatherFagment.setText(forecastModel.modelWeatherArrayList.get(2).modelWeather.get(0).description)
 
@@ -116,15 +121,26 @@ class CurrentWeatherFragment : Fragment() {
             Glide.with(requireContext())
                 .load(imageIcon)
                 .into(img_weatherStatus_InCurrentWeatherFagment)
-        }
 
-        currentWeatherViewModel_Instance_InCurrentWeatherFragmet.forecastLiveDataList_InCurrentWeatherViewModel.observe(viewLifecycleOwner){
-            forecastModel ->
 
+            var cityName = forecastModel.modelCity?.name
             var countryCode = forecastModel.modelCity?.country
-
             var countryName = Locale("", countryCode).displayCountry
-            tv_country_InCurrentWeatherFagment.setText(countryName)
+            tv_country_InCurrentWeatherFagment.setText(cityName + " , " + countryName)
+
+            var pressure = forecastModel.modelWeatherArrayList.get(0).modelMain?.pressure
+            var humidity = forecastModel.modelWeatherArrayList.get(0).modelMain?.humidity
+            var wind = forecastModel.modelWeatherArrayList.get(0).modelWind?.speed
+            var clouds = forecastModel.modelWeatherArrayList.get(0).modelClouds?.all
+            var visibility = forecastModel.modelWeatherArrayList.get(0).visibility
+
+            tv_pressure_InCurrentWeatherFagment.setText(pressure.toString() +" hpa")
+            tv_humidity_InCurrentWeatherFagment.setText(humidity.toString()+ " %")
+            tv_wind_InCurrentWeatherFagment.setText(wind.toString()+ " m/s")
+            tv_cloud_InCurrentWeatherFagment.setText(clouds.toString()+ " %")
+            tv_visibiliy_InCurrentWeatherFagment.setText(visibility.toString()+ " m")
+
+
         }
 
 

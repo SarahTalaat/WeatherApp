@@ -17,7 +17,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView2"
             android:layout_width="328dp"
-            android:layout_height="610dp"
+            android:layout_height="510dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="50dp"
             app:cardBackgroundColor="@color/blue1"
@@ -39,7 +39,6 @@
                     android:text="TextView"
                     android:textColor="@color/white"
                     android:textSize="20sp"
-                    app:layout_constraintEnd_toEndOf="@+id/tv_visibility"
                     app:layout_constraintStart_toStartOf="@+id/tv_visibility"
                     app:layout_constraintTop_toBottomOf="@+id/tv_visibility" />
 
@@ -51,31 +50,8 @@
                     android:text="Visibility :"
                     android:textColor="@color/white"
                     android:textSize="20sp"
-                    app:layout_constraintStart_toStartOf="@+id/tv_ultraviolet"
-                    app:layout_constraintTop_toTopOf="@+id/img_visibility" />
-
-                <TextView
-                    android:id="@+id/tv_ultraviolet_value"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="TextView"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-                    app:layout_constraintEnd_toEndOf="@+id/tv_ultraviolet"
-                    app:layout_constraintStart_toStartOf="@+id/tv_ultraviolet"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_ultraviolet" />
-
-                <TextView
-                    android:id="@+id/tv_ultraviolet"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="Ultraviolet :"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
                     app:layout_constraintStart_toStartOf="@+id/tv_cloud"
-                    app:layout_constraintTop_toTopOf="@+id/img_Ultraviolet" />
+                    app:layout_constraintTop_toTopOf="@+id/img_visibility" />
 
                 <TextView
                     android:id="@+id/tv_cloud_value"
@@ -85,7 +61,6 @@
                     android:text="TextView"
                     android:textColor="@color/white"
                     android:textSize="20sp"
-                    app:layout_constraintEnd_toEndOf="@+id/tv_cloud"
                     app:layout_constraintStart_toStartOf="@+id/tv_cloud"
                     app:layout_constraintTop_toBottomOf="@+id/tv_cloud" />
 
@@ -101,14 +76,13 @@
                     app:layout_constraintTop_toTopOf="@+id/img_cloud" />
 
                 <TextView
-                    android:id="@+id/wind_value"
+                    android:id="@+id/tv_wind_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="TextView"
                     android:textColor="@color/white"
                     android:textSize="20sp"
-                    app:layout_constraintEnd_toEndOf="@+id/tv_wind"
                     app:layout_constraintStart_toStartOf="@+id/tv_wind"
                     app:layout_constraintTop_toBottomOf="@+id/tv_wind" />
 
@@ -131,7 +105,6 @@
                     android:text="TextView"
                     android:textColor="@color/white"
                     android:textSize="20sp"
-                    app:layout_constraintEnd_toEndOf="@+id/tv_humidity"
                     app:layout_constraintStart_toStartOf="@+id/tv_humidity"
                     app:layout_constraintTop_toBottomOf="@+id/tv_humidity" />
 
@@ -187,23 +160,13 @@
                     app:srcCompat="@drawable/image_04d" />
 
                 <ImageView
-                    android:id="@+id/img_Ultraviolet"
+                    android:id="@+id/img_visibility"
                     android:layout_width="72dp"
                     android:layout_height="71dp"
                     android:layout_marginTop="25dp"
                     app:layout_constraintEnd_toEndOf="@+id/img_cloud"
                     app:layout_constraintStart_toStartOf="@+id/img_cloud"
                     app:layout_constraintTop_toBottomOf="@+id/img_cloud"
-                    app:srcCompat="@drawable/card2ultraviolet" />
-
-                <ImageView
-                    android:id="@+id/img_visibility"
-                    android:layout_width="72dp"
-                    android:layout_height="71dp"
-                    android:layout_marginTop="25dp"
-                    app:layout_constraintEnd_toEndOf="@+id/img_Ultraviolet"
-                    app:layout_constraintStart_toStartOf="@+id/img_Ultraviolet"
-                    app:layout_constraintTop_toBottomOf="@+id/img_Ultraviolet"
                     app:srcCompat="@drawable/card2visibility" />
 
                 <TextView
@@ -226,8 +189,6 @@
                     android:text="TextView"
                     android:textColor="@color/white"
                     android:textSize="20sp"
-                    app:layout_constraintEnd_toEndOf="@+id/tv_pressure"
-                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@+id/tv_pressure"
                     app:layout_constraintTop_toBottomOf="@+id/tv_pressure" />
 
@@ -314,11 +275,12 @@
             android:id="@+id/tv_Country"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="168dp"
             android:layout_marginTop="50dp"
+            android:gravity="center"
             android:hint="Country"
             android:textAlignment="center"
             android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
