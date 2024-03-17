@@ -169,7 +169,7 @@ class CurrentWeatherFragment : Fragment() {
         return ContextCompat.checkSelfPermission(requireContext(),android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(requireContext(),android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
     }
-
+ 
     fun isLocationEnabled(): Boolean{
         val locationManager: LocationManager =
             requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
