@@ -62,18 +62,20 @@ class CurrentWeatherAdapter_Day: RecyclerView.Adapter<CurrentWeatherAdapter_Day.
             "settingWeatherArrayList_InCurrentWeatherAdapter_Day: WeatherArrayList :" + weatherArrayList
         )
 
-        for(i in 0 until weatherArrayList.size){
+        for(i in 0 until weatherArrayList.size-1){
 
             var dtTxt_value = weatherArrayList.get(i).dtTxt
 
             var dateAndTimeFromWeatherArrayList =
                 dtTxt_value?.split(" ")
             var timeFromDateAndTime = dateAndTimeFromWeatherArrayList?.get(1)
-            Log.i("TAG", "settingWeatherArrayList_InCurrentWeatherAdapter: Day adapter: dateAndTimeFromWeatherArrayList?.get(1): "+ dateAndTimeFromWeatherArrayList?.get(1) )
-            Log.i("TAG", "settingWeatherArrayList_InCurrentWeatherAdapter: Day adapter: dateAndTimeFromWeatherArrayList?.get(0): "+ dateAndTimeFromWeatherArrayList?.get(0) )
 
             if(timeFromDateAndTime == "03:00:00"){
                 this.weatherArrayList_InCurrentWeatherAdapter_Day.add(weatherArrayList.get(i))
+                Log.i("TAG", "settingWeatherArrayList_InCurrentWeatherAdapter: Day adapter: i= "+i)
+                Log.i("TAG", "settingWeatherArrayList_InCurrentWeatherAdapter: Day adapter: dateAndTimeFromWeatherArrayList?.get(1): "+ dateAndTimeFromWeatherArrayList?.get(1) )
+                Log.i("TAG", "settingWeatherArrayList_InCurrentWeatherAdapter: Day adapter: dateAndTimeFromWeatherArrayList?.get(0): "+ dateAndTimeFromWeatherArrayList?.get(0) )
+
             }
         }
         notifyDataSetChanged()
@@ -102,8 +104,10 @@ class CurrentWeatherAdapter_Day: RecyclerView.Adapter<CurrentWeatherAdapter_Day.
     override fun onBindViewHolder(holder: MyViewHolder_InCurrentWeatherAdapter_Day, position: Int) {
 
 
+        Log.i("TAG", "onBindViewHolder: Day Adapter: position = " +position)
+
         var dateAndTimeFromWeatherArrayList =
-            weatherArrayList_InCurrentWeatherAdapter_Day.get(position + 8).dtTxt?.split(" ")
+            weatherArrayList_InCurrentWeatherAdapter_Day.get(position).dtTxt?.split(" ")
         var dayToBeShownBasedOnTime = dateAndTimeFromWeatherArrayList?.get(1)
         Log.i("TAG", "onBindViewHolder: Day adapter: dateAndTimeFromWeatherArrayList?.get(1): "+ dateAndTimeFromWeatherArrayList?.get(1) )
         Log.i("TAG", "onBindViewHolder: Day adapter: dateAndTimeFromWeatherArrayList?.get(0): "+ dateAndTimeFromWeatherArrayList?.get(0) )
@@ -111,13 +115,13 @@ class CurrentWeatherAdapter_Day: RecyclerView.Adapter<CurrentWeatherAdapter_Day.
 
 
             var imageIconCode: String? =
-                weatherArrayList_InCurrentWeatherAdapter_Day.get(position + 8).modelWeather.get(0).icon
+                weatherArrayList_InCurrentWeatherAdapter_Day.get(position).modelWeather.get(0).icon
             var imageUrl_InMyViewHolder_InCurrentWeatherAdapter_Day: String? =
                 "https://openweathermap.org/img/wn/$imageIconCode@2x.png"
             Glide.with(context_Instance_InCurrentWeatherAdapter_Day)
                 .load(imageUrl_InMyViewHolder_InCurrentWeatherAdapter_Day).into(holder.img_day)
 
-            var dtTxt = weatherArrayList_InCurrentWeatherAdapter_Day.get(position + 8).dtTxt
+            var dtTxt = weatherArrayList_InCurrentWeatherAdapter_Day.get(position).dtTxt
 
             val firstApiFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
             val date = LocalDate.parse(dtTxt , firstApiFormat)
@@ -125,21 +129,21 @@ class CurrentWeatherAdapter_Day: RecyclerView.Adapter<CurrentWeatherAdapter_Day.
             holder.tv_day.setText(date.dayOfWeek.toString())
 
             holder.tv_description.setText(
-                weatherArrayList_InCurrentWeatherAdapter_Day.get(position + 8).modelWeather.get(
+                weatherArrayList_InCurrentWeatherAdapter_Day.get(position).modelWeather.get(
                     0
                 ).description
             )
 
             var minTemp =
-                weatherArrayList_InCurrentWeatherAdapter_Day.get(position + 8).modelMain?.tempMin.toString()
+                weatherArrayList_InCurrentWeatherAdapter_Day.get(position).modelMain?.tempMin.toString()
             var maxTemp =
-                weatherArrayList_InCurrentWeatherAdapter_Day.get(position + 8).modelMain?.tempMax.toString()
+                weatherArrayList_InCurrentWeatherAdapter_Day.get(position).modelMain?.tempMax.toString()
 
-        var tempratureFehrenheit_minTemp = weatherArrayList_InCurrentWeatherAdapter_Day.get(position+8).modelMain?.tempMin
+        var tempratureFehrenheit_minTemp = weatherArrayList_InCurrentWeatherAdapter_Day.get(position).modelMain?.tempMin
         var tempratureCelsius_minTemp = tempratureFehrenheit_minTemp?.minus(273.15)
         var tempFormated_minTemp = String.format("%.2f", tempratureCelsius_minTemp)
 
-        var tempratureFehrenheit_maxTemp = weatherArrayList_InCurrentWeatherAdapter_Day.get(position+8).modelMain?.tempMax
+        var tempratureFehrenheit_maxTemp = weatherArrayList_InCurrentWeatherAdapter_Day.get(position).modelMain?.tempMax
         var tempratureCelsius_maxTemp = tempratureFehrenheit_maxTemp?.minus(273.15)
         var tempFormated_maxTemp = String.format("%.2f", tempratureCelsius_maxTemp)
 
