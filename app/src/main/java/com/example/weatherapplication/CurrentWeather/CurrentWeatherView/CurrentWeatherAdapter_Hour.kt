@@ -122,9 +122,9 @@ class CurrentWeatherAdapter_Hour: RecyclerView.Adapter<CurrentWeatherAdapter_Hou
         return weatherArrayList_InCurrentWeatherAdapter.size
     }
 
-    fun settingWeatherArrayList_InCurrentWeatherAdapter(weatherArrayList: ArrayList<Model_WeatherArrayList>){
+    fun settingWeatherArrayList_InCurrentWeatherAdapter_Hour(weatherArrayList: ArrayList<Model_WeatherArrayList>){
         Log.i("TAG", "settingWeatherArrayList_InCurrentWeatherAdapter: WeatherArrayList :" + weatherArrayList)
-        var firstFourElementsOfweatherArrayList: List<Model_WeatherArrayList> = weatherArrayList.take(8)
+        var firstFourElementsOfweatherArrayList: List<Model_WeatherArrayList> = weatherArrayList.take(7)
         this.weatherArrayList_InCurrentWeatherAdapter = firstFourElementsOfweatherArrayList as ArrayList<Model_WeatherArrayList>
         notifyDataSetChanged()
     }
