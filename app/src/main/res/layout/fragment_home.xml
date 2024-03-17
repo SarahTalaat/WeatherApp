@@ -35,81 +35,100 @@
                     android:id="@+id/tv_visibility_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:text="TextView"
-                    tools:layout_editor_absoluteX="126dp"
-                    tools:layout_editor_absoluteY="558dp" />
+                    app:layout_constraintEnd_toEndOf="@+id/tv_visibility"
+                    app:layout_constraintStart_toStartOf="@+id/tv_visibility"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_visibility" />
 
                 <TextView
                     android:id="@+id/tv_visibility"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
                     android:text="TextView"
-                    tools:layout_editor_absoluteX="126dp"
-                    tools:layout_editor_absoluteY="523dp" />
+                    app:layout_constraintEnd_toEndOf="@+id/tv_ultraviolet_value"
+                    app:layout_constraintStart_toStartOf="@+id/tv_ultraviolet_value"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_ultraviolet_value" />
 
                 <TextView
                     android:id="@+id/tv_ultraviolet_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:text="TextView"
-                    tools:layout_editor_absoluteX="126dp"
-                    tools:layout_editor_absoluteY="468dp" />
+                    app:layout_constraintEnd_toEndOf="@+id/tv_ultraviolet"
+                    app:layout_constraintStart_toStartOf="@+id/tv_ultraviolet"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_ultraviolet" />
 
                 <TextView
                     android:id="@+id/tv_ultraviolet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
                     android:text="TextView"
-                    tools:layout_editor_absoluteX="126dp"
-                    tools:layout_editor_absoluteY="433dp" />
+                    app:layout_constraintEnd_toEndOf="@+id/tv_cloud_value"
+                    app:layout_constraintStart_toStartOf="@+id/tv_cloud_value"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_cloud_value" />
 
                 <TextView
                     android:id="@+id/tv_cloud_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:text="TextView"
-                    tools:layout_editor_absoluteX="126dp"
-                    tools:layout_editor_absoluteY="357dp" />
+                    app:layout_constraintEnd_toEndOf="@+id/tv_cloud"
+                    app:layout_constraintStart_toStartOf="@+id/tv_cloud"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_cloud" />
 
                 <TextView
                     android:id="@+id/tv_cloud"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
                     android:text="TextView"
-                    tools:layout_editor_absoluteX="126dp"
-                    tools:layout_editor_absoluteY="322dp" />
+                    app:layout_constraintTop_toBottomOf="@+id/wind_value"
+                    tools:layout_editor_absoluteX="126dp" />
 
                 <TextView
                     android:id="@+id/wind_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:text="TextView"
-                    tools:layout_editor_absoluteX="126dp"
-                    tools:layout_editor_absoluteY="252dp" />
+                    app:layout_constraintEnd_toEndOf="@+id/tv_wind"
+                    app:layout_constraintStart_toStartOf="@+id/tv_wind"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_wind" />
 
                 <TextView
                     android:id="@+id/tv_wind"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
                     android:text="TextView"
-                    tools:layout_editor_absoluteX="126dp"
-                    tools:layout_editor_absoluteY="217dp" />
+                    app:layout_constraintEnd_toEndOf="@+id/tv_humidity_value"
+                    app:layout_constraintStart_toStartOf="@+id/tv_humidity_value"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_humidity_value" />
 
                 <TextView
                     android:id="@+id/tv_humidity_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:text="TextView"
-                    tools:layout_editor_absoluteX="126dp"
-                    tools:layout_editor_absoluteY="169dp" />
+                    app:layout_constraintEnd_toEndOf="@+id/tv_humidity"
+                    app:layout_constraintStart_toStartOf="@+id/tv_humidity"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_humidity" />
 
                 <TextView
                     android:id="@+id/tv_humidity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
                     android:text="TextView"
-                    tools:layout_editor_absoluteX="126dp"
-                    tools:layout_editor_absoluteY="135dp" />
+                    app:layout_constraintEnd_toEndOf="@+id/tv_pressure_value"
+                    app:layout_constraintStart_toStartOf="@+id/tv_pressure_value"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_pressure_value" />
 
                 <ImageView
                     android:id="@+id/img_pressure"
@@ -117,7 +136,6 @@
                     android:layout_height="71dp"
                     android:layout_marginStart="32dp"
                     android:layout_marginTop="36dp"
-                    android:src="@tools:sample/avatars"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -126,7 +144,6 @@
                     android:layout_width="72dp"
                     android:layout_height="71dp"
                     android:layout_marginTop="25dp"
-                    android:src="@tools:sample/avatars"
                     app:layout_constraintEnd_toEndOf="@+id/img_pressure"
                     app:layout_constraintStart_toStartOf="@+id/img_pressure"
                     app:layout_constraintTop_toBottomOf="@+id/img_pressure" />
@@ -136,7 +153,6 @@
                     android:layout_width="72dp"
                     android:layout_height="71dp"
                     android:layout_marginTop="25dp"
-                    android:src="@tools:sample/avatars"
                     app:layout_constraintEnd_toEndOf="@+id/img_humidity"
                     app:layout_constraintStart_toStartOf="@+id/img_humidity"
                     app:layout_constraintTop_toBottomOf="@+id/img_humidity" />
@@ -146,7 +162,6 @@
                     android:layout_width="72dp"
                     android:layout_height="71dp"
                     android:layout_marginTop="25dp"
-                    android:src="@tools:sample/avatars"
                     app:layout_constraintEnd_toEndOf="@+id/img_wind"
                     app:layout_constraintStart_toStartOf="@+id/img_wind"
                     app:layout_constraintTop_toBottomOf="@+id/img_wind" />
@@ -156,7 +171,6 @@
                     android:layout_width="72dp"
                     android:layout_height="71dp"
                     android:layout_marginTop="25dp"
-                    android:src="@tools:sample/avatars"
                     app:layout_constraintEnd_toEndOf="@+id/img_cloud"
                     app:layout_constraintStart_toStartOf="@+id/img_cloud"
                     app:layout_constraintTop_toBottomOf="@+id/img_cloud" />
@@ -166,7 +180,6 @@
                     android:layout_width="72dp"
                     android:layout_height="71dp"
                     android:layout_marginTop="25dp"
-                    android:src="@tools:sample/avatars"
                     app:layout_constraintEnd_toEndOf="@+id/img_Ultraviolet"
                     app:layout_constraintStart_toStartOf="@+id/img_Ultraviolet"
                     app:layout_constraintTop_toBottomOf="@+id/img_Ultraviolet" />
@@ -175,17 +188,22 @@
                     android:id="@+id/tv_pressure"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="28dp"
+                    android:layout_marginTop="50dp"
                     android:text="TextView"
-                    tools:layout_editor_absoluteX="135dp"
-                    tools:layout_editor_absoluteY="48dp" />
+                    app:layout_constraintStart_toEndOf="@+id/img_pressure"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tv_pressure_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:text="TextView"
-                    tools:layout_editor_absoluteX="135dp"
-                    tools:layout_editor_absoluteY="83dp" />
+                    app:layout_constraintEnd_toEndOf="@+id/tv_pressure"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/tv_pressure"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_pressure" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
