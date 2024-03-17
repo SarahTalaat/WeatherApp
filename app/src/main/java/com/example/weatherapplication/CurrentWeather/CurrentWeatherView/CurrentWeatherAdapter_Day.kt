@@ -62,15 +62,15 @@ class CurrentWeatherAdapter_Day: RecyclerView.Adapter<CurrentWeatherAdapter_Day.
             "settingWeatherArrayList_InCurrentWeatherAdapter_Day: WeatherArrayList :" + weatherArrayList
         )
 
-        for(i in 0 until weatherArrayList.size-1){
+        for(i in 0 until weatherArrayList.size){
 
             var dtTxt_value = weatherArrayList.get(i).dtTxt
 
             var dateAndTimeFromWeatherArrayList =
                 dtTxt_value?.split(" ")
-            var timeFromDateAndTime = dateAndTimeFromWeatherArrayList?.get(1)
+            var timeFromDateAndTimeArrayList = dateAndTimeFromWeatherArrayList?.get(1)
 
-            if(timeFromDateAndTime == "03:00:00"){
+            if(timeFromDateAndTimeArrayList == "03:00:00"){
                 this.weatherArrayList_InCurrentWeatherAdapter_Day.add(weatherArrayList.get(i))
                 Log.i("TAG", "settingWeatherArrayList_InCurrentWeatherAdapter: Day adapter: i= "+i)
                 Log.i("TAG", "settingWeatherArrayList_InCurrentWeatherAdapter: Day adapter: dateAndTimeFromWeatherArrayList?.get(1): "+ dateAndTimeFromWeatherArrayList?.get(1) )
