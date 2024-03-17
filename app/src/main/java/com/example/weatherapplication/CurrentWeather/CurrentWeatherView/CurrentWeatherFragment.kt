@@ -1,6 +1,14 @@
 package com.example.weatherapplication.CurrentWeather.CurrentWeatherView
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.LocationManager
+import android.net.Uri
 import android.os.Bundle
+import android.os.Looper
+import android.provider.Settings
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +16,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,9 +29,19 @@ import com.example.productsmvvm.Model.WeatherRepositoryImplementation
 import com.example.productsmvvm.Network.WeatherRemoteDataSourceImplementation
 import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.R
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import android.Manifest
+import androidx.core.content.ContextCompat
+
+
+const val REQUEST_LOCATION_CODE = 2005
 
 class CurrentWeatherFragment : Fragment() {
 
@@ -35,6 +55,8 @@ class CurrentWeatherFragment : Fragment() {
     private lateinit var adapter_Instance_Day_InCurrentWeatherFragment: CurrentWeatherAdapter_Day
     private lateinit var layoutManager_Instance_Day_InCurrentWeatherFragment: LinearLayoutManager
 
+    lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    lateinit var data: Uri
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,14 +101,14 @@ class CurrentWeatherFragment : Fragment() {
 
         currentWeatherViewModel_Instance_InCurrentWeatherFragmet.forecastLiveDataList_InCurrentWeatherViewModel.observe(viewLifecycleOwner){
                 forecastModel ->
-            adapter_Instance_Hour_InCurrentWeatherFragment.settingWeatherArrayList_InCurrentWeatherAdapter(forecastModel.modelWeatherArrayList)
+            adapter_Instance_Hour_InCurrentWeatherFragment.settingWeatherArrayList_InCurrentWeatherAdapter_Hour(forecastModel.modelWeatherArrayList)
             adapter_Instance_Hour_InCurrentWeatherFragment.notifyDataSetChanged()
         }
 
 
         currentWeatherViewModel_Instance_InCurrentWeatherFragmet.forecastLiveDataList_InCurrentWeatherViewModel.observe(viewLifecycleOwner){
                 forecastModel ->
-            adapter_Instance_Day_InCurrentWeatherFragment.settingWeatherArrayList_InCurrentWeatherAdapter(forecastModel.modelWeatherArrayList)
+            adapter_Instance_Day_InCurrentWeatherFragment.settingWeatherArrayList_InCurrentWeatherAdapter_Day(forecastModel.modelWeatherArrayList)
             adapter_Instance_Day_InCurrentWeatherFragment.notifyDataSetChanged()
         }
 
@@ -144,8 +166,8 @@ class CurrentWeatherFragment : Fragment() {
         }
 
 
-        currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getList_FromRetrofit_InCurrentWeatherViewModel(lat_Egypt,lon_Egypt,Utils.API_KEY)
-        currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getForecast_FromRetrofit_InCurrentWeatherViewModel(lat_Egypt,lon_Egypt,Utils.API_KEY)
+       // currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getList_FromRetrofit_InCurrentWeatherViewModel(lat_Egypt,lon_Egypt,Utils.API_KEY)
+       // currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getForecast_FromRetrofit_InCurrentWeatherViewModel(lat_Egypt,lon_Egypt,Utils.API_KEY)
 
         return view
     }
@@ -177,4 +199,108 @@ class CurrentWeatherFragment : Fragment() {
         recyclerView_Instance_Day_InCurrentWeatherFragment.adapter = adapter_Instance_Day_InCurrentWeatherFragment
         recyclerView_Instance_Day_InCurrentWeatherFragment.layoutManager = layoutManager_Instance_Day_InCurrentWeatherFragment
     }
+
+    @SuppressLint("MissingPermission")
+    override fun onStart() {
+        super.onStart()
+
+        if(checkPermissions()){
+            if(isLocationEnabled()){
+                getFreshLocation()
+            }else{
+                enableLocationServices()
+            }
+        }else{
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(
+                    android.Manifest.permission.ACCESS_FINE_LOCATION,
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+
+                ),
+                REQUEST_LOCATION_CODE
+            )
+        }
+
+    }
+
+    fun checkPermissions(): Boolean{
+        return ContextCompat.checkSelfPermission(requireContext(),android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(requireContext(),android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+    }
+
+    fun isLocationEnabled(): Boolean{
+        val locationManager: LocationManager =
+            requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+    }
+
+    @SuppressLint("MissingPermission")
+    fun getFreshLocation(){
+
+        Log.i("TAG", "getFreshLocation() " )
+
+        //Entry point
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        //Location request to determine min distance , min time , accuracy level to get location updates
+        Log.i("TAG", "after entry point " )
+        fusedLocationProviderClient.requestLocationUpdates(
+            com.google.android.gms.location.LocationRequest.Builder(2000).apply {
+                setPriority(Priority.PRIORITY_HIGH_ACCURACY)
+                Log.i("TAG", "first parameter " )
+            }.build(),
+            //Call back to get the location
+            object : LocationCallback() {
+                override fun onLocationResult(p0: LocationResult) {
+                    super.onLocationResult(p0)
+                    Log.i("TAG", "super.onLocationResult(p0) " )
+                    val location = p0.lastLocation
+                    Log.i("TAG", "latitude: " + location?.latitude.toString())
+                    Log.i("TAG", "longitue: " + location?.longitude.toString())
+                   // tvLongitude.text = location?.longitude.toString()
+                   // tvLatitude.text = location?.latitude.toString()
+
+                    if(location?.latitude!= null && location?.longitude!= null){
+                        val geoUtils = GeoUtils(requireContext())
+                        val address = geoUtils.getAddress(location?.latitude, location?.longitude)
+                        Log.i("TAG", "onLocationResult: ful addess: "+address)
+
+                        currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getList_FromRetrofit_InCurrentWeatherViewModel(location.latitude.toString(),location.longitude.toString(),Utils.API_KEY)
+                        currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getForecast_FromRetrofit_InCurrentWeatherViewModel(location.latitude.toString(),location.longitude.toString(),Utils.API_KEY)
+
+
+
+                        //     tvTextLocation.text = address
+                    }
+
+                    //      fusedLocationProviderClient.removeLocationUpdates(this)
+                }
+            },
+            Looper.myLooper()
+        ) // end of request location updates
+    }
+
+
+    fun enableLocationServices(){
+        Toast.makeText(requireContext(),"Turn on Location", Toast.LENGTH_SHORT).show()
+
+        val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+        startActivity(intent)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        Log.i("TAG", "request code: " + requestCode)
+        if(requestCode == REQUEST_LOCATION_CODE){
+            if(grantResults.size > 1 && grantResults.get(0) == PackageManager.PERMISSION_GRANTED){
+                getFreshLocation()
+            }
+        }
+    }
+
 }

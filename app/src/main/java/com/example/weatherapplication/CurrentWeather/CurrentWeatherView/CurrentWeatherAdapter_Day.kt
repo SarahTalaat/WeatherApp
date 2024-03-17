@@ -56,7 +56,7 @@ class CurrentWeatherAdapter_Day: RecyclerView.Adapter<CurrentWeatherAdapter_Day.
         return weatherArrayList_InCurrentWeatherAdapter_Day.size
     }
 
-    fun settingWeatherArrayList_InCurrentWeatherAdapter(weatherArrayList: ArrayList<Model_WeatherArrayList>) {
+    fun settingWeatherArrayList_InCurrentWeatherAdapter_Day(weatherArrayList: ArrayList<Model_WeatherArrayList>) {
         Log.i(
             "TAG",
             "settingWeatherArrayList_InCurrentWeatherAdapter_Day: WeatherArrayList :" + weatherArrayList
