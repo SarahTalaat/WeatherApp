@@ -18,6 +18,10 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -71,5 +75,7 @@ dependencies {
     //Map: Google play services
     implementation("com.google.android.gms:play-services-location:21.1.0")
 
+    //Open Street Map
+    implementation ("org.osmdroid:osmdroid-android:6.1.14")
 
 }

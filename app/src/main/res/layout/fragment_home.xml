@@ -297,6 +297,17 @@
             app:layout_constraintStart_toStartOf="@+id/tv_Country"
             app:layout_constraintTop_toBottomOf="@+id/tv_Country" />
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingActionButton_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="336dp"
+            android:layout_marginTop="648dp"
+            android:clickable="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/osm_ic_center_map" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

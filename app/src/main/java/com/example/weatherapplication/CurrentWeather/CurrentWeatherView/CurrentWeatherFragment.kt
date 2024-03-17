@@ -38,6 +38,8 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import androidx.core.content.ContextCompat
+import com.example.weatherapplication.MapActivity
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 const val REQUEST_LOCATION_CODE = 2005
@@ -68,6 +70,7 @@ class CurrentWeatherFragment : Fragment() {
     lateinit var tv_wind_InCurrentWeatherFagment:TextView
     lateinit var tv_cloud_InCurrentWeatherFagment:TextView
     lateinit var tv_visibiliy_InCurrentWeatherFagment:TextView
+    lateinit var floatingActionButton_map: FloatingActionButton
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,6 +98,9 @@ class CurrentWeatherFragment : Fragment() {
         tv_wind_InCurrentWeatherFagment = view.findViewById(R.id.tv_wind_value)
         tv_cloud_InCurrentWeatherFagment = view.findViewById(R.id.tv_cloud_value)
         tv_visibiliy_InCurrentWeatherFagment = view.findViewById(R.id.tv_visibility_value)
+        floatingActionButton_map = view.findViewById(R.id.floatingActionButton_map)
+
+
 
         currentWeatherViewModelFactory_Instance_RDS_InCurrentWeatherFragment = CurrentWeatherViewModelFactory_RDS(
             WeatherRepositoryImplementation.getWeatherRepositoryImplementationInstance(
@@ -110,6 +116,12 @@ class CurrentWeatherFragment : Fragment() {
         setUpRecyclerView_Day_InCurrentWeatherFragment()
 
         mapPermissions_AndGettingCurrentLocation_AndDisplayDataInFragmentAndAdapters_InCurrentWeatherFragment()
+
+        floatingActionButton_map.setOnClickListener(){
+            var intent = Intent(context , MapActivity::class.java)
+            startActivity(intent)
+        }
+
 
         return view
     }
@@ -169,7 +181,7 @@ class CurrentWeatherFragment : Fragment() {
         return ContextCompat.checkSelfPermission(requireContext(),android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(requireContext(),android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
     }
- 
+
     fun isLocationEnabled(): Boolean{
         val locationManager: LocationManager =
             requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
