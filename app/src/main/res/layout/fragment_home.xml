@@ -148,7 +148,8 @@
                     android:layout_marginStart="32dp"
                     android:layout_marginTop="36dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/card2pressure" />
 
                 <ImageView
                     android:id="@+id/img_humidity"
@@ -157,7 +158,8 @@
                     android:layout_marginTop="25dp"
                     app:layout_constraintEnd_toEndOf="@+id/img_pressure"
                     app:layout_constraintStart_toStartOf="@+id/img_pressure"
-                    app:layout_constraintTop_toBottomOf="@+id/img_pressure" />
+                    app:layout_constraintTop_toBottomOf="@+id/img_pressure"
+                    app:srcCompat="@drawable/humidity" />
 
                 <ImageView
                     android:id="@+id/img_wind"
@@ -166,7 +168,8 @@
                     android:layout_marginTop="25dp"
                     app:layout_constraintEnd_toEndOf="@+id/img_humidity"
                     app:layout_constraintStart_toStartOf="@+id/img_humidity"
-                    app:layout_constraintTop_toBottomOf="@+id/img_humidity" />
+                    app:layout_constraintTop_toBottomOf="@+id/img_humidity"
+                    app:srcCompat="@drawable/card2wind" />
 
                 <ImageView
                     android:id="@+id/img_cloud"
@@ -175,7 +178,8 @@
                     android:layout_marginTop="25dp"
                     app:layout_constraintEnd_toEndOf="@+id/img_wind"
                     app:layout_constraintStart_toStartOf="@+id/img_wind"
-                    app:layout_constraintTop_toBottomOf="@+id/img_wind" />
+                    app:layout_constraintTop_toBottomOf="@+id/img_wind"
+                    app:srcCompat="@drawable/image_04d" />
 
                 <ImageView
                     android:id="@+id/img_Ultraviolet"
@@ -184,7 +188,8 @@
                     android:layout_marginTop="25dp"
                     app:layout_constraintEnd_toEndOf="@+id/img_cloud"
                     app:layout_constraintStart_toStartOf="@+id/img_cloud"
-                    app:layout_constraintTop_toBottomOf="@+id/img_cloud" />
+                    app:layout_constraintTop_toBottomOf="@+id/img_cloud"
+                    app:srcCompat="@drawable/card2ultraviolet" />
 
                 <ImageView
                     android:id="@+id/img_visibility"
@@ -193,7 +198,8 @@
                     android:layout_marginTop="25dp"
                     app:layout_constraintEnd_toEndOf="@+id/img_Ultraviolet"
                     app:layout_constraintStart_toStartOf="@+id/img_Ultraviolet"
-                    app:layout_constraintTop_toBottomOf="@+id/img_Ultraviolet" />
+                    app:layout_constraintTop_toBottomOf="@+id/img_Ultraviolet"
+                    app:srcCompat="@drawable/card2visibility" />
 
                 <TextView
                     android:id="@+id/tv_pressure"
