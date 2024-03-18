@@ -93,5 +93,7 @@ class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener {
         TODO("Not yet implemented")
     }
 
+    
+
 
 }
