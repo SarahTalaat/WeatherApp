@@ -8,6 +8,7 @@ import android.graphics.Rect
 import android.location.GpsStatus
 import android.location.Location
 import android.util.Log
+import android.view.MotionEvent
 
 import androidx.appcompat.app.AppCompatActivity
 import com.example.weatherapplication.databinding.ActivityMapBinding
@@ -19,7 +20,10 @@ import org.osmdroid.events.MapListener
 import org.osmdroid.events.ScrollEvent
 import org.osmdroid.events.ZoomEvent
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.Marker
+import org.osmdroid.views.overlay.Overlay
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
@@ -27,8 +31,15 @@ class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener {
 
 
     lateinit var mMap: MapView
-    lateinit var controller: IMapController;
-    lateinit var mMyLocationOverlay: MyLocationNewOverlay;
+    lateinit var controller: IMapController
+    lateinit var mMyLocationOverlay: MyLocationNewOverlay
+    lateinit var binding: ActivityMapBinding
+    private  lateinit var pinMarker: Marker
+
+    var lon: Double=0.0
+    var lat: Double=0.0
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityMapBinding.inflate(layoutInflater)
@@ -69,6 +80,10 @@ class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener {
         mMap.addMapListener(this)
 
 
+        pinMarker = Marker(mMap)
+        binding.osmmap.overlays.add(TapOverlay())
+
+
     }
 
     override fun onScroll(event: ScrollEvent?): Boolean {
@@ -93,7 +108,22 @@ class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener {
         TODO("Not yet implemented")
     }
 
-    
+    private  inner class TapOverlay: Overlay(){
+        override fun onSingleTapConfirmed(e: MotionEvent?, mapView: MapView?): Boolean {
+            val point = mapView?.projection?.fromPixels(e?.x?.toInt() ?: 0 , e?.y?.toInt() ?: 0)
+            binding.osmmap.overlays.remove(pinMarker)
+            pinMarker = Marker(mapView)
+            pinMarker?.position = point as GeoPoint
+            binding.osmmap.overlays.add(pinMarker)
+            binding.osmmap.invalidate()
+
+            binding.btnConfirmLocation.setOnClickListener(){
+                Log.i("TAG", "onSingleTapConfirmed_InInnerClass_InMapActivity: Latitude:  ${point.latitude}  Longitude: ${point.longitude}")
+
+            }
+            return true
+        }
+    }
 
 
 }
