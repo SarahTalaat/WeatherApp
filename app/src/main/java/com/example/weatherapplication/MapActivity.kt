@@ -42,7 +42,7 @@ class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityMapBinding.inflate(layoutInflater)
+        binding = ActivityMapBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Configuration.getInstance().load(
             applicationContext,

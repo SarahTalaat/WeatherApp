@@ -98,7 +98,7 @@ class CurrentWeatherFragment : Fragment() {
         tv_wind_InCurrentWeatherFagment = view.findViewById(R.id.tv_wind_value)
         tv_cloud_InCurrentWeatherFagment = view.findViewById(R.id.tv_cloud_value)
         tv_visibiliy_InCurrentWeatherFagment = view.findViewById(R.id.tv_visibility_value)
-        floatingActionButton_map = view.findViewById(R.id.floatingActionButton_map)
+      //  floatingActionButton_map = view.findViewById(R.id.floatingActionButton_map)
 
 
 
@@ -117,10 +117,7 @@ class CurrentWeatherFragment : Fragment() {
 
         mapPermissions_AndGettingCurrentLocation_AndDisplayDataInFragmentAndAdapters_InCurrentWeatherFragment()
 
-        floatingActionButton_map.setOnClickListener(){
-            var intent = Intent(context , MapActivity::class.java)
-            startActivity(intent)
-        }
+
 
 
         return view
@@ -128,6 +125,7 @@ class CurrentWeatherFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
 
     }
@@ -191,6 +189,12 @@ class CurrentWeatherFragment : Fragment() {
 
     @SuppressLint("MissingPermission")
     fun getFreshLocation(){
+
+        // Check if the fragment is attached to a context
+        if (!isAdded || !isVisible) {
+            return
+        }
+
         var currentLocationInGetFreshLocation:String=""
         Log.i("TAG", "getFreshLocation() " )
 

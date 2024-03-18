@@ -16,7 +16,6 @@ import com.example.weatherapplication.Model_WeatherArrayList
 import com.example.weatherapplication.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.ArrayList
 
 class CurrentWeatherAdapter_Day: RecyclerView.Adapter<CurrentWeatherAdapter_Day.MyViewHolder_InCurrentWeatherAdapter_Day> {
 
@@ -61,7 +60,7 @@ class CurrentWeatherAdapter_Day: RecyclerView.Adapter<CurrentWeatherAdapter_Day.
             "TAG",
             "settingWeatherArrayList_InCurrentWeatherAdapter_Day: WeatherArrayList :" + weatherArrayList
         )
-
+/*
         for(i in 0 until weatherArrayList.size){
 
             var dtTxt_value = weatherArrayList.get(i).dtTxt
@@ -78,8 +77,27 @@ class CurrentWeatherAdapter_Day: RecyclerView.Adapter<CurrentWeatherAdapter_Day.
 
             }
         }
+
+ */
+        this.weatherArrayList_InCurrentWeatherAdapter_Day = setUniqueDayArrayList(weatherArrayList)
         notifyDataSetChanged()
     }
+
+    fun setUniqueDayArrayList(weatherArrayList: ArrayList<Model_WeatherArrayList>) : ArrayList<Model_WeatherArrayList>{
+        val uniqueDayHashSet = HashSet<String?>()
+        val filterList = weatherArrayList.filter { entry ->
+
+            val day_FromDtTxt = entry.dtTxt?.split(" ")?.get(0)
+            if(uniqueDayHashSet.contains(day_FromDtTxt)){
+                false
+            }else{
+                uniqueDayHashSet.add(day_FromDtTxt)
+                true
+            }
+        }
+        return  filterList as ArrayList<Model_WeatherArrayList>
+    }
+
 
     class MyViewHolder_InCurrentWeatherAdapter_Day : RecyclerView.ViewHolder {
 
