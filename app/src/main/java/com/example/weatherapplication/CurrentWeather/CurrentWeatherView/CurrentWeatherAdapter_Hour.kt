@@ -122,10 +122,32 @@ class CurrentWeatherAdapter_Hour: RecyclerView.Adapter<CurrentWeatherAdapter_Hou
         return weatherArrayList_InCurrentWeatherAdapter.size
     }
 
+
+    fun setUniqueHourArrayList(weatherArrayList: ArrayList<Model_WeatherArrayList>) : ArrayList<Model_WeatherArrayList>{
+        val uniqueHourHashSet = HashSet<String?>()
+        val filterList = weatherArrayList.filter { entry ->
+
+            val hour_FromDtTxt = entry.dtTxt?.split(" ")?.get(1)
+            if(uniqueHourHashSet.contains(hour_FromDtTxt)){
+                false
+            }else{
+                uniqueHourHashSet.add(hour_FromDtTxt)
+                true
+            }
+        }
+        return  filterList as ArrayList<Model_WeatherArrayList>
+    }
+
+
     fun settingWeatherArrayList_InCurrentWeatherAdapter_Hour(weatherArrayList: ArrayList<Model_WeatherArrayList>){
         Log.i("TAG", "settingWeatherArrayList_InCurrentWeatherAdapter: WeatherArrayList :" + weatherArrayList)
-        var firstFourElementsOfweatherArrayList: List<Model_WeatherArrayList> = weatherArrayList.take(7)
-        this.weatherArrayList_InCurrentWeatherAdapter = firstFourElementsOfweatherArrayList as ArrayList<Model_WeatherArrayList>
+        //var firstFourElementsOfweatherArrayList: List<Model_WeatherArrayList> = weatherArrayList.take(7)
+        //this.weatherArrayList_InCurrentWeatherAdapter = firstFourElementsOfweatherArrayList as ArrayList<Model_WeatherArrayList>
+
+        this.weatherArrayList_InCurrentWeatherAdapter = setUniqueHourArrayList(weatherArrayList)
+
+
+
         notifyDataSetChanged()
     }
 

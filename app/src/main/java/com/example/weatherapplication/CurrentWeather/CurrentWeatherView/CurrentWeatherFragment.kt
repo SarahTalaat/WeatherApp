@@ -70,11 +70,24 @@ class CurrentWeatherFragment : Fragment() {
     lateinit var tv_wind_InCurrentWeatherFagment:TextView
     lateinit var tv_cloud_InCurrentWeatherFagment:TextView
     lateinit var tv_visibiliy_InCurrentWeatherFagment:TextView
-    lateinit var floatingActionButton_map: FloatingActionButton
+    private var context_InCurrentWeatherFragment: Context? = null
 
 
+
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        context_InCurrentWeatherFragment = context
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        context_InCurrentWeatherFragment = null
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
 
     }
 
@@ -87,6 +100,13 @@ class CurrentWeatherFragment : Fragment() {
         var lat_Egypt = "30.033333"
         var lon_Egypt = "31.233334"
 
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
         tv_date_InCurrentWeatherFagment = view.findViewById(R.id.tv_Date)
         tv_country_InCurrentWeatherFagment = view.findViewById(R.id.tv_Country)
         tv_weatherStatus_InCurrentWeatherFagment = view.findViewById(R.id.tv_weatherState)
@@ -98,8 +118,6 @@ class CurrentWeatherFragment : Fragment() {
         tv_wind_InCurrentWeatherFagment = view.findViewById(R.id.tv_wind_value)
         tv_cloud_InCurrentWeatherFagment = view.findViewById(R.id.tv_cloud_value)
         tv_visibiliy_InCurrentWeatherFagment = view.findViewById(R.id.tv_visibility_value)
-        floatingActionButton_map = view.findViewById(R.id.floatingActionButton_map)
-
 
 
         currentWeatherViewModelFactory_Instance_RDS_InCurrentWeatherFragment = CurrentWeatherViewModelFactory_RDS(
@@ -114,149 +132,6 @@ class CurrentWeatherFragment : Fragment() {
         initUI_InCurrentWeatherFragment(view)
         setUpRecyclerView_Hour_InCurrentWeatherFragment()
         setUpRecyclerView_Day_InCurrentWeatherFragment()
-
-        mapPermissions_AndGettingCurrentLocation_AndDisplayDataInFragmentAndAdapters_InCurrentWeatherFragment()
-
-        floatingActionButton_map.setOnClickListener(){
-            var intent = Intent(context , MapActivity::class.java)
-            startActivity(intent)
-        }
-
-
-        return view
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-
-    }
-
-    private fun initUI_InCurrentWeatherFragment(view: View){
-        recyclerView_Instance_Hour_InCurrentWeatherFragment = view.findViewById(R.id.rv_hours)
-        recyclerView_Instance_Day_InCurrentWeatherFragment = view.findViewById(R.id.rv_days)
-    }
-
-    private fun setUpRecyclerView_Hour_InCurrentWeatherFragment(){
-        layoutManager_Instance_Hour_InCurrentWeatherFragment = LinearLayoutManager(requireContext())
-        layoutManager_Instance_Hour_InCurrentWeatherFragment.orientation = RecyclerView.HORIZONTAL
-        adapter_Instance_Hour_InCurrentWeatherFragment = CurrentWeatherAdapter_Hour(requireContext(), ArrayList())
-        recyclerView_Instance_Hour_InCurrentWeatherFragment.adapter = adapter_Instance_Hour_InCurrentWeatherFragment
-        recyclerView_Instance_Hour_InCurrentWeatherFragment.layoutManager = layoutManager_Instance_Hour_InCurrentWeatherFragment
-    }
-
-
-    private fun setUpRecyclerView_Day_InCurrentWeatherFragment(){
-        layoutManager_Instance_Day_InCurrentWeatherFragment = LinearLayoutManager(requireContext())
-        layoutManager_Instance_Day_InCurrentWeatherFragment.orientation = RecyclerView.VERTICAL
-        adapter_Instance_Day_InCurrentWeatherFragment = CurrentWeatherAdapter_Day(requireContext(), ArrayList())
-        recyclerView_Instance_Day_InCurrentWeatherFragment.adapter = adapter_Instance_Day_InCurrentWeatherFragment
-        recyclerView_Instance_Day_InCurrentWeatherFragment.layoutManager = layoutManager_Instance_Day_InCurrentWeatherFragment
-    }
-
-
-    @SuppressLint("MissingPermission")
-    fun mapPermissions_AndGettingCurrentLocation_AndDisplayDataInFragmentAndAdapters_InCurrentWeatherFragment(){
-
-        if(checkPermissions()){
-            if(isLocationEnabled()){
-                getFreshLocation()
-            }else{
-                enableLocationServices()
-            }
-        }else{
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                arrayOf(
-                    android.Manifest.permission.ACCESS_FINE_LOCATION,
-                    android.Manifest.permission.ACCESS_COARSE_LOCATION
-
-                ),
-                REQUEST_LOCATION_CODE
-            )
-        }
-    }
-
-    fun checkPermissions(): Boolean{
-        return ContextCompat.checkSelfPermission(requireContext(),android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(requireContext(),android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-    }
-
-    fun isLocationEnabled(): Boolean{
-        val locationManager: LocationManager =
-            requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
-                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-    }
-
-    @SuppressLint("MissingPermission")
-    fun getFreshLocation(){
-        var currentLocationInGetFreshLocation:String=""
-        Log.i("TAG", "getFreshLocation() " )
-
-        //Entry point
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-        //Location request to determine min distance , min time , accuracy level to get location updates
-        Log.i("TAG", "after entry point " )
-        fusedLocationProviderClient.requestLocationUpdates(
-            com.google.android.gms.location.LocationRequest.Builder(2000).apply {
-                setPriority(Priority.PRIORITY_HIGH_ACCURACY)
-                Log.i("TAG", "first parameter " )
-            }.build(),
-            //Call back to get the location
-            object : LocationCallback() {
-                override fun onLocationResult(p0: LocationResult) {
-                    super.onLocationResult(p0)
-                    Log.i("TAG", "super.onLocationResult(p0) " )
-                    val location = p0.lastLocation
-                    Log.i("TAG", "latitude: " + location?.latitude.toString())
-                    Log.i("TAG", "longitue: " + location?.longitude.toString())
-                   // tvLongitude.text = location?.longitude.toString()
-                   // tvLatitude.text = location?.latitude.toString()
-
-                    if(location?.latitude!= null && location?.longitude!= null){
-                        val geoUtils = GeoUtils(requireContext())
-                        val address = geoUtils.getAddress(location?.latitude, location?.longitude)
-                        Log.i("TAG", "onLocationResult: full addess: "+address)
-
-                        getLatAndLonFromGetFreshLocationFunctionToDisplayDataInFragmentAndAdapters_InCurrentWeatherFragment(location.latitude.toString(),location.longitude.toString())
-
-                        //     tvTextLocation.text = address
-                    }
-
-                    //      fusedLocationProviderClient.removeLocationUpdates(this)
-                }
-            },
-            Looper.myLooper()
-        ) // end of request location updates
-
-    }
-
-
-    fun enableLocationServices(){
-        Toast.makeText(requireContext(),"Turn on Location", Toast.LENGTH_SHORT).show()
-
-        val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-        startActivity(intent)
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        Log.i("TAG", "request code: " + requestCode)
-        if(requestCode == REQUEST_LOCATION_CODE){
-            if(grantResults.size > 1 && grantResults.get(0) == PackageManager.PERMISSION_GRANTED){
-                getFreshLocation()
-            }
-        }
-    }
-
-    fun getLatAndLonFromGetFreshLocationFunctionToDisplayDataInFragmentAndAdapters_InCurrentWeatherFragment(lat_constructorParameter: String, lon_constructorParameter:String){
-
-
 
 
         currentWeatherViewModel_Instance_InCurrentWeatherFragmet.forecastLiveDataList_InCurrentWeatherViewModel.observe(viewLifecycleOwner){
@@ -325,9 +200,138 @@ class CurrentWeatherFragment : Fragment() {
 
         }
 
-        currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getList_FromRetrofit_InCurrentWeatherViewModel(lat_constructorParameter,lon_constructorParameter,Utils.API_KEY)
-        currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getForecast_FromRetrofit_InCurrentWeatherViewModel(lat_constructorParameter,lon_constructorParameter,Utils.API_KEY)
+        getFreshLocation()
+        //mapPermissions_AndGettingCurrentLocation_AndDisplayDataInFragmentAndAdapters_InCurrentWeatherFragment()
 
+    }
+
+    private fun initUI_InCurrentWeatherFragment(view: View){
+        recyclerView_Instance_Hour_InCurrentWeatherFragment = view.findViewById(R.id.rv_hours)
+        recyclerView_Instance_Day_InCurrentWeatherFragment = view.findViewById(R.id.rv_days)
+    }
+
+    private fun setUpRecyclerView_Hour_InCurrentWeatherFragment(){
+        layoutManager_Instance_Hour_InCurrentWeatherFragment = LinearLayoutManager(requireContext())
+        layoutManager_Instance_Hour_InCurrentWeatherFragment.orientation = RecyclerView.HORIZONTAL
+        adapter_Instance_Hour_InCurrentWeatherFragment = CurrentWeatherAdapter_Hour(requireContext(), ArrayList())
+        recyclerView_Instance_Hour_InCurrentWeatherFragment.adapter = adapter_Instance_Hour_InCurrentWeatherFragment
+        recyclerView_Instance_Hour_InCurrentWeatherFragment.layoutManager = layoutManager_Instance_Hour_InCurrentWeatherFragment
+    }
+
+
+    private fun setUpRecyclerView_Day_InCurrentWeatherFragment(){
+        layoutManager_Instance_Day_InCurrentWeatherFragment = LinearLayoutManager(requireContext())
+        layoutManager_Instance_Day_InCurrentWeatherFragment.orientation = RecyclerView.VERTICAL
+        adapter_Instance_Day_InCurrentWeatherFragment = CurrentWeatherAdapter_Day(requireContext(), ArrayList())
+        recyclerView_Instance_Day_InCurrentWeatherFragment.adapter = adapter_Instance_Day_InCurrentWeatherFragment
+        recyclerView_Instance_Day_InCurrentWeatherFragment.layoutManager = layoutManager_Instance_Day_InCurrentWeatherFragment
+    }
+
+
+    @SuppressLint("MissingPermission")
+    override fun onStart() {
+        super.onStart()
+        if(checkPermissions()){
+            if(isLocationEnabled()){
+                getFreshLocation()
+            }else{
+                enableLocationServices()
+            }
+        }else{
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(
+                    android.Manifest.permission.ACCESS_FINE_LOCATION,
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+
+                ),
+                REQUEST_LOCATION_CODE
+            )
+        }
+    }
+
+
+    fun checkPermissions(): Boolean{
+        return ContextCompat.checkSelfPermission(requireContext(),android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(requireContext(),android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+    }
+
+    fun isLocationEnabled(): Boolean{
+        val locationManager: LocationManager =
+            requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+    }
+
+    @SuppressLint("MissingPermission")
+    fun getFreshLocation(){
+
+        var currentLocationInGetFreshLocation:String=""
+        Log.i("TAG", "getFreshLocation() " )
+
+        //Entry point
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        //Location request to determine min distance , min time , accuracy level to get location updates
+        Log.i("TAG", "after entry point " )
+        fusedLocationProviderClient.requestLocationUpdates(
+            com.google.android.gms.location.LocationRequest.Builder(2000).apply {
+                setPriority(Priority.PRIORITY_HIGH_ACCURACY)
+                Log.i("TAG", "first parameter " )
+            }.build(),
+            //Call back to get the location
+            object : LocationCallback() {
+                override fun onLocationResult(p0: LocationResult) {
+                    super.onLocationResult(p0)
+                    Log.i("TAG", "super.onLocationResult(p0) " )
+                    val location = p0.lastLocation
+                    Log.i("TAG", "latitude: " + location?.latitude.toString())
+                    Log.i("TAG", "longitue: " + location?.longitude.toString())
+                   // tvLongitude.text = location?.longitude.toString()
+                   // tvLatitude.text = location?.latitude.toString()
+
+                    if(location?.latitude!= null && location?.longitude!= null){
+                        val context_InGetFreshLocation = context_InCurrentWeatherFragment ?: return
+                        val geoUtils = GeoUtils(context_InGetFreshLocation)
+                        val address = geoUtils.getAddress(location?.latitude, location?.longitude)
+                        Log.i("TAG", "onLocationResult: full addess: "+address)
+
+
+                        currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getList_FromRetrofit_InCurrentWeatherViewModel(location.latitude.toString(),location.longitude.toString(),Utils.API_KEY)
+                        currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getForecast_FromRetrofit_InCurrentWeatherViewModel(location.latitude.toString(),location.longitude.toString(),Utils.API_KEY)
+
+                     //   getLatAndLonFromGetFreshLocationFunctionToDisplayDataInFragmentAndAdapters_InCurrentWeatherFragment(location.latitude.toString(),location.longitude.toString())
+
+                        //     tvTextLocation.text = address
+                    }
+
+                    //      fusedLocationProviderClient.removeLocationUpdates(this)
+                }
+            },
+            Looper.myLooper()
+        ) // end of request location updates
+
+    }
+
+
+    fun enableLocationServices(){
+        Toast.makeText(requireContext(),"Turn on Location", Toast.LENGTH_SHORT).show()
+
+        val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+        startActivity(intent)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        Log.i("TAG", "request code: " + requestCode)
+        if(requestCode == REQUEST_LOCATION_CODE){
+            if(grantResults.size > 1 && grantResults.get(0) == PackageManager.PERMISSION_GRANTED){
+                getFreshLocation()
+            }
+        }
     }
 
 
