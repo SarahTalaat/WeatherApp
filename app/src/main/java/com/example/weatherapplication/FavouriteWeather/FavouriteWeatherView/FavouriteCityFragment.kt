@@ -75,7 +75,7 @@ class FavouriteCityFragment : Fragment(), OnFavouriteCityClickListenerInterface 
 
         favouriteCityViewModel_Instance_InFavouriteCityActivity.favouriteCityLiveDataList_InFavouriteCityViewModel .observe(viewLifecycleOwner){
                 products ->
-            adapter_Instance_InFavouriteCityFragment.setProductList_InFavouriteProductsAdapter(products as ArrayList<Model_FavouriteCity>)
+            adapter_Instance_InFavouriteCityFragment.setFavouriteCityList_InFavouriteCityAdapter(products as ArrayList<Model_FavouriteCity>)
             adapter_Instance_InFavouriteCityFragment.notifyDataSetChanged()
         }
 
