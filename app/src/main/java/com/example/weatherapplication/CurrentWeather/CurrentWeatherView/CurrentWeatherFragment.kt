@@ -39,8 +39,6 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import androidx.core.content.ContextCompat
 import com.example.productsmvvm.Database.WeatherLocalDataSourceImplementation
-import com.example.weatherapplication.MapActivity
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 const val REQUEST_LOCATION_CODE = 2005

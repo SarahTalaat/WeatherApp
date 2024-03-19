@@ -20,7 +20,7 @@
         android:theme="@style/Theme.WeatherApplication"
         tools:targetApi="31">
         <activity
-            android:name=".MapActivity"
+            android:name=".Map.MapActivity"
             android:exported="false" />
 
         <activity
