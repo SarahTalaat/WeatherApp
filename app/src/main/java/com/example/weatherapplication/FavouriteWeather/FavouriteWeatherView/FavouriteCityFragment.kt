@@ -76,7 +76,7 @@ class FavouriteCityFragment : Fragment() {
     private fun initUI_InFavouriteProductsActivity(){
         recyclerView_Instance_InFavouriteProductsActivity = findViewById(R.id.rv_Favourite)
     }
-
+ 
     private fun setUpRecyclerView_InFavouriteProductsActivity(){
         layoutManager_Instance_InFavouriteProductsActivity = LinearLayoutManager(this)
         layoutManager_Instance_InFavouriteProductsActivity.orientation = RecyclerView.VERTICAL
