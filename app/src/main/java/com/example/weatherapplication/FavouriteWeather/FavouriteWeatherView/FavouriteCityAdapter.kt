@@ -1,6 +1,6 @@
 package com.example.productsmvvm.FavouriteProducts.FavouriteProductsView
 
-/*
+
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
@@ -22,12 +22,12 @@ class FavouriteProductsAdapter: RecyclerView.Adapter<FavouriteProductsAdapter.My
 
     var context_Instance_InFavouriteProductsAdapter: Context
     var productsArrayList_InFavouriteProductsAdapter: ArrayList<Products>
-    var onFavouriteClickListenerInterface_Instance_InFavouriteProductsAdapter: OnFavouriteClickListenerInterface
+    var onFavouriteClickListenerInterface_Instance_InFavouriteProductsAdapterCity: OnFavouriteCityClickListenerInterface
 
-    public constructor(context_Instance_ConstructorParameter_InFavouriteProductsAdapter: Context, productsArrayList_ConstructorParameter_InFavouriteProductsAdapter: ArrayList<Products>, onFavouriteClickListenerInterfaceInstance_ConstructorParameter_InFavouriteProductsAdapter: OnFavouriteClickListenerInterface){
+    public constructor(context_Instance_ConstructorParameter_InFavouriteProductsAdapter: Context, productsArrayList_ConstructorParameter_InFavouriteProductsAdapter: ArrayList<Products>, onFavouriteClickListenerInterfaceInstance_ConstructorParameter_InFavouriteProductsAdapterCity: OnFavouriteCityClickListenerInterface){
         this.context_Instance_InFavouriteProductsAdapter=context_Instance_ConstructorParameter_InFavouriteProductsAdapter
         this.productsArrayList_InFavouriteProductsAdapter=productsArrayList_ConstructorParameter_InFavouriteProductsAdapter
-        this.onFavouriteClickListenerInterface_Instance_InFavouriteProductsAdapter = onFavouriteClickListenerInterfaceInstance_ConstructorParameter_InFavouriteProductsAdapter
+        this.onFavouriteClickListenerInterface_Instance_InFavouriteProductsAdapterCity = onFavouriteClickListenerInterfaceInstance_ConstructorParameter_InFavouriteProductsAdapterCity
     }
 
 
@@ -81,11 +81,10 @@ class FavouriteProductsAdapter: RecyclerView.Adapter<FavouriteProductsAdapter.My
         holder.tv_id_value_favouriteProducts.setText(productsArrayList_InFavouriteProductsAdapter.get(position).id.toString())
 
         holder.btn_removeFromFavourite_favouriteProducts.setOnClickListener(){
-            onFavouriteClickListenerInterface_Instance_InFavouriteProductsAdapter.onClick_DeleteProductFromFavouriteProductsActivity_InOnFavouriteClickListenerInterface(productsArrayList_InFavouriteProductsAdapter.get(position))
+            onFavouriteClickListenerInterface_Instance_InFavouriteProductsAdapterCity.onClick_DeleteFavouriteCityFromFavouriteCityFragment_InOnFavouriteClickListenerInterface(productsArrayList_InFavouriteProductsAdapter.get(position))
         }
 
     }
 
 }
 
- */
