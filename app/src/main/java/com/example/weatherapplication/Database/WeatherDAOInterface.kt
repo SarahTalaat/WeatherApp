@@ -1,23 +1,23 @@
 package com.example.productsmvvm.Database
-/*
+
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.productsmvvm.Model.Products
+import com.example.weatherapplication.Model.Model_FavouriteCity
+
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface WeatherDAOInterface {
-    @Query("SELECT * FROM products_table ")
-    fun getAllStoredProducts_InDAOInterface(): Flow<List<Products>>
+    @Query("SELECT * FROM city_table ")
+    fun getAllStoredFavouriteCity_InDAOInterface(): Flow<List<Model_FavouriteCity>>
 
     @Insert(onConflict =  OnConflictStrategy.IGNORE)
-    suspend fun insertProduct_InDAOInterface (products: Products) : Long
+    suspend fun insertFavouriteCity_InDAOInterface (city: Model_FavouriteCity) : Long
 
     @Delete
-    suspend fun deleteProduct_InDAOInterface(products: Products): Int
+    suspend fun deleteFavouriteCity_InDAOInterface(city: Model_FavouriteCity): Int
 }
 
- */

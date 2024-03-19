@@ -10,6 +10,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.weatherapplication.CurrentWeather.CurrentWeatherView.CurrentWeatherFragment
+import com.example.weatherapplication.FavouriteWeather.FavouriteWeatherView.FavouriteCityFragment
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -60,7 +61,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.nav_home -> replaceFragment(CurrentWeatherFragment())
-            R.id.nav_favourites -> replaceFragment(FavouriteFragment())
+            R.id.nav_favourites -> replaceFragment(FavouriteCityFragment())
             R.id.nav_alerts -> replaceFragment(AlertsFragment())
             R.id.nav_settings -> replaceFragment(SettingsFragment())
         }

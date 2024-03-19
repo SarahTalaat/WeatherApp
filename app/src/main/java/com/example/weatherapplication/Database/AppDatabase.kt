@@ -1,16 +1,16 @@
 package com.example.productsmvvm.Database
-/*
+
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.productsmvvm.Model.Products
+import com.example.weatherapplication.Model.Model_FavouriteCity
 
 
-@Database(entities = arrayOf(Products::class) , version = 1)
+@Database(entities = arrayOf(Model_FavouriteCity::class) , version = 1)
 abstract class AppDatabase: RoomDatabase() {
                 //productsDao
-    abstract fun getAllProducts_FromDAO_InAppDatabase(): WeatherDAOInterface
+    abstract fun getAllFavouriteCity_FromDAO_InAppDatabase(): WeatherDAOInterface
 
     companion object{
     //    @Volatile
@@ -20,7 +20,7 @@ abstract class AppDatabase: RoomDatabase() {
             return INSTANCE ?: synchronized(this){
                 //val db
                 val instance = Room.databaseBuilder(
-                    context.applicationContext,AppDatabase::class.java,"products_database")
+                    context.applicationContext,AppDatabase::class.java,"city_database")
                     .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE=instance
@@ -31,4 +31,3 @@ abstract class AppDatabase: RoomDatabase() {
 
 }
 
- */

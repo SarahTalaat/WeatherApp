@@ -2,27 +2,30 @@ package com.example.productsmvvm.Model
 
 //import com.example.productsmvvm.Database.WeatherLocalDataSourceInterface
 import android.util.Log
+import com.example.productsmvvm.Database.WeatherLocalDataSourceInterface
 import com.example.productsmvvm.Network.WeatherRemoteDataSourceInterface
+import com.example.weatherapplication.Model.Model_FavouriteCity
 import com.example.weatherapplication.Model.Model_Forecast
 import com.example.weatherapplication.Model_City
 import com.example.weatherapplication.Model_WeatherArrayList
+import kotlinx.coroutines.flow.Flow
 
 //Singleton
 class WeatherRepositoryImplementation private constructor(
     private var weatherRemoteDataSourceInterface_Instance: WeatherRemoteDataSourceInterface,
-   // private var weatherLocalDataSourceInterface_Instance: WeatherLocalDataSourceInterface
+    private var weatherLocalDataSourceInterface_Instance: WeatherLocalDataSourceInterface
 ) : WeatherRepositoryInterface
 {
     companion object{
         private var instance: WeatherRepositoryImplementation? = null
         fun getWeatherRepositoryImplementationInstance(
             weatherRemoteDataSourceInterface: WeatherRemoteDataSourceInterface,
-       //     weatherLocalDataSourceInterface: WeatherLocalDataSourceInterface
+            weatherLocalDataSourceInterface: WeatherLocalDataSourceInterface
         ): WeatherRepositoryImplementation{
             return instance?: synchronized(this){
                 val temp = WeatherRepositoryImplementation(
                     weatherRemoteDataSourceInterface,
-                   // weatherLocalDataSourceInterface
+                    weatherLocalDataSourceInterface
                 )
                 instance = temp
                 Log.i("TAG", "getProductsRepositoryImplementationInstance: " + instance)
@@ -82,6 +85,19 @@ class WeatherRepositoryImplementation private constructor(
     ): Model_Forecast? {
         Log.i("TAG", "getForecast_FromRDS_InProductsRepository: "+  weatherRemoteDataSourceInterface_Instance.getForecast_OverNetwork_InRDS(lat, lon, appid))
         return  weatherRemoteDataSourceInterface_Instance.getForecast_OverNetwork_InRDS(lat, lon, appid)
+    }
+
+    override suspend fun getAllStoredFavouriteCity_FromLDS_InProductsRepository(): Flow<List<Model_FavouriteCity>> {
+        return weatherLocalDataSourceInterface_Instance.getAllStoredFavouriteCityFromDatabase_InLDS()
+    }
+
+    override suspend fun insertFavouriteCity_FromLDS_InProductsRepository(city: Model_FavouriteCity) {
+        return weatherLocalDataSourceInterface_Instance.insertFavouriteCityIntoDatabase_InLDS(city)
+    }
+
+    override suspend fun deleteFavouriteCity_FromLDS_InProductsRepository(city: Model_FavouriteCity) {
+        return weatherLocalDataSourceInterface_Instance.deleteFavouriteCityFromDatabase_InLDS(city)
+
     }
 
 

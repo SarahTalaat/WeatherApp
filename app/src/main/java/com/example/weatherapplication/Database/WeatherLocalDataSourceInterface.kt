@@ -1,15 +1,14 @@
 package com.example.productsmvvm.Database
 
-/*
-import com.example.productsmvvm.Model.Products
+
+import com.example.weatherapplication.Model.Model_FavouriteCity
 import kotlinx.coroutines.flow.Flow
 
 interface WeatherLocalDataSourceInterface {
 
-    suspend fun insertProductIntoDatabase_InLDS(product: Products)
-    suspend fun deleteProductFromDatabase_InLDS(product: Products)
-    suspend fun getAllStoredProductsFromDatabase_InLDS() : Flow<List<Products>>
+    suspend fun insertFavouriteCityIntoDatabase_InLDS(city: Model_FavouriteCity)
+    suspend fun deleteFavouriteCityFromDatabase_InLDS(city: Model_FavouriteCity)
+    suspend fun getAllStoredFavouriteCityFromDatabase_InLDS() : Flow<List<Model_FavouriteCity>>
 
 }
 
- */

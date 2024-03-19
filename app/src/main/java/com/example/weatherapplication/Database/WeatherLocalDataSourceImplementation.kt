@@ -1,33 +1,32 @@
 package com.example.productsmvvm.Database
 
-/*
+
 import android.content.Context
-import com.example.productsmvvm.Model.Products
+import com.example.weatherapplication.Model.Model_FavouriteCity
 import kotlinx.coroutines.flow.Flow
 
 class WeatherLocalDataSourceImplementation (context: Context) : WeatherLocalDataSourceInterface{
 //dao
     private val weatherDAOInterface_InLDSImp: WeatherDAOInterface by lazy {
         val db: AppDatabase = AppDatabase.getAppDatabaseInstance(context)
-        db.getAllProducts_FromDAO_InAppDatabase()
+        db.getAllFavouriteCity_FromDAO_InAppDatabase()
     }
 
-    override suspend fun insertProductIntoDatabase_InLDS(product: Products) {
+    override suspend fun insertFavouriteCityIntoDatabase_InLDS(city: Model_FavouriteCity) {
        //dao
-        weatherDAOInterface_InLDSImp.insertProduct_InDAOInterface(product)
+        weatherDAOInterface_InLDSImp.insertFavouriteCity_InDAOInterface(city)
     }
 
-    override suspend fun deleteProductFromDatabase_InLDS(product: Products) {
+    override suspend fun deleteFavouriteCityFromDatabase_InLDS(city: Model_FavouriteCity) {
         //dao
-        weatherDAOInterface_InLDSImp.deleteProduct_InDAOInterface(product)
+        weatherDAOInterface_InLDSImp.deleteFavouriteCity_InDAOInterface(city)
     }
 
-    override suspend fun getAllStoredProductsFromDatabase_InLDS(): Flow<List<Products>> {
-        //dao
-        return weatherDAOInterface_InLDSImp.getAllStoredProducts_InDAOInterface()
+    override suspend fun getAllStoredFavouriteCityFromDatabase_InLDS(): Flow<List<Model_FavouriteCity>> {
+        return weatherDAOInterface_InLDSImp.getAllStoredFavouriteCity_InDAOInterface()
     }
 
 
 }
 
- */
+ 
