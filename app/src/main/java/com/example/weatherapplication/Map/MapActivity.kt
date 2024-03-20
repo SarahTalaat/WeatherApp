@@ -17,7 +17,9 @@ import com.example.productsmvvm.Database.WeatherLocalDataSourceImplementation
 import com.example.productsmvvm.FavouriteProducts.FavouriteProductsViewModel.FavouriteCityViewModelFactory_LDS
 import com.example.productsmvvm.Model.WeatherRepositoryImplementation
 import com.example.productsmvvm.Network.WeatherRemoteDataSourceImplementation
+import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.FavouriteWeather.FavouriteWeatherView.FavouriteCityFragment
+import com.example.weatherapplication.MainActivity
 import com.example.weatherapplication.Model.Model_FavouriteCity
 import com.example.weatherapplication.R
 import com.example.weatherapplication.databinding.ActivityMapBinding
@@ -64,7 +66,7 @@ class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener , OnFav
             )
         )
 
-        favouriteCityViewModel_Instance_InMapActivity = ViewModelProvider(this, ).get(
+        favouriteCityViewModel_Instance_InMapActivity = ViewModelProvider(this, favouriteCityViewModelFactory_LDS_Instance_InMapActivity ).get(
             FavouriteCityViewModel::class.java)
 
 
@@ -145,7 +147,8 @@ class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener , OnFav
 
                 var modelModel_FavouriteCity = Model_FavouriteCity(lat.toString(),lon.toString(),cityName)
                 onClick_insertFavouriteCityToFavouriteActivity_InFavouriteCityClickListenerInterface(modelModel_FavouriteCity)
-                var intent = Intent(this, FavouriteCityFragment::class.java)
+                var intent = Intent(this, MainActivity::class.java)
+                intent.putExtra(Utils.FAVOURITE_CITY_KEY,Utils.FAVOURITE_CITY_VALUE)
                 startActivity(intent)
 
             }
