@@ -149,8 +149,8 @@ class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener ,
                 onClick_insertFavouriteCityToFavouriteActivity_InFavouriteCityClickListenerInterface(modelModel_FavouriteCity)
 
                 val intent = Intent(this, FavouriteCityWeatherActivity::class.java)
-                intent.putExtra(Utils.FAVOURITE_CITY_LATITUDE, "$lat")
-                intent.putExtra(Utils.FAVOURITE_CITY_LONGITUDE, "$lon")
+                intent.putExtra(Utils.FAVOURITE_CITY_LATITUDE, "${lat.toString()}")
+                intent.putExtra(Utils.FAVOURITE_CITY_LONGITUDE, "${lon.toString()}")
                 intent.putExtra(Utils.FAVOURITE_CITY_NAME,"$cityName")
                 startActivity(intent)
 
