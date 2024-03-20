@@ -120,7 +120,7 @@ class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener , OnFav
         //  Log.e("TAG", "onScroll   x: ${event?.x}  y: ${event?.y}", )
         return true
     }
-
+  
     override fun onZoom(event: ZoomEvent?): Boolean {
         //  event?.zoomLevel?.let { controller.setZoom(it) }
 
