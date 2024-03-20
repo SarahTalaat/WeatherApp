@@ -17,6 +17,7 @@ import com.example.productsmvvm.CurrentWeather.CurrentWeatherView.CurrentWeather
 import com.example.productsmvvm.Database.WeatherLocalDataSourceImplementation
 import com.example.productsmvvm.Model.WeatherRepositoryImplementation
 import com.example.productsmvvm.Network.WeatherRemoteDataSourceImplementation
+import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.CurrentWeather.CurrentWeatherView.CurrentWeatherAdapter_Day
 import com.example.weatherapplication.R
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -51,12 +52,18 @@ class FavouriteCityWeatherActivity : AppCompatActivity() {
     lateinit var tv_cloud_InFavouriteCityWeatherActivity: TextView
     lateinit var tv_visibiliy_InFavouriteCityWeatherActivity: TextView
     private var context_InFavouriteCityWeatherActivity: Context? = null
+    lateinit var latitude_OnBundle_InFavouriteCityWeatherActivity: String
+    lateinit var longitude_OnBundle_InFavouriteCityWeatherActivity: String
+    lateinit var cityName_OnBundle_InFavouriteCityWeatherActivity: String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_favourite_city_weather)
 
+        latitude_OnBundle_InFavouriteCityWeatherActivity = intent.getStringExtra(Utils.FAVOURITE_CITY_LATITUDE)
+        longitude_OnBundle_InFavouriteCityWeatherActivity = intent.getStringExtra(Utils.FAVOURITE_CITY_LONGITUDE)
+        cityName_OnBundle_InFavouriteCityWeatherActivity = intent.getStringExtra(Utils.FAVOURITE_CITY_NAME)
 
         tv_date_InFavouriteCityWeatherActivity = findViewById(R.id.tv_Date_city)
         tv_country_InFavouriteCityWeatherActivity = findViewById(R.id.tv_Country_city)
@@ -153,7 +160,7 @@ class FavouriteCityWeatherActivity : AppCompatActivity() {
 
         }
 
-      //  currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getForecast_FromRetrofit_InCurrentWeatherViewModel(location.latitude.toString(),location.longitude.toString(), Utils.API_KEY)
+        currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getForecast_FromRetrofit_InCurrentWeatherViewModel(latitude_OnBundle_InFavouriteCityWeatherActivity,longitude_OnBundle_InFavouriteCityWeatherActivity, Utils.API_KEY)
         
     }
 
