@@ -9,6 +9,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.CurrentWeather.CurrentWeatherView.CurrentWeatherFragment
 import com.example.weatherapplication.FavouriteWeather.FavouriteWeatherView.FavouriteCityFragment
 import com.google.android.material.navigation.NavigationView
@@ -37,6 +38,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (savedInstanceState==null){
             replaceFragment(CurrentWeatherFragment())
             navigationView.setCheckedItem(R.id.nav_home)
+        }else{
+            var bundleMessage = intent.getStringExtra(Utils.FAVOURITE_CITY_KEY)
+            if (bundleMessage == Utils.FAVOURITE_CITY_VALUE){
+                replaceFragment(FavouriteCityFragment())
+            }
         }
     }
 

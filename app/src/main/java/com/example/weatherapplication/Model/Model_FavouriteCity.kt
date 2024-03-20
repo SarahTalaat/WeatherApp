@@ -7,12 +7,12 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "city_table")
 class Model_FavouriteCity (
-    @PrimaryKey(autoGenerate = true)
-    @NonNull
-    var id: Int = 0 ,
     var latitude: String ,
     var longitude: String ,
-    var cityName: String){
+    var cityName: String,
+    @PrimaryKey(autoGenerate = true)
+    @NonNull
+    var id: Int = 0){
 
 
     override fun equals(other: Any?): Boolean {

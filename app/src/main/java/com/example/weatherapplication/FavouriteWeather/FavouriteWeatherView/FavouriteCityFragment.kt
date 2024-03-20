@@ -16,7 +16,7 @@ import com.example.productsmvvm.FavouriteProducts.FavouriteProductsView.OnFavour
 import com.example.productsmvvm.FavouriteProducts.FavouriteProductsViewModel.FavouriteCityViewModelFactory_LDS
 import com.example.productsmvvm.Model.WeatherRepositoryImplementation
 import com.example.productsmvvm.Network.WeatherRemoteDataSourceImplementation
-import com.example.weatherapplication.MapActivity
+import com.example.weatherapplication.Map.MapActivity
 import com.example.weatherapplication.Model.Model_FavouriteCity
 import com.example.weatherapplication.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton

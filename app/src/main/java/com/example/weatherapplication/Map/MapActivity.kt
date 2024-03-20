@@ -1,21 +1,28 @@
-package com.example.weatherapplication
+package com.example.weatherapplication.Map
 
 
+import android.content.Intent
 import android.os.Bundle
 
-import android.app.ProgressDialog
 import android.graphics.Rect
 import android.location.Geocoder
 import android.location.GpsStatus
-import android.location.Location
 import android.util.Log
 import android.view.MotionEvent
 
 import androidx.appcompat.app.AppCompatActivity
-import com.example.weatherapplication.CurrentWeather.CurrentWeatherView.GeoUtils
+import androidx.lifecycle.ViewModelProvider
+import com.example.favouriteCitymvvm.FavouriteCity.FavouriteCityViewModel.FavouriteCityViewModel
+import com.example.productsmvvm.Database.WeatherLocalDataSourceImplementation
+import com.example.productsmvvm.FavouriteProducts.FavouriteProductsViewModel.FavouriteCityViewModelFactory_LDS
+import com.example.productsmvvm.Model.WeatherRepositoryImplementation
+import com.example.productsmvvm.Network.WeatherRemoteDataSourceImplementation
+import com.example.weatherapplication.Constants.Utils
+import com.example.weatherapplication.FavouriteWeather.FavouriteWeatherView.FavouriteCityFragment
+import com.example.weatherapplication.MainActivity
+import com.example.weatherapplication.Model.Model_FavouriteCity
+import com.example.weatherapplication.R
 import com.example.weatherapplication.databinding.ActivityMapBinding
-import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.location.LocationRequest
 import org.osmdroid.api.IMapController
 import org.osmdroid.config.Configuration
 import org.osmdroid.events.MapListener
@@ -30,7 +37,7 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import java.util.Locale
 
-class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener {
+class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener , OnFavouriteCityClickListenerInterface {
 
 
     lateinit var mMap: MapView
@@ -39,6 +46,8 @@ class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener {
     lateinit var binding: ActivityMapBinding
     private  lateinit var pinMarker: Marker
     lateinit var cityName: String
+    lateinit var favouriteCityViewModel_Instance_InMapActivity: FavouriteCityViewModel
+    lateinit var favouriteCityViewModelFactory_LDS_Instance_InMapActivity: FavouriteCityViewModelFactory_LDS
 
     var lon: Double=0.0
     var lat: Double=0.0
@@ -48,6 +57,20 @@ class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener {
         super.onCreate(savedInstanceState)
         binding = ActivityMapBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
+        favouriteCityViewModelFactory_LDS_Instance_InMapActivity = FavouriteCityViewModelFactory_LDS(
+            WeatherRepositoryImplementation.getWeatherRepositoryImplementationInstance(
+                WeatherRemoteDataSourceImplementation.getCurrentWeatherRemoteDataSourceImplementation_Instance(),
+                WeatherLocalDataSourceImplementation(this)
+            )
+        )
+
+        favouriteCityViewModel_Instance_InMapActivity = ViewModelProvider(this, favouriteCityViewModelFactory_LDS_Instance_InMapActivity ).get(
+            FavouriteCityViewModel::class.java)
+
+
+
         Configuration.getInstance().load(
             applicationContext,
             getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE)
@@ -122,6 +145,12 @@ class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener {
                 cityName = address.adminArea
                 Log.i("TAG", "findCityName_InMapActivity: cityname = " + cityName)
 
+                var modelModel_FavouriteCity = Model_FavouriteCity(lat.toString(),lon.toString(),cityName)
+                onClick_insertFavouriteCityToFavouriteActivity_InFavouriteCityClickListenerInterface(modelModel_FavouriteCity)
+                var intent = Intent(this, MainActivity::class.java)
+                intent.putExtra(Utils.FAVOURITE_CITY_KEY,Utils.FAVOURITE_CITY_VALUE)
+                startActivity(intent)
+
             }
         }
     }
@@ -162,6 +191,10 @@ class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener {
         }
     }
 
+    override fun onClick_insertFavouriteCityToFavouriteActivity_InFavouriteCityClickListenerInterface(city: Model_FavouriteCity) {
+        favouriteCityViewModel_Instance_InMapActivity.insertFavouriteCity_InFavouriteCityViewModel(city)
+
+    }
 
 
 }
