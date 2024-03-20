@@ -34,7 +34,7 @@ class WeatherRepositoryImplementation private constructor(
         }
     }
 
-    override suspend fun getCod_FromRDS_InProductsRepository(
+    override suspend fun getCod_FromRDS_InWeatherRepository(
         lat: String,
         lon: String,
         appid: String
@@ -43,7 +43,7 @@ class WeatherRepositoryImplementation private constructor(
         return weatherRemoteDataSourceInterface_Instance.getCod_OverNetwork_InRDS(lat, lon, appid)
     }
 
-    override suspend fun getMessage_FromRDS_InProductsRepository(
+    override suspend fun getMessage_FromRDS_InWeatherRepository(
         lat: String,
         lon: String,
         appid: String
@@ -52,7 +52,7 @@ class WeatherRepositoryImplementation private constructor(
         return weatherRemoteDataSourceInterface_Instance.getMessage_OverNetwork_InRDS(lat, lon, appid)
     }
 
-    override suspend fun getCnt_FromRDS_InProductsRepository(
+    override suspend fun getCnt_FromRDS_InWeatherRepository(
         lat: String,
         lon: String,
         appid: String
@@ -61,7 +61,7 @@ class WeatherRepositoryImplementation private constructor(
         return  weatherRemoteDataSourceInterface_Instance.getCnt_OverNetwork_InRDS(lat, lon, appid)
     }
 
-    override suspend fun getList_FromRDS_InProductsRepository(
+    override suspend fun getList_FromRDS_InWeatherRepository(
         lat: String,
         lon: String,
         appid: String
@@ -70,7 +70,7 @@ class WeatherRepositoryImplementation private constructor(
         return  weatherRemoteDataSourceInterface_Instance.getList_OverNetwork_InRDS(lat, lon, appid)
     }
 
-    override suspend fun getCity_FromRDS_InProductsRepository(
+    override suspend fun getCity_FromRDS_InWeatherRepository(
         city: String,
         appid: String
     ): Model_City? {
@@ -78,7 +78,7 @@ class WeatherRepositoryImplementation private constructor(
         return weatherRemoteDataSourceInterface_Instance.getCity_OverNetwork_InRDS(city, appid)
     }
 
-    override suspend fun getForecast_FromRDS_InProductsRepository(
+    override suspend fun getForecast_FromRDS_InWeatherRepository(
         lat: String,
         lon: String,
         appid: String
@@ -87,15 +87,15 @@ class WeatherRepositoryImplementation private constructor(
         return  weatherRemoteDataSourceInterface_Instance.getForecast_OverNetwork_InRDS(lat, lon, appid)
     }
 
-    override suspend fun getAllStoredFavouriteCity_FromLDS_InProductsRepository(): Flow<List<Model_FavouriteCity>> {
+    override suspend fun getAllStoredFavouriteCity_FromLDS_InWeatherRepository(): Flow<List<Model_FavouriteCity>> {
         return weatherLocalDataSourceInterface_Instance.getAllStoredFavouriteCityFromDatabase_InLDS()
     }
 
-    override suspend fun insertFavouriteCity_FromLDS_InProductsRepository(city: Model_FavouriteCity) {
+    override suspend fun insertFavouriteCity_FromLDS_InWeatherRepository(city: Model_FavouriteCity) {
         return weatherLocalDataSourceInterface_Instance.insertFavouriteCityIntoDatabase_InLDS(city)
     }
 
-    override suspend fun deleteFavouriteCity_FromLDS_InProductsRepository(city: Model_FavouriteCity) {
+    override suspend fun deleteFavouriteCity_FromLDS_InWeatherRepository(city: Model_FavouriteCity) {
         return weatherLocalDataSourceInterface_Instance.deleteFavouriteCityFromDatabase_InLDS(city)
 
     }

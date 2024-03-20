@@ -1,4 +1,4 @@
-package com.example.weatherapplication.FavouriteWeather.FavouriteWeatherView
+package com.example.weatherapplication.FavouriteCity.FavouriteCityView
 
 import android.content.Intent
 import android.os.Bundle
@@ -16,7 +16,7 @@ import com.example.productsmvvm.FavouriteProducts.FavouriteProductsView.OnFavour
 import com.example.productsmvvm.FavouriteProducts.FavouriteProductsViewModel.FavouriteCityViewModelFactory_LDS
 import com.example.productsmvvm.Model.WeatherRepositoryImplementation
 import com.example.productsmvvm.Network.WeatherRemoteDataSourceImplementation
-import com.example.weatherapplication.Map.MapActivity
+import com.example.weatherapplication.Map.MapView.MapActivity
 import com.example.weatherapplication.Model.Model_FavouriteCity
 import com.example.weatherapplication.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton

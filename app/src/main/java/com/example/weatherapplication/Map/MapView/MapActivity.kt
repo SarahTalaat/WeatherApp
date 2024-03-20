@@ -1,4 +1,4 @@
-package com.example.weatherapplication.Map
+package com.example.weatherapplication.Map.MapView
 
 
 import android.content.Intent
@@ -12,18 +12,16 @@ import android.view.MotionEvent
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.example.favouriteCitymvvm.FavouriteCity.FavouriteCityViewModel.FavouriteCityViewModel
 import com.example.productsmvvm.Database.WeatherLocalDataSourceImplementation
-import com.example.productsmvvm.FavouriteProducts.FavouriteProductsViewModel.FavouriteCityViewModelFactory_LDS
 import com.example.productsmvvm.Model.WeatherRepositoryImplementation
 import com.example.productsmvvm.Network.WeatherRemoteDataSourceImplementation
 import com.example.weatherapplication.Constants.Utils
-import com.example.weatherapplication.FavouriteWeather.FavouriteWeatherView.FavouriteCityFragment
-import com.example.weatherapplication.MainActivity
+import com.example.weatherapplication.FavouriteCityWeather.FavouriteCityWeatherView.FavouriteCityWeatherActivity
+import com.example.weatherapplication.Map.MapViewModel.MapViewModel
+import com.example.weatherapplication.Map.MapViewModel.MapViewModelFactory_LDS
 import com.example.weatherapplication.Model.Model_FavouriteCity
 import com.example.weatherapplication.R
 import com.example.weatherapplication.databinding.ActivityMapBinding
-import com.google.android.material.internal.ContextUtils.getActivity
 import org.osmdroid.api.IMapController
 import org.osmdroid.config.Configuration
 import org.osmdroid.events.MapListener
@@ -38,7 +36,8 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import java.util.Locale
 
-class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener , OnFavouriteCityClickListenerInterface {
+class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener ,
+    OnFavouriteCityClickListenerInterface {
 
 
     lateinit var mMap: MapView
@@ -47,8 +46,8 @@ class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener , OnFav
     lateinit var binding: ActivityMapBinding
     private  lateinit var pinMarker: Marker
     lateinit var cityName: String
-    lateinit var favouriteCityViewModel_Instance_InMapActivity: FavouriteCityViewModel
-    lateinit var favouriteCityViewModelFactory_LDS_Instance_InMapActivity: FavouriteCityViewModelFactory_LDS
+    lateinit var mapWeatherViewModel_Instance_InMapActivity: MapViewModel
+    lateinit var mapWeatherViewModelFactory_LDS_Instance_InMapActivity: MapViewModelFactory_LDS
 
     var lon: Double=0.0
     var lat: Double=0.0
@@ -60,15 +59,15 @@ class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener , OnFav
         setContentView(binding.root)
 
 
-        favouriteCityViewModelFactory_LDS_Instance_InMapActivity = FavouriteCityViewModelFactory_LDS(
+        mapWeatherViewModelFactory_LDS_Instance_InMapActivity = MapViewModelFactory_LDS(
             WeatherRepositoryImplementation.getWeatherRepositoryImplementationInstance(
                 WeatherRemoteDataSourceImplementation.getCurrentWeatherRemoteDataSourceImplementation_Instance(),
                 WeatherLocalDataSourceImplementation(this)
             )
         )
 
-        favouriteCityViewModel_Instance_InMapActivity = ViewModelProvider(this, favouriteCityViewModelFactory_LDS_Instance_InMapActivity ).get(
-            FavouriteCityViewModel::class.java)
+        mapWeatherViewModel_Instance_InMapActivity = ViewModelProvider(this, mapWeatherViewModelFactory_LDS_Instance_InMapActivity ).get(
+            MapViewModel::class.java)
 
 
 
@@ -149,7 +148,7 @@ class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener , OnFav
                 var modelModel_FavouriteCity = Model_FavouriteCity(lat.toString(),lon.toString(),cityName)
                 onClick_insertFavouriteCityToFavouriteActivity_InFavouriteCityClickListenerInterface(modelModel_FavouriteCity)
 
-                val intent = Intent(this, MainActivity::class.java)
+                val intent = Intent(this, FavouriteCityWeatherActivity::class.java)
                 intent.putExtra(Utils.FAVOURITE_CITY_KEY,Utils.FAVOURITE_CITY_VALUE)
                 startActivity(intent)
 
@@ -194,7 +193,7 @@ class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener , OnFav
     }
 
     override fun onClick_insertFavouriteCityToFavouriteActivity_InFavouriteCityClickListenerInterface(city: Model_FavouriteCity) {
-        favouriteCityViewModel_Instance_InMapActivity.insertFavouriteCity_InFavouriteCityViewModel(city)
+        mapWeatherViewModel_Instance_InMapActivity.insertFavouriteCity_InMapViewModel(city)
 
     }
 

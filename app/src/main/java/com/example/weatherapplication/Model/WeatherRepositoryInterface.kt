@@ -15,20 +15,20 @@ interface WeatherRepositoryInterface {
     suspend fun deleteProduct_FromLDS_InProductsRepository(product: Products)
     */
 
-    suspend fun getCod_FromRDS_InProductsRepository(lat: String, lon: String, appid: String): String?
-    suspend fun getMessage_FromRDS_InProductsRepository(lat: String, lon: String, appid: String): Int?
-    suspend fun getCnt_FromRDS_InProductsRepository(lat: String, lon: String, appid: String): Int?
-    suspend fun getList_FromRDS_InProductsRepository(lat: String, lon: String, appid: String): ArrayList<Model_WeatherArrayList>
-    suspend fun getCity_FromRDS_InProductsRepository(city: String, appid:String): Model_City?
+    suspend fun getCod_FromRDS_InWeatherRepository(lat: String, lon: String, appid: String): String?
+    suspend fun getMessage_FromRDS_InWeatherRepository(lat: String, lon: String, appid: String): Int?
+    suspend fun getCnt_FromRDS_InWeatherRepository(lat: String, lon: String, appid: String): Int?
+    suspend fun getList_FromRDS_InWeatherRepository(lat: String, lon: String, appid: String): ArrayList<Model_WeatherArrayList>
+    suspend fun getCity_FromRDS_InWeatherRepository(city: String, appid:String): Model_City?
 
 
 
 
 
-    suspend fun getForecast_FromRDS_InProductsRepository(lat: String, lon: String, appid: String): Model_Forecast?
-    suspend fun getAllStoredFavouriteCity_FromLDS_InProductsRepository(): Flow<List<Model_FavouriteCity>>
-    suspend fun insertFavouriteCity_FromLDS_InProductsRepository(city: Model_FavouriteCity)
-    suspend fun deleteFavouriteCity_FromLDS_InProductsRepository(city: Model_FavouriteCity)
+    suspend fun getForecast_FromRDS_InWeatherRepository(lat: String, lon: String, appid: String): Model_Forecast?
+    suspend fun getAllStoredFavouriteCity_FromLDS_InWeatherRepository(): Flow<List<Model_FavouriteCity>>
+    suspend fun insertFavouriteCity_FromLDS_InWeatherRepository(city: Model_FavouriteCity)
+    suspend fun deleteFavouriteCity_FromLDS_InWeatherRepository(city: Model_FavouriteCity)
 
     /*
         suspend fun getCodOverNetwork_InRDS(lat: String, lon: String, appid: String): String?

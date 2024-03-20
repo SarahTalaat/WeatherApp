@@ -1,4 +1,4 @@
-package com.example.weatherapplication.Map
+package com.example.weatherapplication.Map.MapView
 
 import com.example.weatherapplication.Model.Model_FavouriteCity
 
