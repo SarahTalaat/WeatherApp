@@ -2,6 +2,7 @@ package com.example.weatherapplication
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
@@ -35,15 +36,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
 
 
+        /*
+        Log.i("TAG", "onCreate: Main Activity (Before if) : SavedInstanceState value =  " +savedInstanceState)
         if (savedInstanceState==null){
+            Log.i("TAG", "onCreate: Main Activity: (inside if) SavedInstanceState value =  " +savedInstanceState)
+
             replaceFragment(CurrentWeatherFragment())
             navigationView.setCheckedItem(R.id.nav_home)
-        }else{
-            var bundleMessage = intent.getStringExtra(Utils.FAVOURITE_CITY_KEY)
-            if (bundleMessage == Utils.FAVOURITE_CITY_VALUE){
-                replaceFragment(FavouriteCityFragment())
-            }
+        }else if(bundleMessage == Utils.FAVOURITE_CITY_VALUE){
+            replaceFragment(FavouriteCityFragment())
         }
+
+         */
+
+        // Check if there is data in the intent extras
+        val bundleMessage = intent.getStringExtra(Utils.FAVOURITE_CITY_KEY)
+        if (bundleMessage == Utils.FAVOURITE_CITY_VALUE) {
+            replaceFragment(FavouriteCityFragment())
+            navigationView.setCheckedItem(R.id.nav_favourites)
+        } else {
+            replaceFragment(CurrentWeatherFragment())
+            navigationView.setCheckedItem(R.id.nav_home)
+        }
+
     }
 
 
