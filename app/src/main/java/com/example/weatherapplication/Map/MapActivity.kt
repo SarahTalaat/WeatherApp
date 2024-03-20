@@ -23,6 +23,7 @@ import com.example.weatherapplication.MainActivity
 import com.example.weatherapplication.Model.Model_FavouriteCity
 import com.example.weatherapplication.R
 import com.example.weatherapplication.databinding.ActivityMapBinding
+import com.google.android.material.internal.ContextUtils.getActivity
 import org.osmdroid.api.IMapController
 import org.osmdroid.config.Configuration
 import org.osmdroid.events.MapListener
@@ -120,7 +121,7 @@ class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener , OnFav
         //  Log.e("TAG", "onScroll   x: ${event?.x}  y: ${event?.y}", )
         return true
     }
-  
+
     override fun onZoom(event: ZoomEvent?): Boolean {
         //  event?.zoomLevel?.let { controller.setZoom(it) }
 
@@ -147,7 +148,8 @@ class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener , OnFav
 
                 var modelModel_FavouriteCity = Model_FavouriteCity(lat.toString(),lon.toString(),cityName)
                 onClick_insertFavouriteCityToFavouriteActivity_InFavouriteCityClickListenerInterface(modelModel_FavouriteCity)
-                var intent = Intent(this, MainActivity::class.java)
+
+                val intent = Intent(this, MainActivity::class.java)
                 intent.putExtra(Utils.FAVOURITE_CITY_KEY,Utils.FAVOURITE_CITY_VALUE)
                 startActivity(intent)
 
