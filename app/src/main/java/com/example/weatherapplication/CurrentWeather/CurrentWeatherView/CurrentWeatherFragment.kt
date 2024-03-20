@@ -208,7 +208,7 @@ class CurrentWeatherFragment : Fragment() {
 
     private fun initUI_InCurrentWeatherFragment(view: View){
         recyclerView_Instance_Hour_InCurrentWeatherFragment = view.findViewById(R.id.rv_hours)
-        recyclerView_Instance_Day_InCurrentWeatherFragment = view.findViewById(R.id.rv_days)
+        recyclerView_Instance_Day_InCurrentWeatherFragment = view.findViewById(R.id.rv_days_city)
     }
 
     private fun setUpRecyclerView_Hour_InCurrentWeatherFragment(){
@@ -297,10 +297,9 @@ class CurrentWeatherFragment : Fragment() {
                         Log.i("TAG", "onLocationResult: full addess: "+address)
 
 
-                        currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getList_FromRetrofit_InCurrentWeatherViewModel(location.latitude.toString(),location.longitude.toString(),Utils.API_KEY)
+                       // currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getList_FromRetrofit_InCurrentWeatherViewModel(location.latitude.toString(),location.longitude.toString(),Utils.API_KEY)
                         currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getForecast_FromRetrofit_InCurrentWeatherViewModel(location.latitude.toString(),location.longitude.toString(),Utils.API_KEY)
 
-                     //   getLatAndLonFromGetFreshLocationFunctionToDisplayDataInFragmentAndAdapters_InCurrentWeatherFragment(location.latitude.toString(),location.longitude.toString())
 
                         //     tvTextLocation.text = address
                     }

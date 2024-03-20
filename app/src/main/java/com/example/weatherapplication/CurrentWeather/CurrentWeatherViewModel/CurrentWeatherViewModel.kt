@@ -66,11 +66,11 @@ class CurrentWeatherViewModel(private val currentWeatherRepositoryInterface_Inst
 
             Log.i("TAG", "getCod_FromRetrofit_InCurrentWeatherViewModel: (inside the viewModelScope): lat: $lat , lon: $lon , appid: $appid")
             Log.i("TAG", "getCod_FromRetrofit_InCurrentWeatherViewModel: (inside the viewModelScope): "+  stringMutableLiveData_InCurrentWeatherViewModel.postValue(
-                currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getCod_FromRDS_InProductsRepository(lat, lon, appid)))
+                currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getCod_FromRDS_InWeatherRepository(lat, lon, appid)))
 
 
             stringMutableLiveData_InCurrentWeatherViewModel.postValue(
-                currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getCod_FromRDS_InProductsRepository(lat, lon, appid)
+                currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getCod_FromRDS_InWeatherRepository(lat, lon, appid)
             )
         }
 
@@ -86,11 +86,11 @@ class CurrentWeatherViewModel(private val currentWeatherRepositoryInterface_Inst
 
             Log.i("TAG", "getMessage_FromRetrofit_InCurrentWeatherViewModel: (inside the viewModelScope):  lat: $lat , lon: $lon , appid: $appid ")
             Log.i("TAG", "getMessage_FromRetrofit_InCurrentWeatherViewModel: (inside the viewModelScope): "+ intMutableLiveData_InCurrentWeatherViewModel.postValue(
-                currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getMessage_FromRDS_InProductsRepository(lat, lon, appid)))
+                currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getMessage_FromRDS_InWeatherRepository(lat, lon, appid)))
 
 
             intMutableLiveData_InCurrentWeatherViewModel.postValue(
-                currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getMessage_FromRDS_InProductsRepository(lat, lon, appid)
+                currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getMessage_FromRDS_InWeatherRepository(lat, lon, appid)
             )
         }
 
@@ -105,11 +105,11 @@ class CurrentWeatherViewModel(private val currentWeatherRepositoryInterface_Inst
 
             Log.i("TAG", "getCnt_FromRetrofit_InCurrentWeatherViewModel: (inside the viewModelScope): lat: $lat , lon: $lon , appid: $appid")
             Log.i("TAG", "getCnt_FromRetrofit_InCurrentWeatherViewModel: (inside the viewModelScope): " + intMutableLiveData_InCurrentWeatherViewModel.postValue(
-                currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getCnt_FromRDS_InProductsRepository(lat, lon, appid)))
+                currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getCnt_FromRDS_InWeatherRepository(lat, lon, appid)))
 
 
             intMutableLiveData_InCurrentWeatherViewModel.postValue(
-                currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getCnt_FromRDS_InProductsRepository(lat, lon, appid)
+                currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getCnt_FromRDS_InWeatherRepository(lat, lon, appid)
             )
         }
 
@@ -125,11 +125,11 @@ class CurrentWeatherViewModel(private val currentWeatherRepositoryInterface_Inst
 
             Log.i("TAG", "getList_FromRetrofit_InCurrentWeatherViewModel: (inside the viewModelScope):  lat: $lat , lon: $lon , appid: $appid")
             Log.i("TAG", "getList_FromRetrofit_InCurrentWeatherViewModel: (inside the viewModelScope) : "+
-                currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getList_FromRDS_InProductsRepository(lat, lon, appid))
+                currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getList_FromRDS_InWeatherRepository(lat, lon, appid))
 
 
             weatherArrayListMutableLiveData_InCurrentWeatherViewModel.postValue(
-                currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getList_FromRDS_InProductsRepository(lat, lon, appid)
+                currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getList_FromRDS_InWeatherRepository(lat, lon, appid)
             )
         }
 
@@ -145,11 +145,11 @@ class CurrentWeatherViewModel(private val currentWeatherRepositoryInterface_Inst
 
             Log.i("TAG", "getCity_FromRetrofit_InCurrentWeatherViewModel: (inside the viewModelScope): city: $city , appid: $appid")
             Log.i("TAG", "getCity_FromRetrofit_InCurrentWeatherViewModel: (inside the viewModelScope): " + cityMutableLiveData_InCurrentWeatherViewModel.postValue(
-                currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getCity_FromRDS_InProductsRepository(city, appid)
+                currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getCity_FromRDS_InWeatherRepository(city, appid)
             ))
 
             cityMutableLiveData_InCurrentWeatherViewModel.postValue(
-                currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getCity_FromRDS_InProductsRepository(city, appid)
+                currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getCity_FromRDS_InWeatherRepository(city, appid)
             )
         }
 
@@ -165,11 +165,11 @@ class CurrentWeatherViewModel(private val currentWeatherRepositoryInterface_Inst
 
             Log.i("TAG", "getForecast_FromRetrofit_InCurrentWeatherViewModel: (inside the viewModelScope):  lat: $lat , lon: $lon , appid: $appid")
             Log.i("TAG", "getForecast_FromRetrofit_InCurrentWeatherViewModel: (inside the viewModelScope) : "+
-                    currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getForecast_FromRDS_InProductsRepository(lat, lon, appid))
+                    currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getForecast_FromRDS_InWeatherRepository(lat, lon, appid))
 
 
             forecastMutableLiveData_InCurrentWeatherViewModel.postValue(
-                currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getForecast_FromRDS_InProductsRepository(lat, lon, appid)
+                currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getForecast_FromRDS_InWeatherRepository(lat, lon, appid)
             )
         }
 

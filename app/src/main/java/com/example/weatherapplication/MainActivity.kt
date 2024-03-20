@@ -2,7 +2,6 @@ package com.example.weatherapplication
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
@@ -12,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.CurrentWeather.CurrentWeatherView.CurrentWeatherFragment
-import com.example.weatherapplication.FavouriteWeather.FavouriteWeatherView.FavouriteCityFragment
+import com.example.weatherapplication.FavouriteCity.FavouriteCityView.FavouriteCityFragment
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
