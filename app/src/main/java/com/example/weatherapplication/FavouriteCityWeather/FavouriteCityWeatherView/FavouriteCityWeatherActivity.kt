@@ -1,10 +1,12 @@
 package com.example.weatherapplication.FavouriteCityWeather.FavouriteCityWeatherView
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
@@ -20,6 +22,7 @@ import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.CurrentWeather.CurrentWeatherView.CurrentWeatherAdapter_Day
 import com.example.weatherapplication.FavouriteCityWeather.FavouriteCityWeatherViewModel.FavouriteCityWeatherViewModel
 import com.example.weatherapplication.FavouriteCityWeather.FavouriteCityWeatherViewModel.FavouriteCityWeatherViewModelFactory_RDS
+import com.example.weatherapplication.MainActivity
 import com.example.weatherapplication.R
 import com.google.android.gms.location.FusedLocationProviderClient
 import java.time.LocalDate
@@ -53,7 +56,7 @@ class FavouriteCityWeatherActivity : AppCompatActivity() {
     lateinit var tv_cloud_InFavouriteCityWeatherActivity: TextView
     lateinit var tv_visibiliy_InFavouriteCityWeatherActivity: TextView
     private var context_InFavouriteCityWeatherActivity: Context? = null
-
+    lateinit var btn_back_InFavouriteCityWeatherActivity: Button
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,6 +80,7 @@ class FavouriteCityWeatherActivity : AppCompatActivity() {
         tv_cloud_InFavouriteCityWeatherActivity = findViewById(R.id.tv_cloud_value_city)
         tv_visibiliy_InFavouriteCityWeatherActivity = findViewById(R.id.tv_visibility_value_city)
 
+        btn_back_InFavouriteCityWeatherActivity = findViewById(R.id.btn_back)
 
         favouriteCityWeatherViewModelFactory_Instance_RDS_InFavouriteCityWeatherActivity = FavouriteCityWeatherViewModelFactory_RDS(
             WeatherRepositoryImplementation.getWeatherRepositoryImplementationInstance(
@@ -161,6 +165,12 @@ class FavouriteCityWeatherActivity : AppCompatActivity() {
         }
         if(latitude_OnBundle_InFavouriteCityWeatherActivity!= null && longitude_OnBundle_InFavouriteCityWeatherActivity != null){
             favouriteCityWeatherViewModel_Instance_InFavouriteCityWeatherActivity.getForecast_FromRetrofit_InFavouriteCityWeatherViewModel(latitude_OnBundle_InFavouriteCityWeatherActivity,longitude_OnBundle_InFavouriteCityWeatherActivity, Utils.API_KEY)
+        }
+
+        btn_back_InFavouriteCityWeatherActivity.setOnClickListener(){
+            val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra(Utils.FAVOURITE_CITY_KEY,Utils.FAVOURITE_CITY_VALUE)
+            startActivity(intent)
         }
 
     }

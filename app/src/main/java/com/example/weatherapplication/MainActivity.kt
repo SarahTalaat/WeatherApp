@@ -2,6 +2,7 @@ package com.example.weatherapplication
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
@@ -50,6 +51,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         // Check if there is data in the intent extras
         val bundleMessage = intent.getStringExtra(Utils.FAVOURITE_CITY_KEY)
+        Log.i("TAG", "onCreate: Main Activity: Favourite city value from key: " + bundleMessage)
         if (bundleMessage == Utils.FAVOURITE_CITY_VALUE) {
             replaceFragment(FavouriteCityFragment())
             navigationView.setCheckedItem(R.id.nav_favourites)
