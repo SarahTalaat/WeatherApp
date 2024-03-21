@@ -141,7 +141,7 @@ class FavouriteCityFragment : Fragment(), OnFavouriteCityClickListenerInterface 
 
 
 
-        
+
 
     }
 
