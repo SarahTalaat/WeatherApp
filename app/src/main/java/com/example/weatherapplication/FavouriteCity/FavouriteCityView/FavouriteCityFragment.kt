@@ -138,8 +138,8 @@ class FavouriteCityFragment : Fragment(), OnFavouriteCityClickListenerInterface 
         val intent = Intent(requireContext(), FavouriteCityWeatherActivity::class.java)
         intent.putExtras(bundle)
         startActivity(intent)
-
         
+
 
     }
 
