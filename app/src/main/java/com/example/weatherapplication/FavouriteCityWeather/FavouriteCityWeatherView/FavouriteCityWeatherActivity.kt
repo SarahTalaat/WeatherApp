@@ -65,7 +65,7 @@ class FavouriteCityWeatherActivity : AppCompatActivity() {
 
        var latitude_OnBundle_InFavouriteCityWeatherActivity = intent.getStringExtra(Utils.FAVOURITE_CITY_LATITUDE)
        var longitude_OnBundle_InFavouriteCityWeatherActivity = intent.getStringExtra(Utils.FAVOURITE_CITY_LONGITUDE)
-       var cityName_OnBundle_InFavouriteCityWeatherActivity = intent.getStringExtra(Utils.FAVOURITE_CITY_NAME)
+      // var cityName_OnBundle_InFavouriteCityWeatherActivity = intent.getStringExtra(Utils.FAVOURITE_CITY_NAME)
 
 
         tv_date_InFavouriteCityWeatherActivity = findViewById(R.id.tv_Date_city)

@@ -18,6 +18,7 @@ import com.example.productsmvvm.FavouriteProducts.FavouriteProductsViewModel.Fav
 import com.example.productsmvvm.Model.WeatherRepositoryImplementation
 import com.example.productsmvvm.Network.WeatherRemoteDataSourceImplementation
 import com.example.weatherapplication.Constants.Utils
+import com.example.weatherapplication.FavouriteCity.FavouriteCityView.FavouriteCityFragment
 import com.example.weatherapplication.FavouriteCityWeather.FavouriteCityWeatherView.FavouriteCityWeatherActivity
 import com.example.weatherapplication.Map.MapViewModel.MapViewModel
 import com.example.weatherapplication.Map.MapViewModel.MapViewModelFactory_LDS
@@ -154,6 +155,17 @@ class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener ,
                 intent.putExtra(Utils.FAVOURITE_CITY_LATITUDE, "${lat.toString()}")
                 intent.putExtra(Utils.FAVOURITE_CITY_LONGITUDE, "${lon.toString()}")
                 intent.putExtra(Utils.FAVOURITE_CITY_NAME,"$cityName")
+
+
+
+                // Create the fragment instance
+                val fragment_FavouriteCityFragment = FavouriteCityFragment()
+                // Pass data using Bundle
+                val bundle = Bundle()
+                bundle.putString(Utils.FAVOURITE_CITY_LATITUDE,"${lat.toString()}" )
+                bundle.putString(Utils.FAVOURITE_CITY_LONGITUDE, "${lon.toString()}")
+                fragment_FavouriteCityFragment.arguments = bundle
+
                 startActivity(intent)
 
             }
