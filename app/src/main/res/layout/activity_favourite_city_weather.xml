@@ -275,14 +275,14 @@
             android:id="@+id/tv_Country_city"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="20dp"
             android:gravity="center"
             android:hint="Country"
             android:textAlignment="center"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/btn_back" />
 
         <TextView
             android:id="@+id/tv_Date_city"
@@ -296,6 +296,18 @@
             app:layout_constraintHorizontal_bias="0.371"
             app:layout_constraintStart_toStartOf="@+id/tv_Country_city"
             app:layout_constraintTop_toBottomOf="@+id/tv_Country_city" />
+
+        <Button
+            android:id="@+id/btn_back"
+            android:layout_width="75dp"
+            android:layout_height="51dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="28dp"
+            android:backgroundTint="@color/white"
+            android:drawableBottom="@drawable/back"
+            android:text="Button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
