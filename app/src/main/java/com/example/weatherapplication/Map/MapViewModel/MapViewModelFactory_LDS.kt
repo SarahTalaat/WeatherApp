@@ -13,7 +13,7 @@ class MapViewModelFactory_LDS(private val  weatherRepositoryInterface_Instance_C
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return if (modelClass.isAssignableFrom(MapViewModel::class.java)){
-            FavouriteCityViewModel(weatherRepositoryInterface_Instance_ConstructorParameter_InMapViewModelFactory) as T
+            MapViewModel(weatherRepositoryInterface_Instance_ConstructorParameter_InMapViewModelFactory) as T
         }else{
             throw IllegalArgumentException("Map ViewModel class not found")
         }

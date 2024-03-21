@@ -12,7 +12,9 @@ import android.view.MotionEvent
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.example.favouriteCitymvvm.FavouriteCity.FavouriteCityViewModel.FavouriteCityViewModel
 import com.example.productsmvvm.Database.WeatherLocalDataSourceImplementation
+import com.example.productsmvvm.FavouriteProducts.FavouriteProductsViewModel.FavouriteCityViewModelFactory_LDS
 import com.example.productsmvvm.Model.WeatherRepositoryImplementation
 import com.example.productsmvvm.Network.WeatherRemoteDataSourceImplementation
 import com.example.weatherapplication.Constants.Utils
@@ -149,7 +151,9 @@ class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener ,
                 onClick_insertFavouriteCityToFavouriteActivity_InFavouriteCityClickListenerInterface(modelModel_FavouriteCity)
 
                 val intent = Intent(this, FavouriteCityWeatherActivity::class.java)
-                intent.putExtra(Utils.FAVOURITE_CITY_KEY,Utils.FAVOURITE_CITY_VALUE)
+                intent.putExtra(Utils.FAVOURITE_CITY_LATITUDE, "${lat.toString()}")
+                intent.putExtra(Utils.FAVOURITE_CITY_LONGITUDE, "${lon.toString()}")
+                intent.putExtra(Utils.FAVOURITE_CITY_NAME,"$cityName")
                 startActivity(intent)
 
             }

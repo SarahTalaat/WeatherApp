@@ -12,12 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.productsmvvm.AllProducts.AllProductsViewModel.CurrentWeatherViewModel
-import com.example.productsmvvm.AllProducts.AllProductsViewModel.CurrentWeatherViewModelFactory_RDS
 import com.example.productsmvvm.CurrentWeather.CurrentWeatherView.CurrentWeatherAdapter_Hour
 import com.example.productsmvvm.Database.WeatherLocalDataSourceImplementation
 import com.example.productsmvvm.Model.WeatherRepositoryImplementation
 import com.example.productsmvvm.Network.WeatherRemoteDataSourceImplementation
+import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.CurrentWeather.CurrentWeatherView.CurrentWeatherAdapter_Day
+import com.example.weatherapplication.FavouriteCityWeather.FavouriteCityWeatherViewModel.FavouriteCityWeatherViewModel
+import com.example.weatherapplication.FavouriteCityWeather.FavouriteCityWeatherViewModel.FavouriteCityWeatherViewModelFactory_RDS
 import com.example.weatherapplication.R
 import com.google.android.gms.location.FusedLocationProviderClient
 import java.time.LocalDate
@@ -26,8 +28,8 @@ import java.util.Locale
 
 class FavouriteCityWeatherActivity : AppCompatActivity() {
 
-    private lateinit var currentWeatherViewModelFactory_Instance_RDS_InFavouriteCityWeatherActivity: CurrentWeatherViewModelFactory_RDS
-    private lateinit var currentWeatherViewModel_Instance_InCurrentWeatherFragmet: CurrentWeatherViewModel
+    private lateinit var favouriteCityWeatherViewModelFactory_Instance_RDS_InFavouriteCityWeatherActivity: FavouriteCityWeatherViewModelFactory_RDS
+    private lateinit var favouriteCityWeatherViewModel_Instance_InFavouriteCityWeatherActivity: FavouriteCityWeatherViewModel
     private lateinit var recyclerView_Instance_Hour_InFavouriteCityWeatherActivity: RecyclerView
     private lateinit var adapter_Instance_Hour_InFavouriteCityWeatherActivity: CurrentWeatherAdapter_Hour
     private lateinit var layoutManager_Instance_Hour_InFavouriteCityWeatherActivity: LinearLayoutManager
@@ -53,9 +55,14 @@ class FavouriteCityWeatherActivity : AppCompatActivity() {
     private var context_InFavouriteCityWeatherActivity: Context? = null
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_favourite_city_weather)
+
+       var latitude_OnBundle_InFavouriteCityWeatherActivity = intent.getStringExtra(Utils.FAVOURITE_CITY_LATITUDE)
+       var longitude_OnBundle_InFavouriteCityWeatherActivity = intent.getStringExtra(Utils.FAVOURITE_CITY_LONGITUDE)
+       var cityName_OnBundle_InFavouriteCityWeatherActivity = intent.getStringExtra(Utils.FAVOURITE_CITY_NAME)
 
 
         tv_date_InFavouriteCityWeatherActivity = findViewById(R.id.tv_Date_city)
@@ -71,7 +78,7 @@ class FavouriteCityWeatherActivity : AppCompatActivity() {
         tv_visibiliy_InFavouriteCityWeatherActivity = findViewById(R.id.tv_visibility_value_city)
 
 
-        currentWeatherViewModelFactory_Instance_RDS_InFavouriteCityWeatherActivity = CurrentWeatherViewModelFactory_RDS(
+        favouriteCityWeatherViewModelFactory_Instance_RDS_InFavouriteCityWeatherActivity = FavouriteCityWeatherViewModelFactory_RDS(
             WeatherRepositoryImplementation.getWeatherRepositoryImplementationInstance(
                 WeatherRemoteDataSourceImplementation.getCurrentWeatherRemoteDataSourceImplementation_Instance() ,
                 WeatherLocalDataSourceImplementation(this)
@@ -79,29 +86,29 @@ class FavouriteCityWeatherActivity : AppCompatActivity() {
 
         )
 
-        currentWeatherViewModel_Instance_InCurrentWeatherFragmet = ViewModelProvider(this,currentWeatherViewModelFactory_Instance_RDS_InFavouriteCityWeatherActivity).get(
-            CurrentWeatherViewModel::class.java)
+        favouriteCityWeatherViewModel_Instance_InFavouriteCityWeatherActivity = ViewModelProvider(this,favouriteCityWeatherViewModelFactory_Instance_RDS_InFavouriteCityWeatherActivity).get(
+            FavouriteCityWeatherViewModel::class.java)
 
         initUI_InFavouriteCityWeatherActivity()
         setUpRecyclerView_Hour_InFavouriteCityWeatherActivity()
         setUpRecyclerView_Day_InFavouriteCityWeatherActivity()
 
 
-        currentWeatherViewModel_Instance_InCurrentWeatherFragmet.forecastLiveDataList_InCurrentWeatherViewModel.observe(this){
+        favouriteCityWeatherViewModel_Instance_InFavouriteCityWeatherActivity.forecastLiveDataList_InFavouriteCityWeatherViewModel.observe(this){
                 forecastModel ->
             adapter_Instance_Hour_InFavouriteCityWeatherActivity.settingWeatherArrayList_InCurrentWeatherAdapter_Hour(forecastModel.modelWeatherArrayList)
             adapter_Instance_Hour_InFavouriteCityWeatherActivity.notifyDataSetChanged()
         }
 
 
-        currentWeatherViewModel_Instance_InCurrentWeatherFragmet.forecastLiveDataList_InCurrentWeatherViewModel.observe(this){
+        favouriteCityWeatherViewModel_Instance_InFavouriteCityWeatherActivity.forecastLiveDataList_InFavouriteCityWeatherViewModel.observe(this){
                 forecastModel ->
             adapter_Instance_Day_InFavouriteCityWeatherActivity.settingWeatherArrayList_InCurrentWeatherAdapter_Day(forecastModel.modelWeatherArrayList)
             adapter_Instance_Day_InFavouriteCityWeatherActivity.notifyDataSetChanged()
         }
 
 
-        currentWeatherViewModel_Instance_InCurrentWeatherFragmet.forecastLiveDataList_InCurrentWeatherViewModel.observe(this){
+        favouriteCityWeatherViewModel_Instance_InFavouriteCityWeatherActivity.forecastLiveDataList_InFavouriteCityWeatherViewModel.observe(this){
                 forecastModel ->
 
 
@@ -152,9 +159,10 @@ class FavouriteCityWeatherActivity : AppCompatActivity() {
 
 
         }
+        if(latitude_OnBundle_InFavouriteCityWeatherActivity!= null && longitude_OnBundle_InFavouriteCityWeatherActivity != null){
+            favouriteCityWeatherViewModel_Instance_InFavouriteCityWeatherActivity.getForecast_FromRetrofit_InFavouriteCityWeatherViewModel(latitude_OnBundle_InFavouriteCityWeatherActivity,longitude_OnBundle_InFavouriteCityWeatherActivity, Utils.API_KEY)
+        }
 
-      //  currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getForecast_FromRetrofit_InCurrentWeatherViewModel(location.latitude.toString(),location.longitude.toString(), Utils.API_KEY)
-        
     }
 
 
