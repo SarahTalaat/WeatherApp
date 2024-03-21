@@ -2,10 +2,11 @@ package com.example.weatherapplication.FavouriteCity.FavouriteCityView
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +17,8 @@ import com.example.productsmvvm.FavouriteProducts.FavouriteProductsView.OnFavour
 import com.example.productsmvvm.FavouriteProducts.FavouriteProductsViewModel.FavouriteCityViewModelFactory_LDS
 import com.example.productsmvvm.Model.WeatherRepositoryImplementation
 import com.example.productsmvvm.Network.WeatherRemoteDataSourceImplementation
+import com.example.weatherapplication.Constants.Utils
+import com.example.weatherapplication.FavouriteCityWeather.FavouriteCityWeatherView.FavouriteCityWeatherActivity
 import com.example.weatherapplication.Map.MapView.MapActivity
 import com.example.weatherapplication.Model.Model_FavouriteCity
 import com.example.weatherapplication.R
@@ -62,6 +65,16 @@ class FavouriteCityFragment : Fragment(), OnFavouriteCityClickListenerInterface 
         super.onViewCreated(view, savedInstanceState)
 
 
+        val latitudeFromMapBundle_Value = arguments?.getString(Utils.FAVOURITE_CITY_LATITUDE)
+        val longitudeFromMapBundle_Value = arguments?.getString(Utils.FAVOURITE_CITY_LONGITUDE)
+
+        val bundle = Bundle()
+        bundle.putString(Utils.FAVOURITE_CITY_LATITUDE, latitudeFromMapBundle_Value )
+        bundle.putString(Utils.FAVOURITE_CITY_LONGITUDE,longitudeFromMapBundle_Value)
+        val intent = Intent(activity, FavouriteCityWeatherActivity::class.java)
+        intent.putExtras(bundle)
+
+
         favouriteCityViewModelFactory_Instance_LDS_InFavouriteCityFragment = FavouriteCityViewModelFactory_LDS(
             WeatherRepositoryImplementation.getWeatherRepositoryImplementationInstance(
             WeatherRemoteDataSourceImplementation.getCurrentWeatherRemoteDataSourceImplementation_Instance(),
@@ -101,6 +114,30 @@ class FavouriteCityFragment : Fragment(), OnFavouriteCityClickListenerInterface 
         city: Model_FavouriteCity
     ) {
         favouriteCityViewModel_Instance_InFavouriteCityActivity.deleteFavouriteCity_InFavouriteCityViewModel(city)
+
+    }
+
+    override fun onClick_NavigateToFavouriteCityWeatherActivity_InOnFavouriteClickListenerInterface(latitude: String?, longitude: String?) {
+/*
+        val latitude: String? = arguments?.getString(Utils.FAVOURITE_CITY_LATITUDE)
+        val logitude: String? = arguments?.getString(Utils.FAVOURITE_CITY_LONGITUDE)
+        Log.i(
+            "TAG",
+            "onClick_NavigateToFavouriteCityWeatherActivity_InOnFavouriteClickListenerInterface: lat = " + latitude)
+
+        val bundle = Bundle()
+        bundle.putString(Utils.FAVOURITE_CITY_LATITUDE, latitude)
+        bundle.putString(Utils.FAVOURITE_CITY_LONGITUDE, logitude)
+        val intent = Intent(requireContext(), FavouriteCityWeatherActivity::class.java)
+        intent.putExtras(bundle)
+*/
+
+        val bundle = Bundle()
+        bundle.putString(Utils.FAVOURITE_CITY_LATITUDE, latitude)
+        bundle.putString(Utils.FAVOURITE_CITY_LONGITUDE, longitude)
+        val intent = Intent(requireContext(), FavouriteCityWeatherActivity::class.java)
+        intent.putExtras(bundle)
+        startActivity(intent)
 
     }
 

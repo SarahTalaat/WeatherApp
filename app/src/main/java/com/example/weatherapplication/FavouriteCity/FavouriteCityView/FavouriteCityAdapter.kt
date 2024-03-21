@@ -68,6 +68,10 @@ class FavouriteProductsAdapter: RecyclerView.Adapter<FavouriteProductsAdapter.My
         holder.btn_deleteFromFavourite_InFavouriteCityAdapter.setOnClickListener(){
             onFavouriteCityClickListenerInterface_Instance_InFavouriteProductsAdapterCity.onClick_DeleteFavouriteCityFromFavouriteCityFragment_InOnFavouriteClickListenerInterface(favouriteCityArrayList_InFavouriteCityAdapter.get(position))
         }
+        holder.itemView.setOnClickListener(){
+            val city = favouriteCityArrayList_InFavouriteCityAdapter.get(position)
+            onFavouriteCityClickListenerInterface_Instance_InFavouriteProductsAdapterCity.onClick_NavigateToFavouriteCityWeatherActivity_InOnFavouriteClickListenerInterface(city.latitude , city.longitude)
+        }
 
     }
 
