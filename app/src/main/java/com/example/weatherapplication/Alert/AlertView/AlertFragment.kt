@@ -20,6 +20,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.TimePicker
+import androidx.annotation.RequiresApi
 import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.R
 import com.example.weatherapplication.MainActivity
@@ -32,7 +33,7 @@ class AlertFragment : Fragment() {
 
     private lateinit var fab_addAlert_InAlertFragment: FloatingActionButton
     private var selectedDateTime: Date? = null
-   
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,6 +42,7 @@ class AlertFragment : Fragment() {
         return view
     }
 
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -50,6 +52,7 @@ class AlertFragment : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.S)
     private fun showDateTimePickerDialog() {
         val calendar = Calendar.getInstance()
         val currentYear = calendar.get(Calendar.YEAR)
@@ -67,6 +70,7 @@ class AlertFragment : Fragment() {
         datePickerDialog.show()
     }
 
+    @RequiresApi(Build.VERSION_CODES.S)
     private fun showTimePickerDialog(calendar: Calendar) {
         val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
         val currentMinute = calendar.get(Calendar.MINUTE)
@@ -82,6 +86,7 @@ class AlertFragment : Fragment() {
         timePickerDialog.show()
     }
 
+    @RequiresApi(Build.VERSION_CODES.S)
     private fun showNotificationOrAlarmDialog(selectedDateTime: Date) {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Choose Action")
@@ -94,6 +99,7 @@ class AlertFragment : Fragment() {
         builder.create().show()
     }
 
+    @RequiresApi(Build.VERSION_CODES.S)
     private fun requestDrawOverAppsPermission(selectedDateTime: Date) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
             !Settings.canDrawOverlays(requireContext())
@@ -106,6 +112,7 @@ class AlertFragment : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == Constants.REQUEST_DRAW_OVER_APPS_PERMISSION) {
@@ -135,9 +142,16 @@ class AlertFragment : Fragment() {
     }
 
     private fun createNotification(selectedDateTime: Date) {
+        // Create an intent to open the app when notification is clicked
         val intent = Intent(requireContext(), MainActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(requireContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = PendingIntent.getActivity(
+            requireContext(),
+            Constants.NOTIFICATION_ID,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE // Add FLAG_IMMUTABLE flag here
+        )
 
+        // Create a notification
         val builder = NotificationCompat.Builder(requireContext(), Constants.CHANNEL_ID)
             .setSmallIcon(R.drawable.notification_icon)
             .setContentTitle("Notification Title")
@@ -146,39 +160,42 @@ class AlertFragment : Fragment() {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
 
-        val futureInMillis = selectedDateTime.time - System.currentTimeMillis()
-        builder.setWhen(System.currentTimeMillis() + futureInMillis)
-
+//
+        // Set sound for the notification
         val alarmSound = Settings.System.DEFAULT_NOTIFICATION_URI
         builder.setSound(alarmSound)
 
+        // Show the notification
         val notificationManager = NotificationManagerCompat.from(requireContext())
         if (ActivityCompat.checkSelfPermission(
-                requireContext(),
+                requireActivity(),
                 Manifest.permission.POST_NOTIFICATIONS
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return
+            // Request the missing permissions if not granted
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                Constants.NOTIFICATION_PERMISSION_REQUEST_CODE
+            )
+        } else {
+            // If permission is granted, show the notification
+            notificationManager.notify(Constants.NOTIFICATION_ID, builder.build())
+
+            // Show a toast to confirm the notification set
+            Toast.makeText(requireContext(), "Notification set successfully", Toast.LENGTH_SHORT).show()
         }
-        notificationManager.notify(Constants.NOTIFICATION_ID, builder.build())
     }
 
     companion object {
         fun newInstance() = AlertFragment()
     }
-
 }
 
 object Constants {
     const val ALARM_REQUEST_CODE = 1001
     const val REQUEST_DRAW_OVER_APPS_PERMISSION = 1002
-    const val CHANNEL_ID = "my_channel_01"
+    const val CHANNEL_ID = "my_channel_id"
     const val NOTIFICATION_ID = 2001
+    const val NOTIFICATION_PERMISSION_REQUEST_CODE = 2002
 }
