@@ -32,7 +32,7 @@ class AlertFragment : Fragment() {
 
     private lateinit var fab_addAlert_InAlertFragment: FloatingActionButton
     private var selectedDateTime: Date? = null
-
+  
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
