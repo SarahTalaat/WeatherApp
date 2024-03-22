@@ -1,6 +1,5 @@
-package com.example.weatherapplication.Alert.AlertView
-
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
 import android.content.Intent
@@ -21,7 +20,6 @@ import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.TimePicker
 import androidx.annotation.RequiresApi
-import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.R
 import com.example.weatherapplication.MainActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -141,6 +139,7 @@ class AlertFragment : Fragment() {
         Toast.makeText(requireContext(), "Alarm set successfully", Toast.LENGTH_SHORT).show()
     }
 
+    @SuppressLint("MissingPermission")
     private fun createNotification(selectedDateTime: Date) {
         // Create an intent to open the app when notification is clicked
         val intent = Intent(requireContext(), MainActivity::class.java)
@@ -148,8 +147,13 @@ class AlertFragment : Fragment() {
             requireContext(),
             Constants.NOTIFICATION_ID,
             intent,
-            PendingIntent.FLAG_IMMUTABLE // Add FLAG_IMMUTABLE flag here
+            PendingIntent.FLAG_IMMUTABLE
         )
+
+        // Create a notification channel
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            createNotificationChannel()
+        }
 
         // Create a notification
         val builder = NotificationCompat.Builder(requireContext(), Constants.CHANNEL_ID)
@@ -160,30 +164,30 @@ class AlertFragment : Fragment() {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
 
-//
         // Set sound for the notification
         val alarmSound = Settings.System.DEFAULT_NOTIFICATION_URI
         builder.setSound(alarmSound)
 
         // Show the notification
         val notificationManager = NotificationManagerCompat.from(requireContext())
-        if (ActivityCompat.checkSelfPermission(
-                requireActivity(),
-                Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // Request the missing permissions if not granted
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-                Constants.NOTIFICATION_PERMISSION_REQUEST_CODE
-            )
-        } else {
-            // If permission is granted, show the notification
-            notificationManager.notify(Constants.NOTIFICATION_ID, builder.build())
+        notificationManager.notify(System.currentTimeMillis().toInt(), builder.build())
 
-            // Show a toast to confirm the notification set
-            Toast.makeText(requireContext(), "Notification set successfully", Toast.LENGTH_SHORT).show()
+        // Show a toast to confirm the notification set
+        Toast.makeText(requireContext(), "Notification set successfully", Toast.LENGTH_SHORT).show()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "My Channel"
+            val descriptionText = "Channel Description"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(Constants.CHANNEL_ID, name, importance).apply {
+                description = descriptionText
+            }
+            val notificationManager: NotificationManager =
+                requireActivity().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
         }
     }
 
@@ -196,6 +200,7 @@ object Constants {
     const val ALARM_REQUEST_CODE = 1001
     const val REQUEST_DRAW_OVER_APPS_PERMISSION = 1002
     const val CHANNEL_ID = "my_channel_id"
-    const val NOTIFICATION_ID = 2001
+    const val NOTIFICATION_ID = 2001 // Unique identifier for notifications
     const val NOTIFICATION_PERMISSION_REQUEST_CODE = 2002
 }
+
