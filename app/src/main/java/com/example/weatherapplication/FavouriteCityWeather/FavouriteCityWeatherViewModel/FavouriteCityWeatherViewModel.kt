@@ -39,7 +39,7 @@ class FavouriteCityWeatherViewModel(private val weatherRepositoryInterface_Insta
 
  */
 
-
+/*
     private var stringMutableLiveData_InFavouriteCityWeatherViewModel: MutableLiveData<String> = MutableLiveData<String>()
     val stringLiveDataList_InFavouriteCityWeatherViewModel: LiveData<String> = stringMutableLiveData_InFavouriteCityWeatherViewModel
 
@@ -51,11 +51,11 @@ class FavouriteCityWeatherViewModel(private val weatherRepositoryInterface_Insta
 
     private var cityMutableLiveData_InFavouriteCityWeatherViewModel: MutableLiveData<Model_City> = MutableLiveData<Model_City>()
     val cityLiveDataList_InFavouriteCityWeatherViewModel: LiveData<Model_City> = cityMutableLiveData_InFavouriteCityWeatherViewModel
-
+*/
     private var forecastMutableLiveData_InFavouriteCityWeatherViewModel: MutableLiveData<Model_Forecast> = MutableLiveData<Model_Forecast>()
     val forecastLiveDataList_InFavouriteCityWeatherViewModel: LiveData<Model_Forecast> = forecastMutableLiveData_InFavouriteCityWeatherViewModel
 
-
+/*
 
     fun getCod_FromRetrofit_InFavouriteCityWeatherViewModel(lat: String, lon: String, appid: String){
 
@@ -156,7 +156,7 @@ class FavouriteCityWeatherViewModel(private val weatherRepositoryInterface_Insta
         Log.i("TAG", "getCity_FromRetrofit_InFavouriteCityWeatherViewModel: (after the viewModelScope): city: $city , appid: $appid")
 
     }
-
+*/
     fun getForecast_FromRetrofit_InFavouriteCityWeatherViewModel(lat: String, lon: String, appid: String){
 
         Log.i("TAG", "getForecast_FromRetrofit_InFavouriteCityWeatherViewModel: (before the viewModelScope): lat: $lat , lon: $lon , appid: $appid")

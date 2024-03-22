@@ -12,9 +12,7 @@ import android.view.MotionEvent
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.example.favouriteCitymvvm.FavouriteCity.FavouriteCityViewModel.FavouriteCityViewModel
 import com.example.productsmvvm.Database.WeatherLocalDataSourceImplementation
-import com.example.productsmvvm.FavouriteProducts.FavouriteProductsViewModel.FavouriteCityViewModelFactory_LDS
 import com.example.productsmvvm.Model.WeatherRepositoryImplementation
 import com.example.productsmvvm.Network.WeatherRemoteDataSourceImplementation
 import com.example.weatherapplication.Constants.Utils
@@ -64,7 +62,7 @@ class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener ,
 
         mapWeatherViewModelFactory_LDS_Instance_InMapActivity = MapViewModelFactory_LDS(
             WeatherRepositoryImplementation.getWeatherRepositoryImplementationInstance(
-                WeatherRemoteDataSourceImplementation.getCurrentWeatherRemoteDataSourceImplementation_Instance(),
+                WeatherRemoteDataSourceImplementation.getWeatherRemoteDataSourceImplementation_Instance(),
                 WeatherLocalDataSourceImplementation(this)
             )
         )

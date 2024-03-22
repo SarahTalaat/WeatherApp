@@ -2,28 +2,32 @@ package com.example.productsmvvm.Network
 
 import android.util.Log
 import com.example.weatherapplication.Model.Model_Forecast
-import com.example.weatherapplication.Model_City
-import com.example.weatherapplication.Model_WeatherArrayList
+import com.example.weatherapplication.Model_Alert
 
 private const val TAB = "AllProductsFeature"
 class WeatherRemoteDataSourceImplementation private constructor() : WeatherRemoteDataSourceInterface{
 
     private val weatherService: WeatherServiceInterface by lazy {
-        RetrofitHelper.getRetrofit_Instance_InRetrofitHelper().create(WeatherServiceInterface::class.java)
+        RetrofitHelper.getRetrofit_Instance_5Days_InRetrofitHelper().create(WeatherServiceInterface::class.java)
+    }
+
+    private val alertService: WeatherServiceInterface by lazy {
+        RetrofitHelper.getRetrofit_Instance_1Call_InRetrofitHelper().create(WeatherServiceInterface::class.java)
     }
 
     /*
     override suspend fun getAllProductsOverNetwork_InRDS(): List<Products> {
 
         val response = productsService.getWeatherByCity_FromApiEndPoint_InWeatherService().products
-        return response
+        r
+        eturn response
 
     }
     */
 
     companion object{
         private var instance: WeatherRemoteDataSourceImplementation?=null
-        fun getCurrentWeatherRemoteDataSourceImplementation_Instance(): WeatherRemoteDataSourceImplementation{
+        fun getWeatherRemoteDataSourceImplementation_Instance(): WeatherRemoteDataSourceImplementation{
             return instance?: synchronized(this){
                 val temp = WeatherRemoteDataSourceImplementation()
                 instance = temp
@@ -43,6 +47,24 @@ class WeatherRemoteDataSourceImplementation private constructor() : WeatherRemot
         return response
     }
 
+
+
+    override suspend fun getAlert_OverNetwork_InRDS(
+        lat: String,
+        lon: String,
+        appid: String
+    ): Model_Alert? {
+        val response = weatherService.getAlert_FromApiEndPoint_InWeatherService(lat,lon,appid)
+        Log.i("TAG", "getAlert_OverNetwork_InRDS: " + response)
+        return response
+    }
+
+
+
+
+
+
+/*
     override suspend fun getCod_OverNetwork_InRDS(lat: String, lon: String, appid: String): String? {
         val response = weatherService.getCurrentWeather_FromApiEndPoint_InWeatherService(lat, lon, appid).cod
         Log.i("TAG", "getCod_OverNetwork_InRDS: response: "+response)
@@ -76,6 +98,6 @@ class WeatherRemoteDataSourceImplementation private constructor() : WeatherRemot
         Log.i("TAG", "getCity_OverNetwork_InRDS: response:  "+ response)
         return  response
     }
-
+*/
 
 }

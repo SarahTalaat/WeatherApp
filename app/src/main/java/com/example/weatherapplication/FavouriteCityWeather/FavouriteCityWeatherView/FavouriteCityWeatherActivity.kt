@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.productsmvvm.AllProducts.AllProductsViewModel.CurrentWeatherViewModel
 import com.example.productsmvvm.CurrentWeather.CurrentWeatherView.CurrentWeatherAdapter_Hour
 import com.example.productsmvvm.Database.WeatherLocalDataSourceImplementation
 import com.example.productsmvvm.Model.WeatherRepositoryImplementation
@@ -84,7 +83,7 @@ class FavouriteCityWeatherActivity : AppCompatActivity() {
 
         favouriteCityWeatherViewModelFactory_Instance_RDS_InFavouriteCityWeatherActivity = FavouriteCityWeatherViewModelFactory_RDS(
             WeatherRepositoryImplementation.getWeatherRepositoryImplementationInstance(
-                WeatherRemoteDataSourceImplementation.getCurrentWeatherRemoteDataSourceImplementation_Instance() ,
+                WeatherRemoteDataSourceImplementation.getWeatherRemoteDataSourceImplementation_Instance() ,
                 WeatherLocalDataSourceImplementation(this)
             )
 

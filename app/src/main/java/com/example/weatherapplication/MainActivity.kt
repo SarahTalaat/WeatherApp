@@ -10,6 +10,8 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import com.example.weatherapplication.Alert.AlertView.AlertFragment
+
 import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.CurrentWeather.CurrentWeatherView.CurrentWeatherFragment
 import com.example.weatherapplication.FavouriteCity.FavouriteCityView.FavouriteCityFragment
@@ -84,7 +86,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when(item.itemId){
             R.id.nav_home -> replaceFragment(CurrentWeatherFragment())
             R.id.nav_favourites -> replaceFragment(FavouriteCityFragment())
-            R.id.nav_alerts -> replaceFragment(AlertsFragment())
+            R.id.nav_alerts -> replaceFragment(AlertFragment())
             R.id.nav_settings -> replaceFragment(SettingsFragment())
         }
 
