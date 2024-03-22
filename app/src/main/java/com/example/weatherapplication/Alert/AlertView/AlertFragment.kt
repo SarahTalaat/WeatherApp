@@ -1,16 +1,13 @@
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
@@ -20,6 +17,7 @@ import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.TimePicker
 import androidx.annotation.RequiresApi
+import com.example.myweatherapp.AlarmReceiver
 import com.example.weatherapplication.R
 import com.example.weatherapplication.MainActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -141,6 +139,15 @@ class AlertFragment : Fragment() {
 
     @SuppressLint("MissingPermission")
     private fun createNotification(selectedDateTime: Date) {
+        val currentTime = Calendar.getInstance().timeInMillis
+        val delayInMillis = selectedDateTime.time - currentTime
+
+        if (delayInMillis <= 0) {
+            // The selected time has already passed
+            Toast.makeText(requireContext(), "Selected time has already passed", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         // Create an intent to open the app when notification is clicked
         val intent = Intent(requireContext(), MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
@@ -168,12 +175,21 @@ class AlertFragment : Fragment() {
         val alarmSound = Settings.System.DEFAULT_NOTIFICATION_URI
         builder.setSound(alarmSound)
 
-        // Show the notification
-        val notificationManager = NotificationManagerCompat.from(requireContext())
-        notificationManager.notify(System.currentTimeMillis().toInt(), builder.build())
+        // Schedule the notification to be sent after the delay
+        val notificationIntent = Intent(requireContext(), AlarmReceiver::class.java)
+        notificationIntent.putExtra("notification_id", Constants.NOTIFICATION_ID)
+        val pendingNotificationIntent = PendingIntent.getBroadcast(
+            requireContext(),
+            Constants.NOTIFICATION_ID,
+            notificationIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
 
-        // Show a toast to confirm the notification set
-        Toast.makeText(requireContext(), "Notification set successfully", Toast.LENGTH_SHORT).show()
+        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, currentTime + delayInMillis, pendingNotificationIntent)
+
+        // Show a toast to confirm that the notification will be sent
+        Toast.makeText(requireContext(), "Notification will be sent at the specified time", Toast.LENGTH_SHORT).show()
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -202,5 +218,7 @@ object Constants {
     const val CHANNEL_ID = "my_channel_id"
     const val NOTIFICATION_ID = 2001 // Unique identifier for notifications
     const val NOTIFICATION_PERMISSION_REQUEST_CODE = 2002
+
 }
+
 
