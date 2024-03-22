@@ -2,7 +2,6 @@ package com.example.weatherapplication.FavouriteCity.FavouriteCityView
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -77,7 +76,7 @@ class FavouriteCityFragment : Fragment(), OnFavouriteCityClickListenerInterface 
 
         favouriteCityViewModelFactory_Instance_LDS_InFavouriteCityFragment = FavouriteCityViewModelFactory_LDS(
             WeatherRepositoryImplementation.getWeatherRepositoryImplementationInstance(
-            WeatherRemoteDataSourceImplementation.getCurrentWeatherRemoteDataSourceImplementation_Instance(),
+            WeatherRemoteDataSourceImplementation.getWeatherRemoteDataSourceImplementation_Instance(),
             WeatherLocalDataSourceImplementation(requireContext())
         ))
 

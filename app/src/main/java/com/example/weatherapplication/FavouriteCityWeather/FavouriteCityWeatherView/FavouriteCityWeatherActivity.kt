@@ -83,7 +83,7 @@ class FavouriteCityWeatherActivity : AppCompatActivity() {
 
         favouriteCityWeatherViewModelFactory_Instance_RDS_InFavouriteCityWeatherActivity = FavouriteCityWeatherViewModelFactory_RDS(
             WeatherRepositoryImplementation.getWeatherRepositoryImplementationInstance(
-                WeatherRemoteDataSourceImplementation.getCurrentWeatherRemoteDataSourceImplementation_Instance() ,
+                WeatherRemoteDataSourceImplementation.getWeatherRemoteDataSourceImplementation_Instance() ,
                 WeatherLocalDataSourceImplementation(this)
             )
 

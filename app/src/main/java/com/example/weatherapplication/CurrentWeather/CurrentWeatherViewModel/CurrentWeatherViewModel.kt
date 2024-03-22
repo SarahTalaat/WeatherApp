@@ -39,7 +39,7 @@ class CurrentWeatherViewModel(private val currentWeatherRepositoryInterface_Inst
 
  */
 
-
+/*
     private var stringMutableLiveData_InCurrentWeatherViewModel: MutableLiveData<String> = MutableLiveData<String>()
     val stringLiveDataList_InCurrentWeatherViewModel: LiveData<String> = stringMutableLiveData_InCurrentWeatherViewModel
 
@@ -52,11 +52,12 @@ class CurrentWeatherViewModel(private val currentWeatherRepositoryInterface_Inst
     private var cityMutableLiveData_InCurrentWeatherViewModel: MutableLiveData<Model_City> = MutableLiveData<Model_City>()
     val cityLiveDataList_InCurrentWeatherViewModel: LiveData<Model_City> = cityMutableLiveData_InCurrentWeatherViewModel
 
+   */
     private var forecastMutableLiveData_InCurrentWeatherViewModel: MutableLiveData<Model_Forecast> = MutableLiveData<Model_Forecast>()
     val forecastLiveDataList_InCurrentWeatherViewModel: LiveData<Model_Forecast> = forecastMutableLiveData_InCurrentWeatherViewModel
 
 
-
+/*
     fun getCod_FromRetrofit_InCurrentWeatherViewModel(lat: String, lon: String, appid: String){
 
         Log.i("TAG", "getCod_FromRetrofit_InCurrentWeatherViewModel: (before the viewModelScope):  lat: $lat , lon: $lon , appid: $appid")
@@ -156,7 +157,7 @@ class CurrentWeatherViewModel(private val currentWeatherRepositoryInterface_Inst
         Log.i("TAG", "getCity_FromRetrofit_InCurrentWeatherViewModel: (after the viewModelScope): city: $city , appid: $appid")
 
     }
-
+*/
     fun getForecast_FromRetrofit_InCurrentWeatherViewModel(lat: String, lon: String, appid: String){
 
         Log.i("TAG", "getForecast_FromRetrofit_InCurrentWeatherViewModel: (before the viewModelScope): lat: $lat , lon: $lon , appid: $appid")
