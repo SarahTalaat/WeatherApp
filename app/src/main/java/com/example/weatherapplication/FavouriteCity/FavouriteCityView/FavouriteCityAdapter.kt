@@ -10,7 +10,6 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.weatherapplication.Model.Model_FavouriteCity
 import com.example.weatherapplication.R
 import java.util.ArrayList
@@ -57,7 +56,7 @@ class FavouriteProductsAdapter: RecyclerView.Adapter<FavouriteProductsAdapter.My
 
 
         constructor(@NonNull itemView: View): super(itemView){
-                tv_cityName_InFavouriteCityAdapter = itemView.findViewById(R.id.tv_cityName)
+                tv_cityName_InFavouriteCityAdapter = itemView.findViewById(R.id.tv_from)
                 btn_deleteFromFavourite_InFavouriteCityAdapter = itemView.findViewById(R.id.btn_delete)
             }
     }
