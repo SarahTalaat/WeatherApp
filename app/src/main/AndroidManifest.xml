@@ -50,7 +50,14 @@
         </activity>
 
 
+        <service
+            android:name=".Alert.AlertView.NotificationService"
+            android:exported="false" />
 
+        <!-- Receivers -->
+        <receiver
+            android:name=".Alert.AlertView.AlarmReceiver"
+            android:exported="false" />
 
     </application>
 

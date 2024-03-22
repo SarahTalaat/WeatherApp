@@ -1,5 +1,6 @@
 package com.example.weatherapplication
 
+import AlertFragment
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -10,7 +11,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import com.example.weatherapplication.Alert.AlertView.AlertFragment
+
 
 import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.CurrentWeather.CurrentWeatherView.CurrentWeatherFragment
