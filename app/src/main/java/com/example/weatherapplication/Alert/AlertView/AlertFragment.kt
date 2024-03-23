@@ -293,7 +293,7 @@ class AlertFragment : Fragment() {
 
     private fun setUpRecyclerView_InAlertFragment(){
         layoutManager_Instance_InAlertFragment = LinearLayoutManager(requireContext())
-        layoutManager_Instance_InAlertFragment.orientation = RecyclerView.HORIZONTAL
+        layoutManager_Instance_InAlertFragment.orientation = RecyclerView.VERTICAL
         adapter_Instance_InAlertFragment = AlertAdapter(requireContext(), ArrayList())
         recyclerView_Instance_InAlertFragment.adapter = adapter_Instance_InAlertFragment
         recyclerView_Instance_InAlertFragment.layoutManager = layoutManager_Instance_InAlertFragment

@@ -52,6 +52,9 @@ class AlertAdapter: RecyclerView.Adapter<AlertAdapter.MyViewHolder_InAlertAdapte
     override fun getItemCount(): Int {
         return timeArrayList_InAlertAdapter.size
     }
+
+
+
 /*
     fun settingTimeArrayList_InAlertAdapter(timeModel: Model_Time) {
         Log.i(
@@ -78,6 +81,9 @@ class AlertAdapter: RecyclerView.Adapter<AlertAdapter.MyViewHolder_InAlertAdapte
 
         timeArrayList_InAlertAdapter.add(modelTime)
         notifyDataSetChanged()
+
+        Log.d("AlertAdapter", "Added notification: $modelTime")
+        Log.d("AlertAdapter", "Size of data list: ${timeArrayList_InAlertAdapter.size}")
     }
 
     class MyViewHolder_InAlertAdapter : RecyclerView.ViewHolder {
