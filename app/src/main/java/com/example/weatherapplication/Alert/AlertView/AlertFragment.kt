@@ -188,7 +188,7 @@ class AlertFragment : Fragment() {
             alarmIntent,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
-
+  
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, selectedDateTime.time, pendingIntent)
         Toast.makeText(requireContext(), "Alarm set successfully", Toast.LENGTH_SHORT).show()
     }
