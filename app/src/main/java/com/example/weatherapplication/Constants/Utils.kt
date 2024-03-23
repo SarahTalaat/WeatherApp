@@ -10,8 +10,8 @@ class Utils {
         var FAVOURITE_CITY_LATITUDE = "favourite_city_latitude"
         var FAVOURITE_CITY_LONGITUDE = "favourite_city_longitude"
         var FAVOURITE_CITY_NAME = "favourite_city_name"
-
-
+        var LAT_EGYPT = "26.8206"
+        var LON_EGYPT = "30.8025"
         var LAT_ALERT = "46.8182"
         var lON_ALERT = "8.2275"
     }
