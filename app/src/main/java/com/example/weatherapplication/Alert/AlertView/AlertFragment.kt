@@ -6,22 +6,33 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.DatePicker
-import android.widget.TimePicker
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.myweatherapp.AlarmReceiver
+import com.example.productsmvvm.Database.WeatherLocalDataSourceImplementation
+import com.example.productsmvvm.Model.WeatherRepositoryImplementation
+import com.example.productsmvvm.Network.WeatherRemoteDataSourceImplementation
+import com.example.weatherapplication.Constants.Utils
+import com.example.weatherapplication.Alert.AlertView.AlertAdapter
+import com.example.weatherapplication.Alert.AlertViewModel.AlertViewModel
+import com.example.weatherapplication.Alert.AlertViewModel.AlertViewModelFactory_RDS
 import com.example.weatherapplication.R
 import com.example.weatherapplication.MainActivity
+import com.example.weatherapplication.Model.Model_Time
+import com.example.weatherapplication.R.id.rv_alert
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.*
+import kotlin.collections.ArrayList
 
 const val REQUEST_LOCATION_CODE = 2005
 
@@ -29,6 +40,20 @@ class AlertFragment : Fragment() {
 
     private lateinit var fab_addAlert_InAlertFragment: FloatingActionButton
     private var selectedDateTime: Date? = null
+    lateinit var hour:String
+    lateinit var minutes: String
+    lateinit var day:String
+    lateinit var month:String
+    lateinit var year: String
+    private lateinit var alertViewModelFactory_Instance_RDS_InAlertFragment: AlertViewModelFactory_RDS
+    private lateinit var alertViewModel_Instance_InAlertFragmet: AlertViewModel
+    private lateinit var recyclerView_Instance_InAlertFragment: RecyclerView
+    private lateinit var layoutManager_Instance_InAlertFragment: LinearLayoutManager
+    private lateinit var adapter_Instance_InAlertFragment: AlertAdapter
+    lateinit var data: Uri
+    lateinit var model_Time_Instance : Model_Time
+
+    var arrayOfModelTime: ArrayList<Model_Time> = arrayListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,6 +71,30 @@ class AlertFragment : Fragment() {
         fab_addAlert_InAlertFragment.setOnClickListener {
             showDateTimePickerDialog()
         }
+
+
+        model_Time_Instance= Model_Time()
+        alertViewModelFactory_Instance_RDS_InAlertFragment = AlertViewModelFactory_RDS(
+            WeatherRepositoryImplementation.getWeatherRepositoryImplementationInstance(
+                WeatherRemoteDataSourceImplementation.getWeatherRemoteDataSourceImplementation_Instance() ,
+                WeatherLocalDataSourceImplementation(requireContext())
+            )
+
+        )
+
+        alertViewModel_Instance_InAlertFragmet = ViewModelProvider(this,alertViewModelFactory_Instance_RDS_InAlertFragment).get(
+            AlertViewModel::class.java)
+
+        initUI_InAlertFragment(view)
+        setUpRecyclerView_InAlertFragment()
+
+    //    adapter_Instance_InAlertFragment.settingTimeArrayList_InAlertAdapter(model_Time_Instance)
+
+        alertViewModel_Instance_InAlertFragmet.getAlert_FromRetrofit_InAlertViewModel(Utils.LAT_ALERT,Utils.lON_ALERT,
+            Utils.API_KEY)
+
+
+
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -54,6 +103,19 @@ class AlertFragment : Fragment() {
         val currentYear = calendar.get(Calendar.YEAR)
         val currentMonth = calendar.get(Calendar.MONTH)
         val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
+
+
+        year = currentYear.toString()
+        month = currentMonth.toString()
+        day = currentDay.toString()
+
+
+        model_Time_Instance.year = year
+        model_Time_Instance.month = month
+        model_Time_Instance.day = day
+
+        Log.i("TAG", "AlertFragment - showDateTimePickerDialog: year= $year , month= $month , day= $day")
+
 
         val datePickerDialog = DatePickerDialog(requireContext(), { _, year, month, day ->
             calendar.set(Calendar.YEAR, year)
@@ -71,7 +133,19 @@ class AlertFragment : Fragment() {
         val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
         val currentMinute = calendar.get(Calendar.MINUTE)
 
-        val timePickerDialog = TimePickerDialog(requireContext(), { _, hourOfDay, minute ->
+        minutes = currentMinute.toString()
+        hour = currentHour.toString()
+
+        model_Time_Instance.minutes = minutes
+        model_Time_Instance.hour = hour
+
+        // Update the adapter with the new data
+
+
+
+        Log.i("TAG", "AlertFragment - showTimePickerDialog: minutes = $minutes , hour = $hour ")
+
+        val timePickerDialog = TimePickerDialog(requireActivity(), { _, hourOfDay, minute ->
             calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
             calendar.set(Calendar.MINUTE, minute)
 
@@ -188,6 +262,9 @@ class AlertFragment : Fragment() {
         val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, currentTime + delayInMillis, pendingNotificationIntent)
 
+        adapter_Instance_InAlertFragment.addNotification(selectedDateTime)
+        adapter_Instance_InAlertFragment.notifyDataSetChanged()
+
         // Show a toast to confirm that the notification will be sent
         Toast.makeText(requireContext(), "Notification will be sent at the specified time", Toast.LENGTH_SHORT).show()
     }
@@ -206,6 +283,22 @@ class AlertFragment : Fragment() {
             notificationManager.createNotificationChannel(channel)
         }
     }
+
+
+    private fun initUI_InAlertFragment(view: View){
+        recyclerView_Instance_InAlertFragment = view.findViewById(rv_alert)
+
+    }
+
+    private fun setUpRecyclerView_InAlertFragment(){
+        layoutManager_Instance_InAlertFragment = LinearLayoutManager(requireContext())
+        layoutManager_Instance_InAlertFragment.orientation = RecyclerView.HORIZONTAL
+        adapter_Instance_InAlertFragment = AlertAdapter(requireContext(), ArrayList())
+        recyclerView_Instance_InAlertFragment.adapter = adapter_Instance_InAlertFragment
+        recyclerView_Instance_InAlertFragment.layoutManager = layoutManager_Instance_InAlertFragment
+    }
+
+
 
     companion object {
         fun newInstance() = AlertFragment()

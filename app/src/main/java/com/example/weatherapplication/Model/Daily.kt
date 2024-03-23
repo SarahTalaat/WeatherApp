@@ -22,7 +22,8 @@ data class Daily (
   @SerializedName("wind_gust"  ) var windGust  : Double?            = null,
   @SerializedName("weather"    ) var weather   : ArrayList<Weather> = arrayListOf(),
   @SerializedName("clouds"     ) var clouds    : Int?               = null,
-  @SerializedName("pop"        ) var pop       : Int?               = null,
+  //@SerializedName("pop"        ) var pop       : Int?               = null,
+  @SerializedName("pop"        ) var pop       : Double?               = null,
   @SerializedName("uvi"        ) var uvi       : Double?            = null
 
 )

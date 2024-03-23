@@ -7,7 +7,8 @@ data class Hourly (
 
   @SerializedName("dt"         ) var dt         : Int?               = null,
   @SerializedName("temp"       ) var temp       : Double?            = null,
-  @SerializedName("feels_like" ) var feelsLike  : Int?               = null,
+//  @SerializedName("feels_like" ) var feelsLike  : Int?               = null,
+  @SerializedName("feels_like" ) var feelsLike  : Double?               = null,
   @SerializedName("pressure"   ) var pressure   : Int?               = null,
   @SerializedName("humidity"   ) var humidity   : Int?               = null,
   @SerializedName("dew_point"  ) var dewPoint   : Double?            = null,
@@ -18,6 +19,8 @@ data class Hourly (
   @SerializedName("wind_deg"   ) var windDeg    : Int?               = null,
   @SerializedName("wind_gust"  ) var windGust   : Double?            = null,
   @SerializedName("weather"    ) var weather    : ArrayList<Weather> = arrayListOf(),
-  @SerializedName("pop"        ) var pop        : Int?               = null
+ // @SerializedName("pop"        ) var pop        : Int?               = null
+  @SerializedName("pop"        ) var pop        : Double?               = null
+
 
 )
