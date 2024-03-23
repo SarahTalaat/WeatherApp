@@ -59,6 +59,14 @@
             android:name="com.example.myweatherapp.AlarmReceiver"
             android:exported="false" />
 
+        <receiver android:name=".Alert.AlertView.DismissNotificationReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="DISMISS_NOTIFICATION" />
+            </intent-filter>
+        </receiver>
+
+
         <!-- Services -->
         <service
             android:name="com.example.myweatherapp.NotificationService"
