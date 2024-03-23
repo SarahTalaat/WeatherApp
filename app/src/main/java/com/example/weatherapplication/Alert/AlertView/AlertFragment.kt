@@ -1,3 +1,5 @@
+
+import Constants.NOTIFICATION_ID
 import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
@@ -31,6 +33,7 @@ import com.example.weatherapplication.MainActivity
 import com.example.weatherapplication.Model.Model_Time
 import com.example.weatherapplication.R.id.rv_alert
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.gson.Gson
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -52,6 +55,8 @@ class AlertFragment : Fragment() {
     private lateinit var adapter_Instance_InAlertFragment: AlertAdapter
     lateinit var data: Uri
     lateinit var model_Time_Instance : Model_Time
+    var isAlertsNotEmpty: Boolean = false
+
 
     var arrayOfModelTime: ArrayList<Model_Time> = arrayListOf()
 
@@ -90,8 +95,38 @@ class AlertFragment : Fragment() {
 
     //    adapter_Instance_InAlertFragment.settingTimeArrayList_InAlertAdapter(model_Time_Instance)
 
+
+
+
+        alertViewModel_Instance_InAlertFragmet.alertLiveDataList_InAlertViewModel.observe(viewLifecycleOwner){
+                alertResponse ->
+
+            Log.i("TAG", "onViewCreated: AlertFragment : alertResponse:  $alertResponse")
+            val gson = Gson()
+            val modelAlertJson = gson.toJson(alertResponse)
+            val sharedPreferences = requireContext().getSharedPreferences(Utils.ALERT_DATA_SP, Context.MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+            editor.putString(Utils.MODEL_ALERT_GSON, modelAlertJson)
+            editor.apply()
+
+            Log.i("TAG", "onViewCreated: AlertFragment: createNotification(selectedDateTime!!) : " + selectedDateTime)
+          //  createNotification(selectedDateTime!!)
+
+            if (alertResponse.alerts.isNotEmpty()) {
+                isAlertsNotEmpty = true
+
+            } else {
+                isAlertsNotEmpty = false
+            }
+        }
+
+
+
+
+
         alertViewModel_Instance_InAlertFragmet.getAlert_FromRetrofit_InAlertViewModel(Utils.LAT_ALERT,Utils.lON_ALERT,
             Utils.API_KEY)
+
 
 
 
@@ -213,61 +248,84 @@ class AlertFragment : Fragment() {
 
     @SuppressLint("MissingPermission")
     private fun createNotification(selectedDateTime: Date) {
-        val currentTime = Calendar.getInstance().timeInMillis
-        val delayInMillis = selectedDateTime.time - currentTime
 
 
-        if (delayInMillis <= 0) {
-            // The selected time has already passed
-            Toast.makeText(requireContext(), "Selected time has already passed", Toast.LENGTH_SHORT).show()
-            return
-        }
 
-        // Create an intent to open the app when notification is clicked
-        val intent = Intent(requireContext(), MainActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(
-            requireContext(),
-            Constants.NOTIFICATION_ID,
-            intent,
-            PendingIntent.FLAG_IMMUTABLE
-        )
+            val currentTime = Calendar.getInstance().timeInMillis
+            val delayInMillis = selectedDateTime.time - currentTime
 
-        // Create a notification channel
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            createNotificationChannel()
-        }
 
-        // Create a notification
-        val builder = NotificationCompat.Builder(requireContext(), Constants.CHANNEL_ID)
-            .setSmallIcon(R.drawable.notification_icon)
-            .setContentTitle("Notification Title")
-            .setContentText("Notification Description")
-            .setContentIntent(pendingIntent)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setAutoCancel(true)
+            if (delayInMillis <= 0) {
+                // The selected time has already passed
+                Toast.makeText(
+                    requireContext(),
+                    "Selected time has already passed",
+                    Toast.LENGTH_SHORT
+                ).show()
+                return
+            }
 
-        // Set sound for the notification
-        val alarmSound = Settings.System.DEFAULT_NOTIFICATION_URI
-        builder.setSound(alarmSound)
+            NOTIFICATION_ID++
 
-        // Schedule the notification to be sent after the delay
-        val notificationIntent = Intent(requireContext(), AlarmReceiver::class.java)
-        notificationIntent.putExtra("notification_id", Constants.NOTIFICATION_ID)
-        val pendingNotificationIntent = PendingIntent.getBroadcast(
-            requireContext(),
-            Constants.NOTIFICATION_ID,
-            notificationIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
 
-        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, currentTime + delayInMillis, pendingNotificationIntent)
+            // Create an intent to open the app when notification is clicked
+            val intent = Intent(requireContext(), MainActivity::class.java)
+            val pendingIntent = PendingIntent.getActivity(
+                requireContext(),
+                Constants.NOTIFICATION_ID,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE
+            )
 
-        adapter_Instance_InAlertFragment.addNotification(selectedDateTime)
-        adapter_Instance_InAlertFragment.notifyDataSetChanged()
+            // Create a notification channel
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                createNotificationChannel()
+            }
 
-        // Show a toast to confirm that the notification will be sent
-        Toast.makeText(requireContext(), "Notification will be sent at the specified time", Toast.LENGTH_SHORT).show()
+            // Create a notification
+            val builder = NotificationCompat.Builder(requireContext(), Constants.CHANNEL_ID)
+                .setSmallIcon(R.drawable.notification_icon)
+                .setContentTitle("Notification Title")
+                .setContentText("Notification Description")
+                .setContentIntent(pendingIntent)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setAutoCancel(true)
+
+            // Set sound for the notification
+            val alarmSound = Settings.System.DEFAULT_NOTIFICATION_URI
+            builder.setSound(alarmSound)
+
+
+            // Schedule the notification to be sent after the delay
+            val notificationIntent = Intent(requireContext(), AlarmReceiver::class.java)
+            notificationIntent.putExtra("notification_id", Constants.NOTIFICATION_ID)
+
+
+            val pendingNotificationIntent = PendingIntent.getBroadcast(
+                requireContext(),
+                Constants.NOTIFICATION_ID,
+                notificationIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+
+            val alarmManager =
+                requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            alarmManager.setExact(
+                AlarmManager.RTC_WAKEUP,
+                currentTime + delayInMillis,
+                pendingNotificationIntent
+            )
+
+            adapter_Instance_InAlertFragment.addNotification(selectedDateTime)
+            adapter_Instance_InAlertFragment.notifyDataSetChanged()
+
+            // Show a toast to confirm that the notification will be sent
+            Toast.makeText(
+                requireContext(),
+                "Notification will be sent at the specified time",
+                Toast.LENGTH_SHORT
+            ).show()
+
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -293,7 +351,7 @@ class AlertFragment : Fragment() {
 
     private fun setUpRecyclerView_InAlertFragment(){
         layoutManager_Instance_InAlertFragment = LinearLayoutManager(requireContext())
-        layoutManager_Instance_InAlertFragment.orientation = RecyclerView.HORIZONTAL
+        layoutManager_Instance_InAlertFragment.orientation = RecyclerView.VERTICAL
         adapter_Instance_InAlertFragment = AlertAdapter(requireContext(), ArrayList())
         recyclerView_Instance_InAlertFragment.adapter = adapter_Instance_InAlertFragment
         recyclerView_Instance_InAlertFragment.layoutManager = layoutManager_Instance_InAlertFragment
@@ -310,8 +368,9 @@ object Constants {
     const val ALARM_REQUEST_CODE = 1001
     const val REQUEST_DRAW_OVER_APPS_PERMISSION = 1002
     const val CHANNEL_ID = "my_channel_id"
-    const val NOTIFICATION_ID = 2001 // Unique identifier for notifications
+    var NOTIFICATION_ID = 2001 // Unique identifier for notifications
     const val NOTIFICATION_PERMISSION_REQUEST_CODE = 2002
+
 
 }
 
