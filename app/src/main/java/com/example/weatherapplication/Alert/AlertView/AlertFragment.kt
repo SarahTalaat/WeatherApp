@@ -243,7 +243,7 @@ class AlertFragment : Fragment() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             createNotificationChannel()
         }
-
+ 
         // Create a notification
         val builder = NotificationCompat.Builder(requireContext(), Constants.CHANNEL_ID)
             .setSmallIcon(R.drawable.notification_icon)
