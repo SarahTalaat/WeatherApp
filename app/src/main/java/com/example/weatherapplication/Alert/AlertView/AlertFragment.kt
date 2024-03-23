@@ -193,7 +193,6 @@ class AlertFragment : Fragment() {
         Toast.makeText(requireContext(), "Alarm set successfully", Toast.LENGTH_SHORT).show()
     }
 
-    @RequiresApi(Build.VERSION_CODES.S)
     private fun createNotification(selectedDateTime: Date) {
         val currentTime = Calendar.getInstance().timeInMillis
         val delayInMillis = selectedDateTime.time - currentTime
@@ -229,17 +228,6 @@ class AlertFragment : Fragment() {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
 
-        // Replace the default notification sound with a custom sound from a media player
-        val mediaPlayer = MediaPlayer.create(requireContext(), R.raw.notification_music)
-        mediaPlayer.start()
-
-        // Set the starting and ending time for the notification sound
-        Timer().schedule(object : TimerTask() {
-            override fun run() {
-                mediaPlayer.stop()
-            }
-        }, delayInMillis)
-
         // Add a dismiss button to the notification
         val dismissIntent = Intent(requireContext(), DismissNotificationReceiver::class.java)
         dismissIntent.action = "DISMISS_NOTIFICATION"
@@ -274,6 +262,13 @@ class AlertFragment : Fragment() {
             pendingNotificationIntent
         )
 
+        // Schedule playing the notification sound at the specified time
+        Timer().schedule(object : TimerTask() {
+            override fun run() {
+                playNotificationSound()
+            }
+        }, delayInMillis)
+
         adapter_Instance_InAlertFragment.addNotification(selectedDateTime)
         adapter_Instance_InAlertFragment.notifyDataSetChanged()
 
@@ -282,6 +277,12 @@ class AlertFragment : Fragment() {
             "Notification will be sent at the specified time",
             Toast.LENGTH_SHORT
         ).show()
+    }
+
+    private fun playNotificationSound() {
+        val mediaPlayer = MediaPlayer.create(requireContext(), R.raw.notification_music)
+        mediaPlayer.start()
+        // You can optionally handle stopping the sound after a duration if needed
     }
 
 
