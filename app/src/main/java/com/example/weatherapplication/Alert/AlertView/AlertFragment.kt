@@ -247,7 +247,7 @@ class AlertFragment : Fragment() {
             requireContext(),
             Constants.NOTIFICATION_ID,
             dismissIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
         val dismissAction = NotificationCompat.Action.Builder(
             R.drawable.notification_icon,
