@@ -1,3 +1,5 @@
+
+import Constants.NOTIFICATION_ID
 import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
@@ -223,6 +225,11 @@ class AlertFragment : Fragment() {
             return
         }
 
+        NOTIFICATION_ID++
+
+
+
+
         // Create an intent to open the app when notification is clicked
         val intent = Intent(requireContext(), MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
@@ -250,9 +257,11 @@ class AlertFragment : Fragment() {
         val alarmSound = Settings.System.DEFAULT_NOTIFICATION_URI
         builder.setSound(alarmSound)
 
+
         // Schedule the notification to be sent after the delay
         val notificationIntent = Intent(requireContext(), AlarmReceiver::class.java)
         notificationIntent.putExtra("notification_id", Constants.NOTIFICATION_ID)
+
         val pendingNotificationIntent = PendingIntent.getBroadcast(
             requireContext(),
             Constants.NOTIFICATION_ID,
@@ -310,8 +319,9 @@ object Constants {
     const val ALARM_REQUEST_CODE = 1001
     const val REQUEST_DRAW_OVER_APPS_PERMISSION = 1002
     const val CHANNEL_ID = "my_channel_id"
-    const val NOTIFICATION_ID = 2001 // Unique identifier for notifications
+    var NOTIFICATION_ID = 2001 // Unique identifier for notifications
     const val NOTIFICATION_PERMISSION_REQUEST_CODE = 2002
+
 
 }
 
