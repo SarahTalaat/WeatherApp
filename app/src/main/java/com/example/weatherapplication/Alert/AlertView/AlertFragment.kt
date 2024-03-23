@@ -216,6 +216,7 @@ class AlertFragment : Fragment() {
         val currentTime = Calendar.getInstance().timeInMillis
         val delayInMillis = selectedDateTime.time - currentTime
 
+
         if (delayInMillis <= 0) {
             // The selected time has already passed
             Toast.makeText(requireContext(), "Selected time has already passed", Toast.LENGTH_SHORT).show()
