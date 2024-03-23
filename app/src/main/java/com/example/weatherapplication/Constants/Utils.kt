@@ -14,6 +14,8 @@ class Utils {
         var LON_EGYPT = "30.8025"
         var LAT_ALERT = "46.8182"
         var lON_ALERT = "8.2275"
+        var ALERT_DATA_SP = "AlertData"
+        var MODEL_ALERT_GSON ="modelAlert"
     }
 
 }

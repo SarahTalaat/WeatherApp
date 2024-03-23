@@ -34,7 +34,6 @@ import com.example.weatherapplication.Model.Model_Time
 import com.example.weatherapplication.R.id.rv_alert
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
-import com.google.gson.JsonParser
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -102,6 +101,17 @@ class AlertFragment : Fragment() {
         alertViewModel_Instance_InAlertFragmet.alertLiveDataList_InAlertViewModel.observe(viewLifecycleOwner){
                 alertResponse ->
 
+            Log.i("TAG", "onViewCreated: AlertFragment : alertResponse:  $alertResponse")
+            val gson = Gson()
+            val modelAlertJson = gson.toJson(alertResponse)
+            val sharedPreferences = requireContext().getSharedPreferences(Utils.ALERT_DATA_SP, Context.MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+            editor.putString(Utils.MODEL_ALERT_GSON, modelAlertJson)
+            editor.apply()
+
+            Log.i("TAG", "onViewCreated: AlertFragment: createNotification(selectedDateTime!!) : " + selectedDateTime)
+          //  createNotification(selectedDateTime!!)
+
             if (alertResponse.alerts.isNotEmpty()) {
                 isAlertsNotEmpty = true
 
@@ -114,7 +124,7 @@ class AlertFragment : Fragment() {
 
 
 
-        alertViewModel_Instance_InAlertFragmet.getAlert_FromRetrofit_InAlertViewModel(Utils.LAT_EGYPT,Utils.LON_EGYPT,
+        alertViewModel_Instance_InAlertFragmet.getAlert_FromRetrofit_InAlertViewModel(Utils.LAT_ALERT,Utils.lON_ALERT,
             Utils.API_KEY)
 
 
@@ -239,7 +249,7 @@ class AlertFragment : Fragment() {
     @SuppressLint("MissingPermission")
     private fun createNotification(selectedDateTime: Date) {
 
-        if (isAlertsNotEmpty == true) {
+
 
             val currentTime = Calendar.getInstance().timeInMillis
             val delayInMillis = selectedDateTime.time - currentTime
@@ -290,6 +300,7 @@ class AlertFragment : Fragment() {
             val notificationIntent = Intent(requireContext(), AlarmReceiver::class.java)
             notificationIntent.putExtra("notification_id", Constants.NOTIFICATION_ID)
 
+
             val pendingNotificationIntent = PendingIntent.getBroadcast(
                 requireContext(),
                 Constants.NOTIFICATION_ID,
@@ -314,9 +325,7 @@ class AlertFragment : Fragment() {
                 "Notification will be sent at the specified time",
                 Toast.LENGTH_SHORT
             ).show()
-        }else{
-            Toast.makeText(requireContext(), "There is no dangerous situation in your area ", Toast.LENGTH_SHORT).show()
-        }
+
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
