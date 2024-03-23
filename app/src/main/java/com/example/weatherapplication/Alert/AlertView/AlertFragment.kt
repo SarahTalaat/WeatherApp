@@ -27,6 +27,7 @@ import com.example.productsmvvm.Network.WeatherRemoteDataSourceImplementation
 import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.Alert.AlertView.AlertAdapter
 import com.example.weatherapplication.Alert.AlertView.DismissNotificationReceiver
+import com.example.weatherapplication.Alert.AlertView.StopNotificationReceiver
 import com.example.weatherapplication.Alert.AlertViewModel.AlertViewModel
 import com.example.weatherapplication.Alert.AlertViewModel.AlertViewModelFactory_RDS
 import com.example.weatherapplication.MainActivity
@@ -188,7 +189,7 @@ class AlertFragment : Fragment() {
             alarmIntent,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
-  
+
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, selectedDateTime.time, pendingIntent)
         Toast.makeText(requireContext(), "Alarm set successfully", Toast.LENGTH_SHORT).show()
     }
@@ -238,7 +239,7 @@ class AlertFragment : Fragment() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
         val dismissAction = NotificationCompat.Action.Builder(
-            R.drawable.notification_icon,
+            R.drawable.notification_close,
             "Dismiss",
             dismissPendingIntent
         ).build()
@@ -277,7 +278,13 @@ class AlertFragment : Fragment() {
             "Notification will be sent at the specified time",
             Toast.LENGTH_SHORT
         ).show()
+
+        // Show the notification
+        val notificationManager =
+            requireActivity().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(NOTIFICATION_ID, builder.build())
     }
+
 
     private fun playNotificationSound() {
         val mediaPlayer = MediaPlayer.create(requireContext(), R.raw.notification_music)
@@ -324,4 +331,8 @@ object Constants {
     const val CHANNEL_ID = "my_channel_id"
     var NOTIFICATION_ID = 2001 // Unique identifier for notifications
     const val NOTIFICATION_PERMISSION_REQUEST_CODE = 2002
+
+    const val STOP_NOTIFICATION_REQUEST_CODE = 2003
+    const val NOTIFICATION_ID_EXTRA = "notification_id_extra"
+
 }

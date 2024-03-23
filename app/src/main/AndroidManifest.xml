@@ -55,6 +55,8 @@
 
 
         <!-- Receivers -->
+
+        <receiver android:name=".Alert.AlertView.StopNotificationReceiver" />
         <receiver
             android:name="com.example.myweatherapp.AlarmReceiver"
             android:exported="false" />
