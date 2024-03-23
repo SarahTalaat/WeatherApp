@@ -54,7 +54,7 @@ class WeatherRemoteDataSourceImplementation private constructor() : WeatherRemot
         lon: String,
         appid: String
     ): Model_Alert? {
-        val response = weatherService.getAlert_FromApiEndPoint_InWeatherService(lat,lon,appid)
+        val response = alertService.getAlert_FromApiEndPoint_InWeatherService(lat,lon,appid)
         Log.i("TAG", "getAlert_OverNetwork_InRDS: " + response)
         return response
     }
