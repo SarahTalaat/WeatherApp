@@ -10,7 +10,7 @@ import android.widget.Toast
 import com.example.weatherapplication.MainActivity
 import com.example.weatherapplication.R
 
-  
+    
 class StopNotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (context != null) {
