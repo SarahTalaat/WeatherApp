@@ -52,7 +52,7 @@ class AlertFragment : Fragment() {
     private lateinit var adapter_Instance_InAlertFragment: AlertAdapter
     lateinit var model_Time_Instance : Model_Time
     var isAlertsNotEmpty: Boolean = false
-
+    private var mediaPlayer: MediaPlayer? = null
     var arrayOfModelTime: ArrayList<Model_Time> = arrayListOf()
 
     override fun onCreateView(
@@ -193,7 +193,6 @@ class AlertFragment : Fragment() {
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, selectedDateTime.time, pendingIntent)
         Toast.makeText(requireContext(), "Alarm set successfully", Toast.LENGTH_SHORT).show()
     }
-
     private fun createNotification(selectedDateTime: Date) {
         val currentTime = Calendar.getInstance().timeInMillis
         val delayInMillis = selectedDateTime.time - currentTime
@@ -209,10 +208,25 @@ class AlertFragment : Fragment() {
 
         NOTIFICATION_ID++
 
+        // Add a dismiss button to the notification
+        val dismissIntent = Intent(requireContext(), DismissNotificationReceiver::class.java)
+        dismissIntent.action = "DISMISS_NOTIFICATION"
+        val dismissPendingIntent = PendingIntent.getBroadcast(
+            requireContext(),
+            NOTIFICATION_ID,
+            dismissIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        val dismissAction = NotificationCompat.Action.Builder(
+            R.drawable.notification_close,
+            "Dismiss",
+            dismissPendingIntent
+        ).build()
+
         val intent = Intent(requireContext(), MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
             requireContext(),
-            Constants.NOTIFICATION_ID,
+            NOTIFICATION_ID,
             intent,
             PendingIntent.FLAG_IMMUTABLE
         )
@@ -228,29 +242,14 @@ class AlertFragment : Fragment() {
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
-
-        // Add a dismiss button to the notification
-        val dismissIntent = Intent(requireContext(), DismissNotificationReceiver::class.java)
-        dismissIntent.action = "DISMISS_NOTIFICATION"
-        val dismissPendingIntent = PendingIntent.getBroadcast(
-            requireContext(),
-            Constants.NOTIFICATION_ID,
-            dismissIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-        val dismissAction = NotificationCompat.Action.Builder(
-            R.drawable.notification_close,
-            "Dismiss",
-            dismissPendingIntent
-        ).build()
-        builder.addAction(dismissAction)
+            .addAction(dismissAction)
 
         val notificationIntent = Intent(requireContext(), AlarmReceiver::class.java)
-        notificationIntent.putExtra("notification_id", Constants.NOTIFICATION_ID)
+        notificationIntent.putExtra("notification_id", NOTIFICATION_ID)
 
         val pendingNotificationIntent = PendingIntent.getBroadcast(
             requireContext(),
-            Constants.NOTIFICATION_ID,
+            NOTIFICATION_ID,
             notificationIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
@@ -286,10 +285,11 @@ class AlertFragment : Fragment() {
     }
 
 
+
     private fun playNotificationSound() {
         val mediaPlayer = MediaPlayer.create(requireContext(), R.raw.notification_music)
         mediaPlayer.start()
-        // You can optionally handle stopping the sound after a duration if needed
+
     }
 
 
@@ -308,6 +308,10 @@ class AlertFragment : Fragment() {
         }
     }
 
+    fun stopMediaPlayer() {
+        mediaPlayer?.stop()
+    }
+
     private fun initUI_InAlertFragment(view: View){
         recyclerView_Instance_InAlertFragment = view.findViewById(R.id.rv_alert)
     }
@@ -324,6 +328,8 @@ class AlertFragment : Fragment() {
         fun newInstance() = AlertFragment()
     }
 }
+
+
 
 object Constants {
     const val ALARM_REQUEST_CODE = 1001

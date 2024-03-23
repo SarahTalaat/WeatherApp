@@ -7,12 +7,14 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.MediaPlayer
 import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.example.weatherapplication.Alert.AlertView.StopNotificationReceiver
 import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.Model_Alert
 import com.example.weatherapplication.R
@@ -20,6 +22,13 @@ import com.google.gson.Gson
 
 
 class AlarmReceiver : BroadcastReceiver() {
+
+
+    companion object {
+        var mediaPlayerInstance: MediaPlayer? = null // Static variable to store MediaPlayer instance
+    }
+
+
 
     override fun onReceive(context: Context?, intent: Intent?) {
         // Check if context is not null
@@ -97,7 +106,7 @@ class AlarmReceiver : BroadcastReceiver() {
             notificationManager.createNotificationChannel(channel)
         }
     }
-
+/*
     private fun notification(context: Context , title: String , contentText: String){
         createNotificationChannel(context)
         Toast.makeText(context, "context in alarm receiver is not null", Toast.LENGTH_SHORT).show()
@@ -128,4 +137,48 @@ class AlarmReceiver : BroadcastReceiver() {
             notify(Constants.NOTIFICATION_ID, builder.build())
         }
     }
+
+ */
+
+    private fun notification(context: Context, title: String, contentText: String) {
+        createNotificationChannel(context)
+
+        // Create an intent to stop the music
+        val stopIntent = Intent(context, StopNotificationReceiver::class.java)
+        val stopPendingIntent = PendingIntent.getBroadcast(
+            context,
+            Constants.STOP_NOTIFICATION_REQUEST_CODE,
+            stopIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        // Create a notification with dismiss action
+        val builder = NotificationCompat.Builder(context, Constants.CHANNEL_ID)
+            .setSmallIcon(R.drawable.notification_icon)
+            .setContentTitle(title)
+            .setContentText(contentText)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .addAction(R.drawable.notification_close, "Stop Music", stopPendingIntent) // Add dismiss action
+
+        // Show the notification
+        with(NotificationManagerCompat.from(context)) {
+            if (ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return
+            }
+            notify(Constants.NOTIFICATION_ID, builder.build())
+        }
     }
+
+}
