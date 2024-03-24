@@ -1,9 +1,9 @@
-package com.example.weatherapplication
+package com.example.weatherapplication.Model.AlertModel.APIModel
 
 import com.google.gson.annotations.SerializedName
 
 
-data class Model_Weather (
+data class Weather (
 
   @SerializedName("id"          ) var id          : Int?    = null,
   @SerializedName("main"        ) var main        : String? = null,

@@ -1,5 +1,3 @@
-import Constants.NOTIFICATION_ID
-import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
 import android.content.Intent
@@ -20,22 +18,21 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myweatherapp.AlarmReceiver
 import com.example.productsmvvm.Database.WeatherLocalDataSourceImplementation
-import com.example.productsmvvm.Model.WeatherRepositoryImplementation
+import com.example.weatherapplication.Repository.WeatherRepositoryImplementation
 import com.example.productsmvvm.Network.WeatherRemoteDataSourceImplementation
-import com.example.weatherapplication.Constants.Utils
+import com.example.weatherapplication.Alert.AlertView.AlarmReceiver
 import com.example.weatherapplication.Alert.AlertView.AlertAdapter
 import com.example.weatherapplication.Alert.AlertView.DismissNotificationReceiver
-import com.example.weatherapplication.Alert.AlertView.StopNotificationReceiver
 import com.example.weatherapplication.Alert.AlertViewModel.AlertViewModel
 import com.example.weatherapplication.Alert.AlertViewModel.AlertViewModelFactory_RDS
+import com.example.weatherapplication.Constants.Utils
+import com.example.weatherapplication.Constants.Utils.Companion.NOTIFICATION_ID
 import com.example.weatherapplication.MainActivity
-import com.example.weatherapplication.Model.Model_Time
+import com.example.weatherapplication.Model.AlertModel.MyApplicationAlertModel.Model_Time
 import com.example.weatherapplication.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
-
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -54,8 +51,6 @@ class AlertFragment : Fragment() {
     var isAlertsNotEmpty: Boolean = false
     var arrayOfModelTime: ArrayList<Model_Time> = arrayListOf()
 
-
-
     companion object {
         private var instance: AlertFragment? = null
 
@@ -72,7 +67,6 @@ class AlertFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view: View = inflater.inflate(R.layout.fragment_alert, container, false)
-        val mediaPlayer = MediaPlayer.create(requireActivity(), R.raw.notification_music)
         return view
     }
 
@@ -172,7 +166,7 @@ class AlertFragment : Fragment() {
         ) {
             val intent =
                 Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + requireContext().packageName))
-            startActivityForResult(intent, Constants.REQUEST_DRAW_OVER_APPS_PERMISSION)
+            startActivityForResult(intent, Utils.REQUEST_DRAW_OVER_APPS_PERMISSION)
         } else {
             createNotification(selectedDateTime)
         }
@@ -181,7 +175,7 @@ class AlertFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == Constants.REQUEST_DRAW_OVER_APPS_PERMISSION) {
+        if (requestCode == Utils.REQUEST_DRAW_OVER_APPS_PERMISSION) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
                 Settings.canDrawOverlays(requireContext())
             ) {
@@ -198,14 +192,15 @@ class AlertFragment : Fragment() {
         val alarmIntent = Intent(requireContext(), AlarmReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(
             requireContext(),
-            Constants.ALARM_REQUEST_CODE,
+            Utils.ALARM_REQUEST_CODE,
             alarmIntent,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
 
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, selectedDateTime.time, pendingIntent)
-        Toast.makeText(requireContext(), "Alarm set successfully", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "Alarm set successfully", Toast.LENGTH_SHORT        ).show()
     }
+
     private fun createNotification(selectedDateTime: Date) {
         val currentTime = Calendar.getInstance().timeInMillis
         val delayInMillis = selectedDateTime.time - currentTime
@@ -236,6 +231,20 @@ class AlertFragment : Fragment() {
             dismissPendingIntent
         ).build()
 
+        val stopIntent = Intent(requireContext(), AlarmReceiver::class.java)
+        stopIntent.action = "STOP_NOTIFICATION"
+        val stopPendingIntent = PendingIntent.getBroadcast(
+            requireContext(),
+            NOTIFICATION_ID,
+            stopIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        val stopAction = NotificationCompat.Action.Builder(
+            R.drawable.notification_close,
+            "Stop Music",
+            stopPendingIntent
+        ).build()
+
         val intent = Intent(requireContext(), MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
             requireContext(),
@@ -248,7 +257,7 @@ class AlertFragment : Fragment() {
             createNotificationChannel()
         }
 
-        val builder = NotificationCompat.Builder(requireContext(), Constants.CHANNEL_ID)
+        val builder = NotificationCompat.Builder(requireContext(), Utils.CHANNEL_ID)
             .setSmallIcon(R.drawable.notification_icon)
             .setContentTitle("Notification Title")
             .setContentText("Notification Description")
@@ -256,6 +265,7 @@ class AlertFragment : Fragment() {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
             .addAction(dismissAction)
+            .addAction(stopAction)
 
         val notificationIntent = Intent(requireContext(), AlarmReceiver::class.java)
         notificationIntent.putExtra("notification_id", NOTIFICATION_ID)
@@ -297,14 +307,9 @@ class AlertFragment : Fragment() {
         notificationManager.notify(NOTIFICATION_ID, builder.build())
     }
 
-
-
     private fun playNotificationSound() {
-
-        MediaPlayerSingleton.getInstance(AlertFragment.getInstance(),requireContext() ).start()
-
+        MediaPlayerSingleton.getInstance(AlertFragment.getInstance(), requireContext()).start()
     }
-
 
     @RequiresApi(Build.VERSION_CODES.S)
     private fun createNotificationChannel() {
@@ -312,17 +317,13 @@ class AlertFragment : Fragment() {
             val name = "My Channel"
             val descriptionText = "Channel Description"
             val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(Constants.CHANNEL_ID, name, importance).apply {
+            val channel = NotificationChannel(Utils.CHANNEL_ID, name, importance).apply {
                 description = descriptionText
             }
             val notificationManager: NotificationManager =
                 requireActivity().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
-    }
-
-    fun stopMediaPlayer() {
-        MediaPlayerSingleton.getInstance(AlertFragment.getInstance(),requireActivity()).stop()
     }
 
     private fun initUI_InAlertFragment(view: View){
@@ -337,22 +338,10 @@ class AlertFragment : Fragment() {
         recyclerView_Instance_InAlertFragment.layoutManager = layoutManager_Instance_InAlertFragment
     }
 
+    fun stopMediaPlayer() {
+        MediaPlayerSingleton.getInstance(AlertFragment.getInstance(),requireContext().applicationContext).stop()
+    }
 }
-
-
-
-object Constants {
-    const val ALARM_REQUEST_CODE = 1001
-    const val REQUEST_DRAW_OVER_APPS_PERMISSION = 1002
-    const val CHANNEL_ID = "my_channel_id"
-    var NOTIFICATION_ID = 2001 // Unique identifier for notifications
-    const val NOTIFICATION_PERMISSION_REQUEST_CODE = 2002
-
-    const val STOP_NOTIFICATION_REQUEST_CODE = 2003
-    const val NOTIFICATION_ID_EXTRA = "notification_id_extra"
-
-}
-
 object MediaPlayerSingleton {
     private var mediaPlayer: MediaPlayer? = null
 
@@ -366,6 +355,12 @@ object MediaPlayerSingleton {
 
     // Optional: Add a method to release the MediaPlayer when it's no longer needed.
     fun release() {
+        mediaPlayer?.release()
+        mediaPlayer = null
+    }
+
+    fun stop() {
+        mediaPlayer?.stop()
         mediaPlayer?.release()
         mediaPlayer = null
     }

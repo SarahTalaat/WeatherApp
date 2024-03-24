@@ -56,10 +56,25 @@
 
         <!-- Receivers -->
 
+        <receiver
+            android:name=".Alert.AlertView.AlarmReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <!-- Add any other actions your AlarmReceiver should handle -->
+            </intent-filter>
+        </receiver>
+
+
+<!--
+
         <receiver android:name=".Alert.AlertView.StopNotificationReceiver" />
         <receiver
-            android:name="com.example.myweatherapp.AlarmReceiver"
+            android:name=".Alert.AlertView.AlarmReceiver"
             android:exported="false" />
+
+        -->
 
         <receiver android:name=".Alert.AlertView.DismissNotificationReceiver"
             android:exported="true">

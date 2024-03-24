@@ -10,7 +10,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
-import com.example.weatherapplication.Model.Model_FavouriteCity
+import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_FavouriteCity
 import com.example.weatherapplication.R
 import java.util.ArrayList
 

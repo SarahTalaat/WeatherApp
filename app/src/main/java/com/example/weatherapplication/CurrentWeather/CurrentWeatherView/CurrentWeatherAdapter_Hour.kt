@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.weatherapplication.Model_WeatherArrayList
+import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_WeatherArrayList
 import com.example.weatherapplication.R
 //import com.example.productsmvvm.Model.Products
 //import com.example.productsmvvm.R

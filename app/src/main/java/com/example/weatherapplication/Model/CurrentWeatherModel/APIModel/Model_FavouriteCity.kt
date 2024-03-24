@@ -1,4 +1,4 @@
-package com.example.weatherapplication.Model
+package com.example.weatherapplication.Model.CurrentWeatherModel.APIModel
 
 import androidx.annotation.NonNull
 import androidx.room.Entity

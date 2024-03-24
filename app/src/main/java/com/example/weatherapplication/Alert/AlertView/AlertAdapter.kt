@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
-import com.example.weatherapplication.Model.Model_Time
+import com.example.weatherapplication.Model.AlertModel.MyApplicationAlertModel.Model_Time
 import com.example.weatherapplication.R
 import java.util.Calendar
 import java.util.Date

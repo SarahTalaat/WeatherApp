@@ -7,10 +7,11 @@ import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.widget.Toast
+import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.MainActivity
 import com.example.weatherapplication.R
 
-    
+
 class StopNotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (context != null) {
@@ -20,7 +21,7 @@ class StopNotificationReceiver : BroadcastReceiver() {
             // Dismiss the notification
             val notificationManager =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            val notificationId = intent?.getIntExtra(Constants.NOTIFICATION_ID_EXTRA, 0) ?: 0
+            val notificationId = intent?.getIntExtra(Utils.NOTIFICATION_ID_EXTRA, 0) ?: 0
             notificationManager.cancel(notificationId)
         }
     }

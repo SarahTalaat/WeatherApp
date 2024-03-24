@@ -1,8 +1,8 @@
 package com.example.productsmvvm.Network
 
 import android.util.Log
-import com.example.weatherapplication.Model.Model_Forecast
-import com.example.weatherapplication.Model_Alert
+import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_Forecast
+import com.example.weatherapplication.Model.AlertModel.APIModel.Model_Alert
 
 private const val TAB = "AllProductsFeature"
 class WeatherRemoteDataSourceImplementation private constructor() : WeatherRemoteDataSourceInterface{

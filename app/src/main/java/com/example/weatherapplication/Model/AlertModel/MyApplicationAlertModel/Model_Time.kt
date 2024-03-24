@@ -1,4 +1,4 @@
-package com.example.weatherapplication.Model
+package com.example.weatherapplication.Model.AlertModel.MyApplicationAlertModel
 
 data class Model_Time (
     var year: String = "nullValue" ,

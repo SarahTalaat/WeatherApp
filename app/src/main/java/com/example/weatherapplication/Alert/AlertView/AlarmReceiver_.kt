@@ -1,5 +1,4 @@
-package com.example.weatherapplication.Alert.AlertView
-
+/*
 import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -76,7 +75,7 @@ class AlarmReceiver : BroadcastReceiver() {
             context,
             Utils.DISMISS_NOTIFICATION_REQUEST_CODE,
             dismissIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_UPDATE_CURRENT
         )
 
         // Create a notification with dismiss and stop music actions
@@ -145,7 +144,7 @@ class AlarmReceiver : BroadcastReceiver() {
             context,
             Utils.STOP_NOTIFICATION_REQUEST_CODE,
             stopIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_UPDATE_CURRENT
         )
 
     }
@@ -155,9 +154,9 @@ class DismissNotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent?.action == "DISMISS_NOTIFICATION") {
             context?.let {
-                MediaPlayerSingleton.stop()
                 NotificationManagerCompat.from(it).cancel(Utils.NOTIFICATION_ID)
             }
         }
     }
 }
+*/

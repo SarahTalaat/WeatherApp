@@ -16,6 +16,18 @@ class Utils {
         var lON_ALERT = "8.2275"
         var ALERT_DATA_SP = "AlertData"
         var MODEL_ALERT_GSON ="modelAlert"
+
+
+
+        const val ALARM_REQUEST_CODE = 1001
+        const val REQUEST_DRAW_OVER_APPS_PERMISSION = 1002
+        const val CHANNEL_ID = "my_channel_id"
+        var NOTIFICATION_ID = 2001 // Unique identifier for notifications
+        const val NOTIFICATION_PERMISSION_REQUEST_CODE = 2002
+
+        const val STOP_NOTIFICATION_REQUEST_CODE = 2003
+        const val NOTIFICATION_ID_EXTRA = "notification_id_extra"
+        const val DISMISS_NOTIFICATION_REQUEST_CODE = 101
     }
 
 }

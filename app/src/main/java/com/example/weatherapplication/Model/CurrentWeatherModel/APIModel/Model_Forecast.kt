@@ -1,7 +1,5 @@
-package com.example.weatherapplication.Model
+package com.example.weatherapplication.Model.CurrentWeatherModel.APIModel
 
-import com.example.weatherapplication.Model_City
-import com.example.weatherapplication.Model_WeatherArrayList
 import com.google.gson.annotations.SerializedName
 
 data class Model_Forecast(

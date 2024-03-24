@@ -1,3 +1,4 @@
+/*
 package com.example.weatherapplication.Alert.AlertView
 
 import android.content.BroadcastReceiver
@@ -17,3 +18,5 @@ class DismissNotificationReceiver : BroadcastReceiver() {
         }
     }
 }
+
+*/
