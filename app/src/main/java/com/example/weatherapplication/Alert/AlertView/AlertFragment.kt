@@ -216,34 +216,6 @@ class AlertFragment : Fragment() {
 
         NOTIFICATION_ID++
 
-        // Add a dismiss button to the notification
-        val dismissIntent = Intent(requireContext(), AlarmReceiver::class.java)
-        dismissIntent.action = "DISMISS_NOTIFICATION"
-        val dismissPendingIntent = PendingIntent.getBroadcast(
-            requireContext(),
-            NOTIFICATION_ID,
-            dismissIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-        val dismissAction = NotificationCompat.Action.Builder(
-            R.drawable.notification_close,
-            "Dismiss",
-            dismissPendingIntent
-        ).build()
-
-        val stopIntent = Intent(requireContext(), AlarmReceiver::class.java)
-        stopIntent.action = "STOP_NOTIFICATION"
-        val stopPendingIntent = PendingIntent.getBroadcast(
-            requireContext(),
-            NOTIFICATION_ID,
-            stopIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-        val stopAction = NotificationCompat.Action.Builder(
-            R.drawable.notification_close,
-            "Stop Music",
-            stopPendingIntent
-        ).build()
 
         val intent = Intent(requireContext(), MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
@@ -264,8 +236,6 @@ class AlertFragment : Fragment() {
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
-            .addAction(dismissAction)
-            .addAction(stopAction)
 
         val notificationIntent = Intent(requireContext(), AlarmReceiver::class.java)
         notificationIntent.putExtra("notification_id", NOTIFICATION_ID)
