@@ -16,6 +16,8 @@ class Utils {
         var lON_ALERT = "8.2275"
         var ALERT_DATA_SP = "AlertData"
         var MODEL_ALERT_GSON ="modelAlert"
+        var DISMISS_NOTIFICATION = "DISMISS_NOTIFICATION"
+        var STOP_NOTIFICATION = "STOP_NOTIFICATION"
 
 
 

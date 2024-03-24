@@ -74,7 +74,7 @@
             android:name=".Alert.AlertView.AlarmReceiver"
             android:exported="false" />
 
-        -->
+
 
         <receiver android:name=".Alert.AlertView.DismissNotificationReceiver"
             android:exported="true">
@@ -82,7 +82,7 @@
                 <action android:name="DISMISS_NOTIFICATION" />
             </intent-filter>
         </receiver>
-
+-->
 
         <!-- Services -->
         <service

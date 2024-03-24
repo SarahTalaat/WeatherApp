@@ -23,7 +23,7 @@ import com.example.weatherapplication.Repository.WeatherRepositoryImplementation
 import com.example.productsmvvm.Network.WeatherRemoteDataSourceImplementation
 import com.example.weatherapplication.Alert.AlertView.AlarmReceiver
 import com.example.weatherapplication.Alert.AlertView.AlertAdapter
-import com.example.weatherapplication.Alert.AlertView.DismissNotificationReceiver
+
 import com.example.weatherapplication.Alert.AlertViewModel.AlertViewModel
 import com.example.weatherapplication.Alert.AlertViewModel.AlertViewModelFactory_RDS
 import com.example.weatherapplication.Constants.Utils
@@ -217,7 +217,7 @@ class AlertFragment : Fragment() {
         NOTIFICATION_ID++
 
         // Add a dismiss button to the notification
-        val dismissIntent = Intent(requireContext(), DismissNotificationReceiver::class.java)
+        val dismissIntent = Intent(requireContext(), AlarmReceiver::class.java)
         dismissIntent.action = "DISMISS_NOTIFICATION"
         val dismissPendingIntent = PendingIntent.getBroadcast(
             requireContext(),

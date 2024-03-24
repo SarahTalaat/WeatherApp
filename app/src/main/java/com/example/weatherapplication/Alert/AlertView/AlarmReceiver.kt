@@ -27,8 +27,14 @@ class AlarmReceiver : BroadcastReceiver() {
 
         if (context != null && intent != null) {
             val action = intent.action
-            if (action != null && action == "STOP_NOTIFICATION") {
+            if (action != null && action == Utils.STOP_NOTIFICATION) {
                 stopMediaPlayer(context)
+                return
+            }else if(action != null && action == Utils.DISMISS_NOTIFICATION){
+                context?.let {
+                    MediaPlayerSingleton.stop()
+                    NotificationManagerCompat.from(it).cancel(Utils.NOTIFICATION_ID)
+                }
                 return
             }
 
@@ -68,17 +74,6 @@ class AlarmReceiver : BroadcastReceiver() {
     private fun notification(context: Context, title: String, contentText: String) {
         createNotificationChannel(context)
 
-        // Create an intent for dismissing the notification
-        val dismissIntent = Intent(context, DismissNotificationReceiver::class.java).apply {
-            action = "DISMISS_NOTIFICATION"
-        }
-        val dismissPendingIntent = PendingIntent.getBroadcast(
-            context,
-            Utils.DISMISS_NOTIFICATION_REQUEST_CODE,
-            dismissIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-
         // Create a notification with dismiss and stop music actions
         val builder = NotificationCompat.Builder(context, Utils.CHANNEL_ID)
             .setSmallIcon(R.drawable.notification_icon_blue)
@@ -94,7 +89,7 @@ class AlarmReceiver : BroadcastReceiver() {
             .addAction(
                 R.drawable.dismiss_icon,
                 "Dismiss",
-                dismissPendingIntent
+                getPendingIntentForDismissNotification(context)
             )
 
         // Show the notification
@@ -139,7 +134,7 @@ class AlarmReceiver : BroadcastReceiver() {
     private fun getPendingIntentForStopNotification(context: Context): PendingIntent {
         // Create an intent to stop the notification
         val stopIntent = Intent(context, AlarmReceiver::class.java).apply {
-            action = "STOP_NOTIFICATION"
+            action = Utils.STOP_NOTIFICATION
         }
         return PendingIntent.getBroadcast(
             context,
@@ -149,15 +144,20 @@ class AlarmReceiver : BroadcastReceiver() {
         )
 
     }
-}
-     
-class DismissNotificationReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context?, intent: Intent?) {
-        if (intent?.action == "DISMISS_NOTIFICATION") {
-            context?.let {
-                MediaPlayerSingleton.stop()
-                NotificationManagerCompat.from(it).cancel(Utils.NOTIFICATION_ID)
-            }
+
+    private fun getPendingIntentForDismissNotification(context: Context): PendingIntent {
+        // Create an intent to dismiss the notification
+        val dismissIntent = Intent(context, AlarmReceiver::class.java).apply {
+            action = Utils.DISMISS_NOTIFICATION
         }
+        return PendingIntent.getBroadcast(
+            context,
+            Utils.DISMISS_NOTIFICATION_REQUEST_CODE,
+            dismissIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
     }
+
+
 }
+
