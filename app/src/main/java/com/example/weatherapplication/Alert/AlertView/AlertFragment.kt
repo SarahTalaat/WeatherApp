@@ -52,14 +52,27 @@ class AlertFragment : Fragment() {
     private lateinit var adapter_Instance_InAlertFragment: AlertAdapter
     lateinit var model_Time_Instance : Model_Time
     var isAlertsNotEmpty: Boolean = false
-    private var mediaPlayer: MediaPlayer? = null
     var arrayOfModelTime: ArrayList<Model_Time> = arrayListOf()
+
+
+
+    companion object {
+        private var instance: AlertFragment? = null
+
+        fun getInstance(): AlertFragment {
+            if (instance == null) {
+                instance = AlertFragment()
+            }
+            return instance!!
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view: View = inflater.inflate(R.layout.fragment_alert, container, false)
+        val mediaPlayer = MediaPlayer.create(requireActivity(), R.raw.notification_music)
         return view
     }
 
@@ -287,8 +300,8 @@ class AlertFragment : Fragment() {
 
 
     private fun playNotificationSound() {
-        val mediaPlayer = MediaPlayer.create(requireContext(), R.raw.notification_music)
-        mediaPlayer.start()
+
+        MediaPlayerSingleton.getInstance(AlertFragment.getInstance(),requireContext() ).start()
 
     }
 
@@ -309,7 +322,7 @@ class AlertFragment : Fragment() {
     }
 
     fun stopMediaPlayer() {
-        mediaPlayer?.stop()
+        MediaPlayerSingleton.getInstance(AlertFragment.getInstance(),requireActivity()).stop()
     }
 
     private fun initUI_InAlertFragment(view: View){
@@ -324,9 +337,6 @@ class AlertFragment : Fragment() {
         recyclerView_Instance_InAlertFragment.layoutManager = layoutManager_Instance_InAlertFragment
     }
 
-    companion object {
-        fun newInstance() = AlertFragment()
-    }
 }
 
 
@@ -341,4 +351,22 @@ object Constants {
     const val STOP_NOTIFICATION_REQUEST_CODE = 2003
     const val NOTIFICATION_ID_EXTRA = "notification_id_extra"
 
+}
+
+object MediaPlayerSingleton {
+    private var mediaPlayer: MediaPlayer? = null
+
+    fun getInstance(fragment: Fragment, contextObject: Context): MediaPlayer {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(contextObject, R.raw.notification_music)
+        }
+        // Additional initialization or configuration based on contextObject if needed
+        return mediaPlayer!!
+    }
+
+    // Optional: Add a method to release the MediaPlayer when it's no longer needed.
+    fun release() {
+        mediaPlayer?.release()
+        mediaPlayer = null
+    }
 }

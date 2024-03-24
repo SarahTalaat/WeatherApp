@@ -14,9 +14,9 @@ import com.example.weatherapplication.R
 class StopNotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (context != null) {
-            val fragment = (context as MainActivity).currentFragment as? AlertFragment
-            // Call the stopMediaPlayer method if fragment is not null
-            fragment?.stopMediaPlayer()
+
+            AlertFragment.getInstance().stopMediaPlayer()
+
             // Dismiss the notification
             val notificationManager =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
