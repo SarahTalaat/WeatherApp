@@ -149,8 +149,8 @@ class AlarmReceiver : BroadcastReceiver() {
         )
 
     }
-}  
-
+}
+     
 class DismissNotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent?.action == "DISMISS_NOTIFICATION") {
