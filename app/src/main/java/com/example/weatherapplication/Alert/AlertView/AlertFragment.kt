@@ -122,21 +122,37 @@ class AlertFragment : Fragment() {
             requireContext(),
             Utils.ALARM_REQUEST_CODE,
             alarmIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE // Add FLAG_IMMUTABLE
         )
 
-        // Set the alarm to trigger at the specified selectedDateTime
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, selectedDateTime.time, pendingIntent)
+        // Calculate the time difference between the current time and the selected time
+        val currentTimeMillis = System.currentTimeMillis()
+        val selectedTimeMillis = selectedDateTime.time
+        val delayInMillis = selectedTimeMillis - currentTimeMillis
 
-        // Set default alarm tone
-        val defaultAlarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
-        val mediaPlayer = MediaPlayer.create(requireContext(), defaultAlarmUri)
-        mediaPlayer.start()
+        // Ensure that the delay is positive
+        if (delayInMillis > 0) {
+            // Set the alarm to trigger at the specified selectedDateTime
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setExactAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    selectedTimeMillis,
+                    pendingIntent
+                )
+            } else {
+                alarmManager.setExact(
+                    AlarmManager.RTC_WAKEUP,
+                    selectedTimeMillis,
+                    pendingIntent
+                )
+            }
 
-        // Show a toast message indicating the successful setting of the alarm
-        Toast.makeText(requireContext(), "Alarm set successfully", Toast.LENGTH_SHORT).show()
-
-        // Optionally, add any additional logic specific to setting alarms here
+            // Show a toast message indicating the successful setting of the alarm
+            Toast.makeText(requireContext(), "Alarm set successfully", Toast.LENGTH_SHORT).show()
+        } else {
+            // If the selected time is in the past, show an error message
+            Toast.makeText(requireContext(), "Invalid time selected", Toast.LENGTH_SHORT).show()
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -240,8 +256,7 @@ class AlertFragment : Fragment() {
             ).show()
             return
         }
-        // Increment notification ID for each scheduled notification
-        NOTIFICATION_ID++
+
 
         // Schedule notification
         val alarmManager =
@@ -252,7 +267,8 @@ class AlertFragment : Fragment() {
             getPendingNotificationIntent(NOTIFICATION_ID)
         )
 
-
+        // Increment notification ID for each scheduled notification
+        NOTIFICATION_ID++
 
     }
 

@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -78,20 +79,22 @@ class AlarmReceiver : BroadcastReceiver() {
     private fun notification(context: Context, title: String, contentText: String) {
         createNotificationChannel(context)
 
+        val soundUri: Uri? = null
         // Create a notification with dismiss and stop music actions
         val builder = NotificationCompat.Builder(context, Utils.CHANNEL_ID)
-            .setSmallIcon(R.drawable.notification_icon_blue)
+            .setSmallIcon(R.drawable.notification_icon)
             .setContentTitle(title)
             .setContentText(contentText)
+            .setSound(soundUri)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .addAction(
-                R.drawable.stop_music_icon,
+                R.drawable.notification_close,
                 "Stop Music",
                 getPendingIntentForStopNotification(context)
             )
             .addAction(
-                R.drawable.dismiss_icon,
+                R.drawable.baseline_remove_circle_outline_24,
                 "Dismiss",
                 getPendingIntentForDismissNotification(context)
             )
