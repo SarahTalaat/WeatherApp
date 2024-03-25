@@ -359,7 +359,7 @@ object MediaPlayerSingleton {
         mediaPlayer?.release()
         mediaPlayer = null
     }
-
+   
     fun stop() {
         mediaPlayer?.stop()
         mediaPlayer?.release()
