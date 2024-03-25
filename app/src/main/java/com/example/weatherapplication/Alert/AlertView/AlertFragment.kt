@@ -285,10 +285,6 @@ class AlertFragment : Fragment() {
     }
 
 
-    private fun playSound() {
-        MediaPlayerSingleton.getInstance(AlertFragment.getInstance(), requireContext()).start()
-
-    }
 
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -320,9 +316,6 @@ class AlertFragment : Fragment() {
         }
     }
 
-    private fun playNotificationSound() {
-        MediaPlayerSingleton.getInstance(AlertFragment.getInstance(), requireContext()).start()
-    }
 
     private fun initUI_InAlertFragment(view: View){
         recyclerView_Instance_InAlertFragment = view.findViewById(R.id.rv_alert)
@@ -342,27 +335,4 @@ class AlertFragment : Fragment() {
 
 
 
-}
-object MediaPlayerSingleton {
-    private var mediaPlayer: MediaPlayer? = null
-
-    fun getInstance(fragment: Fragment, contextObject: Context): MediaPlayer {
-        if (mediaPlayer == null) {
-            mediaPlayer = MediaPlayer.create(contextObject, R.raw.notification_music)
-        }
-        // Additional initialization or configuration based on contextObject if needed
-        return mediaPlayer!!
-    }
-
-    // Optional: Add a method to release the MediaPlayer when it's no longer needed.
-    fun release() {
-        mediaPlayer?.release()
-        mediaPlayer = null
-    }
-   
-    fun stop() {
-        mediaPlayer?.stop()
-        mediaPlayer?.release()
-        mediaPlayer = null
-    }
 }

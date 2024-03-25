@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.MediaPlayer
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -28,7 +29,7 @@ class AlarmReceiver : BroadcastReceiver() {
 
 
         if (context != null && intent != null) {
-            MediaPlayerSingleton.getInstance(AlertFragment.getInstance(), context).start()
+            MediaPlayerSingleton.getInstance(context).start()
             val action = intent.action
             if (action != null && action == Utils.STOP_NOTIFICATION) {
                 stopMediaPlayer(context)
@@ -69,7 +70,7 @@ class AlarmReceiver : BroadcastReceiver() {
 
     private fun stopMediaPlayer(context: Context) {
         // Stop the media player here
-        MediaPlayerSingleton.stop()
+        MediaPlayerSingleton.getInstance(context).stop()
         Toast.makeText(context, "Media player stopped", Toast.LENGTH_SHORT).show()
     }
 
@@ -164,3 +165,26 @@ class AlarmReceiver : BroadcastReceiver() {
 
 }
 
+object MediaPlayerSingleton {
+    private var mediaPlayer: MediaPlayer? = null
+
+    fun getInstance( contextObject: Context): MediaPlayer {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(contextObject, R.raw.notification_music)
+        }
+        // Additional initialization or configuration based on contextObject if needed
+        return mediaPlayer!!
+    }
+
+    // Optional: Add a method to release the MediaPlayer when it's no longer needed.
+    fun release() {
+        mediaPlayer?.release()
+        mediaPlayer = null
+    }
+
+    fun stop() {
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
+    }
+}
