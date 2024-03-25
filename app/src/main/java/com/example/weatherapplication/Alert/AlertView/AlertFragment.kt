@@ -122,7 +122,10 @@ class AlertFragment : Fragment() {
     private fun setAlarm(selectedDateTime: Date) {
         val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val alarmIntent = Intent(requireContext(), AlarmReceiver::class.java)
-        alarmIntent.putExtra(Utils.ISNOTIFICATION, "false")
+        if(notificationClicked == false){
+            alarmIntent.putExtra(Utils.ISNOTIFICATION, "false")
+        }
+
 
         val pendingIntent = PendingIntent.getBroadcast(
             requireContext(),
@@ -470,7 +473,10 @@ class AlertFragment : Fragment() {
     private fun getPendingNotificationIntent(notificationId: Int): PendingIntent {
         val notificationIntent = Intent(requireContext(), AlarmReceiver::class.java)
         notificationIntent.putExtra("notification_id", notificationId)
-        notificationIntent.putExtra(Utils.ISNOTIFICATION, "true")
+        if(alertClicked == true){
+            notificationIntent.putExtra(Utils.ISNOTIFICATION, "true")
+        }
+
         return PendingIntent.getBroadcast(
             requireContext(),
             notificationId,
