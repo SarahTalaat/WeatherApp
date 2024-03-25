@@ -19,7 +19,7 @@ import com.example.productsmvvm.Network.WeatherRemoteDataSourceImplementation
 import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.FavouriteCityWeather.FavouriteCityWeatherView.FavouriteCityWeatherActivity
 import com.example.weatherapplication.Map.MapView.MapActivity
-import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_FavouriteCity
+import com.example.weatherapplication.Model.FavouriteCityModel.MyApplicationFavouriteCityModel.Model_FavouriteCity
 import com.example.weatherapplication.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 

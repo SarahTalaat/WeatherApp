@@ -1,6 +1,6 @@
 package com.example.weatherapplication.Map.MapView
 
-import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_FavouriteCity
+import com.example.weatherapplication.Model.FavouriteCityModel.MyApplicationFavouriteCityModel.Model_FavouriteCity
 
 interface OnFavouriteCityClickListenerInterface {
 

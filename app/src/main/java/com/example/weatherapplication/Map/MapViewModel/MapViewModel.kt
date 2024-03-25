@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherapplication.Repository.WeatherRepositoryInterface
-import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_FavouriteCity
+import com.example.weatherapplication.Model.FavouriteCityModel.MyApplicationFavouriteCityModel.Model_FavouriteCity
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

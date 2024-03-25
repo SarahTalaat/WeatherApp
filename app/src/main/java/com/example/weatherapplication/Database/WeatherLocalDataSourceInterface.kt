@@ -1,7 +1,7 @@
 package com.example.productsmvvm.Database
 
 
-import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_FavouriteCity
+import com.example.weatherapplication.Model.FavouriteCityModel.MyApplicationFavouriteCityModel.Model_FavouriteCity
 import kotlinx.coroutines.flow.Flow
 
 interface WeatherLocalDataSourceInterface {

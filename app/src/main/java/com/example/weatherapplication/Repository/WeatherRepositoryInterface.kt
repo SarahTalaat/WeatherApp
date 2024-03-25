@@ -1,6 +1,6 @@
 package com.example.weatherapplication.Repository
 
-import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_FavouriteCity
+import com.example.weatherapplication.Model.FavouriteCityModel.MyApplicationFavouriteCityModel.Model_FavouriteCity
 import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_Forecast
 import com.example.weatherapplication.Model.AlertModel.APIModel.Model_Alert
 import kotlinx.coroutines.flow.Flow

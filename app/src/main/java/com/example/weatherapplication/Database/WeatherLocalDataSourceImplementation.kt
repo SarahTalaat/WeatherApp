@@ -2,7 +2,7 @@ package com.example.productsmvvm.Database
 
 
 import android.content.Context
-import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_FavouriteCity
+import com.example.weatherapplication.Model.FavouriteCityModel.MyApplicationFavouriteCityModel.Model_FavouriteCity
 import kotlinx.coroutines.flow.Flow
 
 class WeatherLocalDataSourceImplementation (context: Context) : WeatherLocalDataSourceInterface{

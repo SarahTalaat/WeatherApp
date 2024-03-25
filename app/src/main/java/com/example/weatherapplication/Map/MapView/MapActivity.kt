@@ -20,7 +20,7 @@ import com.example.weatherapplication.FavouriteCity.FavouriteCityView.FavouriteC
 import com.example.weatherapplication.FavouriteCityWeather.FavouriteCityWeatherView.FavouriteCityWeatherActivity
 import com.example.weatherapplication.Map.MapViewModel.MapViewModel
 import com.example.weatherapplication.Map.MapViewModel.MapViewModelFactory_LDS
-import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_FavouriteCity
+import com.example.weatherapplication.Model.FavouriteCityModel.MyApplicationFavouriteCityModel.Model_FavouriteCity
 import com.example.weatherapplication.R
 import com.example.weatherapplication.databinding.ActivityMapBinding
 import org.osmdroid.api.IMapController
