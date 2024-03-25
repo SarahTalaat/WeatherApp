@@ -1,5 +1,3 @@
-import Constants.NOTIFICATION_ID
-import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
 import android.content.Intent
@@ -20,21 +18,21 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myweatherapp.AlarmReceiver
 import com.example.productsmvvm.Database.WeatherLocalDataSourceImplementation
-import com.example.productsmvvm.Model.WeatherRepositoryImplementation
+import com.example.weatherapplication.Repository.WeatherRepositoryImplementation
 import com.example.productsmvvm.Network.WeatherRemoteDataSourceImplementation
-import com.example.weatherapplication.Constants.Utils
+import com.example.weatherapplication.Alert.AlertView.AlarmReceiver
 import com.example.weatherapplication.Alert.AlertView.AlertAdapter
-import com.example.weatherapplication.Alert.AlertView.DismissNotificationReceiver
+
 import com.example.weatherapplication.Alert.AlertViewModel.AlertViewModel
 import com.example.weatherapplication.Alert.AlertViewModel.AlertViewModelFactory_RDS
+import com.example.weatherapplication.Constants.Utils
+import com.example.weatherapplication.Constants.Utils.Companion.NOTIFICATION_ID
 import com.example.weatherapplication.MainActivity
-import com.example.weatherapplication.Model.Model_Time
+import com.example.weatherapplication.Model.AlertModel.MyApplicationAlertModel.Model_Time
 import com.example.weatherapplication.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
-
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -51,8 +49,18 @@ class AlertFragment : Fragment() {
     private lateinit var adapter_Instance_InAlertFragment: AlertAdapter
     lateinit var model_Time_Instance : Model_Time
     var isAlertsNotEmpty: Boolean = false
-
     var arrayOfModelTime: ArrayList<Model_Time> = arrayListOf()
+
+    companion object {
+        private var instance: AlertFragment? = null
+
+        fun getInstance(): AlertFragment {
+            if (instance == null) {
+                instance = AlertFragment()
+            }
+            return instance!!
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -104,6 +112,7 @@ class AlertFragment : Fragment() {
         alertViewModel_Instance_InAlertFragmet.getAlert_FromRetrofit_InAlertViewModel(Utils.LAT_ALERT,Utils.lON_ALERT, Utils.API_KEY)
     }
 
+
     @RequiresApi(Build.VERSION_CODES.S)
     private fun showDateTimePickerDialog() {
         val calendar = Calendar.getInstance()
@@ -111,16 +120,167 @@ class AlertFragment : Fragment() {
         val currentMonth = calendar.get(Calendar.MONTH)
         val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
 
-        val datePickerDialog = DatePickerDialog(requireContext(), { _, year, month, day ->
+        // Start date picker
+        val startDatePickerDialog = DatePickerDialog(requireContext(), { _, year, month, day ->
             calendar.set(Calendar.YEAR, year)
             calendar.set(Calendar.MONTH, month)
             calendar.set(Calendar.DAY_OF_MONTH, day)
 
-            showTimePickerDialog(calendar)
+            val startDate = calendar.time
+            Log.i("Alert", "showDateTimePickerDialog: startDate: $startDate ")
+
+            // End date picker
+            val endDatePickerDialog = DatePickerDialog(requireContext(), { _, year, month, day ->
+                calendar.set(Calendar.YEAR, year)
+                calendar.set(Calendar.MONTH, month)
+                calendar.set(Calendar.DAY_OF_MONTH, day)
+
+                val endDate = calendar.time
+                Log.i("Alert", "showDateTimePickerDialog: endDate: $endDate")
+
+
+                // Time picker
+                showTimePickerDialog(startDate, endDate)
+            }, currentYear, currentMonth, currentDay)
+
+            endDatePickerDialog.setTitle("End Date")
+            endDatePickerDialog.show()
         }, currentYear, currentMonth, currentDay)
 
-        datePickerDialog.show()
+        startDatePickerDialog.setTitle("Start Date")
+        startDatePickerDialog.show()
     }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun showTimePickerDialog(startDate: Date, endDate: Date) {
+        val calendar = Calendar.getInstance()
+        val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
+        val currentMinute = calendar.get(Calendar.MINUTE)
+
+        val timePickerDialog = TimePickerDialog(requireActivity(), { _, hourOfDay, minute ->
+            calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
+            calendar.set(Calendar.MINUTE, minute)
+
+            val selectedTime = calendar.time
+            Log.i("Alert", "showTimePickerDialog: selectedTime: $selectedTime")
+
+            // Process the selected start date, end date, and time
+            processSelectedDateTime(startDate, endDate, selectedTime)
+        }, currentHour, currentMinute, true)
+
+        timePickerDialog.setTitle("Specific Time")
+        timePickerDialog.show()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun processSelectedDateTime(startDate: Date, endDate: Date, selectedTime: Date) {
+        val calendar = Calendar.getInstance()
+        calendar.time = startDate
+        val endCalendar = Calendar.getInstance()
+        endCalendar.time = endDate
+
+        // Loop through each day between start date and end date
+        while (calendar.before(endCalendar) || calendar == endCalendar) {
+            // Set the selected time on the current date
+            calendar.set(Calendar.HOUR_OF_DAY, selectedTime.hours)
+            calendar.set(Calendar.MINUTE, selectedTime.minutes)
+
+            val scheduledTime = calendar.time
+            Log.i("TAG", "processSelectedDateTime: scheduledTime: $scheduledTime")
+
+            // Schedule notification or alarm for the current date and time
+            scheduleNotificationOrAlarm(scheduledTime)
+
+            // Move to the next day
+            calendar.add(Calendar.DATE, 1)
+        }
+
+        // Show a message to the user indicating that notifications or alarms have been scheduled
+        Toast.makeText(requireContext(), "Notifications/Alarms scheduled successfully", Toast.LENGTH_SHORT).show()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun scheduleNotificationOrAlarm(scheduledTime: Date) {
+        val currentTime = Calendar.getInstance().timeInMillis
+        val delayInMillis = scheduledTime.time - currentTime
+
+        if (delayInMillis <= 0) {
+            // If the selected time has already passed, skip scheduling for this time
+            return
+        }
+
+        
+
+        // Increment notification ID for each scheduled notification
+        NOTIFICATION_ID++
+
+        // Create an intent to open MainActivity when notification is clicked
+        val intent = Intent(requireContext(), MainActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(
+            requireContext(),
+            NOTIFICATION_ID,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
+
+        // Create notification
+        val builder = NotificationCompat.Builder(requireContext(), Utils.CHANNEL_ID)
+            .setSmallIcon(R.drawable.notification_icon)
+            .setContentTitle("Notification Title")
+            .setContentText("Notification Description")
+            .setContentIntent(pendingIntent)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setAutoCancel(true)
+
+        // Schedule notification
+        val alarmManager =
+            requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmManager.setExact(
+            AlarmManager.RTC_WAKEUP,
+            currentTime + delayInMillis,
+            getPendingNotificationIntent(NOTIFICATION_ID)
+        )
+
+        // Schedule playing the notification sound at the specified time
+        Timer().schedule(object : TimerTask() {
+            override fun run() {
+                playNotificationSound()
+            }
+        }, delayInMillis)
+
+        // Show the notification
+        val notificationManager =
+            requireActivity().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(NOTIFICATION_ID, builder.build())
+    }
+
+    private fun getPendingNotificationIntent(notificationId: Int): PendingIntent {
+        val notificationIntent = Intent(requireContext(), AlarmReceiver::class.java)
+        notificationIntent.putExtra("notification_id", notificationId)
+
+        return PendingIntent.getBroadcast(
+            requireContext(),
+            notificationId,
+            notificationIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+    }
+
+    private fun playNotificationSound() {
+        MediaPlayerSingleton.getInstance(AlertFragment.getInstance(), requireContext()).start()
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     @RequiresApi(Build.VERSION_CODES.S)
     private fun showTimePickerDialog(calendar: Calendar) {
@@ -158,7 +318,7 @@ class AlertFragment : Fragment() {
         ) {
             val intent =
                 Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + requireContext().packageName))
-            startActivityForResult(intent, Constants.REQUEST_DRAW_OVER_APPS_PERMISSION)
+            startActivityForResult(intent, Utils.REQUEST_DRAW_OVER_APPS_PERMISSION)
         } else {
             createNotification(selectedDateTime)
         }
@@ -167,7 +327,7 @@ class AlertFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == Constants.REQUEST_DRAW_OVER_APPS_PERMISSION) {
+        if (requestCode == Utils.REQUEST_DRAW_OVER_APPS_PERMISSION) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
                 Settings.canDrawOverlays(requireContext())
             ) {
@@ -184,13 +344,13 @@ class AlertFragment : Fragment() {
         val alarmIntent = Intent(requireContext(), AlarmReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(
             requireContext(),
-            Constants.ALARM_REQUEST_CODE,
+            Utils.ALARM_REQUEST_CODE,
             alarmIntent,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
 
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, selectedDateTime.time, pendingIntent)
-        Toast.makeText(requireContext(), "Alarm set successfully", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "Alarm set successfully", Toast.LENGTH_SHORT        ).show()
     }
 
     private fun createNotification(selectedDateTime: Date) {
@@ -208,10 +368,11 @@ class AlertFragment : Fragment() {
 
         NOTIFICATION_ID++
 
+
         val intent = Intent(requireContext(), MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
             requireContext(),
-            Constants.NOTIFICATION_ID,
+            NOTIFICATION_ID,
             intent,
             PendingIntent.FLAG_IMMUTABLE
         )
@@ -220,7 +381,7 @@ class AlertFragment : Fragment() {
             createNotificationChannel()
         }
 
-        val builder = NotificationCompat.Builder(requireContext(), Constants.CHANNEL_ID)
+        val builder = NotificationCompat.Builder(requireContext(), Utils.CHANNEL_ID)
             .setSmallIcon(R.drawable.notification_icon)
             .setContentTitle("Notification Title")
             .setContentText("Notification Description")
@@ -228,28 +389,12 @@ class AlertFragment : Fragment() {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
 
-        // Add a dismiss button to the notification
-        val dismissIntent = Intent(requireContext(), DismissNotificationReceiver::class.java)
-        dismissIntent.action = "DISMISS_NOTIFICATION"
-        val dismissPendingIntent = PendingIntent.getBroadcast(
-            requireContext(),
-            Constants.NOTIFICATION_ID,
-            dismissIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-        val dismissAction = NotificationCompat.Action.Builder(
-            R.drawable.notification_icon,
-            "Dismiss",
-            dismissPendingIntent
-        ).build()
-        builder.addAction(dismissAction)
-
         val notificationIntent = Intent(requireContext(), AlarmReceiver::class.java)
-        notificationIntent.putExtra("notification_id", Constants.NOTIFICATION_ID)
+        notificationIntent.putExtra("notification_id", NOTIFICATION_ID)
 
         val pendingNotificationIntent = PendingIntent.getBroadcast(
             requireContext(),
-            Constants.NOTIFICATION_ID,
+            NOTIFICATION_ID,
             notificationIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
@@ -277,14 +422,12 @@ class AlertFragment : Fragment() {
             "Notification will be sent at the specified time",
             Toast.LENGTH_SHORT
         ).show()
-    }
 
-    private fun playNotificationSound() {
-        val mediaPlayer = MediaPlayer.create(requireContext(), R.raw.notification_music)
-        mediaPlayer.start()
-        // You can optionally handle stopping the sound after a duration if needed
+        // Show the notification
+        val notificationManager =
+            requireActivity().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(NOTIFICATION_ID, builder.build())
     }
-
 
     @RequiresApi(Build.VERSION_CODES.S)
     private fun createNotificationChannel() {
@@ -292,7 +435,7 @@ class AlertFragment : Fragment() {
             val name = "My Channel"
             val descriptionText = "Channel Description"
             val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(Constants.CHANNEL_ID, name, importance).apply {
+            val channel = NotificationChannel(Utils.CHANNEL_ID, name, importance).apply {
                 description = descriptionText
             }
             val notificationManager: NotificationManager =
@@ -313,15 +456,36 @@ class AlertFragment : Fragment() {
         recyclerView_Instance_InAlertFragment.layoutManager = layoutManager_Instance_InAlertFragment
     }
 
-    companion object {
-        fun newInstance() = AlertFragment()
+    fun stopMediaPlayer() {
+        MediaPlayerSingleton.getInstance(AlertFragment.getInstance(),requireContext().applicationContext).stop()
     }
-}
 
-object Constants {
-    const val ALARM_REQUEST_CODE = 1001
-    const val REQUEST_DRAW_OVER_APPS_PERMISSION = 1002
-    const val CHANNEL_ID = "my_channel_id"
-    var NOTIFICATION_ID = 2001 // Unique identifier for notifications
-    const val NOTIFICATION_PERMISSION_REQUEST_CODE = 2002
+
+
+
+
+
+}
+object MediaPlayerSingleton {
+    private var mediaPlayer: MediaPlayer? = null
+
+    fun getInstance(fragment: Fragment, contextObject: Context): MediaPlayer {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(contextObject, R.raw.notification_music)
+        }
+        // Additional initialization or configuration based on contextObject if needed
+        return mediaPlayer!!
+    }
+
+    // Optional: Add a method to release the MediaPlayer when it's no longer needed.
+    fun release() {
+        mediaPlayer?.release()
+        mediaPlayer = null
+    }
+
+    fun stop() {
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
+    }
 }

@@ -13,14 +13,14 @@ import android.view.MotionEvent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.productsmvvm.Database.WeatherLocalDataSourceImplementation
-import com.example.productsmvvm.Model.WeatherRepositoryImplementation
+import com.example.weatherapplication.Repository.WeatherRepositoryImplementation
 import com.example.productsmvvm.Network.WeatherRemoteDataSourceImplementation
 import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.FavouriteCity.FavouriteCityView.FavouriteCityFragment
 import com.example.weatherapplication.FavouriteCityWeather.FavouriteCityWeatherView.FavouriteCityWeatherActivity
 import com.example.weatherapplication.Map.MapViewModel.MapViewModel
 import com.example.weatherapplication.Map.MapViewModel.MapViewModelFactory_LDS
-import com.example.weatherapplication.Model.Model_FavouriteCity
+import com.example.weatherapplication.Model.FavouriteCityModel.MyApplicationFavouriteCityModel.Model_FavouriteCity
 import com.example.weatherapplication.R
 import com.example.weatherapplication.databinding.ActivityMapBinding
 import org.osmdroid.api.IMapController

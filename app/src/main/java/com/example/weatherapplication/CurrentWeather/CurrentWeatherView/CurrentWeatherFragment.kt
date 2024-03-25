@@ -25,7 +25,7 @@ import com.bumptech.glide.Glide
 import com.example.productsmvvm.AllProducts.AllProductsViewModel.CurrentWeatherViewModel
 import com.example.productsmvvm.AllProducts.AllProductsViewModel.CurrentWeatherViewModelFactory_RDS
 import com.example.productsmvvm.CurrentWeather.CurrentWeatherView.CurrentWeatherAdapter_Hour
-import com.example.productsmvvm.Model.WeatherRepositoryImplementation
+import com.example.weatherapplication.Repository.WeatherRepositoryImplementation
 import com.example.productsmvvm.Network.WeatherRemoteDataSourceImplementation
 import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.R

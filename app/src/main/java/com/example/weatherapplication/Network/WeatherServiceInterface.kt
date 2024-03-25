@@ -1,8 +1,8 @@
 package com.example.productsmvvm.Network
 
-import com.example.weatherapplication.Model.Model_Forecast
+import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_Forecast
 import com.example.weatherapplication.Constants.Utils
-import com.example.weatherapplication.Model_Alert
+import com.example.weatherapplication.Model.AlertModel.APIModel.Model_Alert
 import retrofit2.http.GET
 import retrofit2.http.Query
 

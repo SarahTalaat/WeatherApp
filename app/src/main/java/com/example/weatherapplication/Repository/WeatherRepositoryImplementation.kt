@@ -1,14 +1,12 @@
-package com.example.productsmvvm.Model
+package com.example.weatherapplication.Repository
 
 //import com.example.productsmvvm.Database.WeatherLocalDataSourceInterface
 import android.util.Log
 import com.example.productsmvvm.Database.WeatherLocalDataSourceInterface
 import com.example.productsmvvm.Network.WeatherRemoteDataSourceInterface
-import com.example.weatherapplication.Model.Model_FavouriteCity
-import com.example.weatherapplication.Model.Model_Forecast
-import com.example.weatherapplication.Model_Alert
-import com.example.weatherapplication.Model_City
-import com.example.weatherapplication.Model_WeatherArrayList
+import com.example.weatherapplication.Model.FavouriteCityModel.MyApplicationFavouriteCityModel.Model_FavouriteCity
+import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_Forecast
+import com.example.weatherapplication.Model.AlertModel.APIModel.Model_Alert
 import kotlinx.coroutines.flow.Flow
 
 //Singleton
@@ -22,8 +20,8 @@ class WeatherRepositoryImplementation private constructor(
         fun getWeatherRepositoryImplementationInstance(
             weatherRemoteDataSourceInterface: WeatherRemoteDataSourceInterface,
             weatherLocalDataSourceInterface: WeatherLocalDataSourceInterface
-        ): WeatherRepositoryImplementation{
-            return instance?: synchronized(this){
+        ): WeatherRepositoryImplementation {
+            return instance ?: synchronized(this){
                 val temp = WeatherRepositoryImplementation(
                     weatherRemoteDataSourceInterface,
                     weatherLocalDataSourceInterface

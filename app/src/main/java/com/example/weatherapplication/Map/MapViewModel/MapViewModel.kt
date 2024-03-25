@@ -5,8 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.productsmvvm.Model.WeatherRepositoryInterface
-import com.example.weatherapplication.Model.Model_FavouriteCity
+import com.example.weatherapplication.Repository.WeatherRepositoryInterface
+import com.example.weatherapplication.Model.FavouriteCityModel.MyApplicationFavouriteCityModel.Model_FavouriteCity
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,14 +22,14 @@ class MapViewModel(private val weatherRepositoryInterface_Instance_ConstructorPa
         getAllLocalFavouriteCity_StoredInDatabase_InMapViewModel()
     }
 
-    fun deleteFavouriteCity_InMapViewModel(city:Model_FavouriteCity){
+    fun deleteFavouriteCity_InMapViewModel(city: Model_FavouriteCity){
         viewModelScope.launch(Dispatchers.IO){
             weatherRepositoryInterface_Instance_ConstructorParameter_InFavouriteWeatherViewModel.deleteFavouriteCity_FromLDS_InWeatherRepository(city)
             getAllLocalFavouriteCity_StoredInDatabase_InMapViewModel()
         }
     }
 
-    fun insertFavouriteCity_InMapViewModel(city:Model_FavouriteCity){
+    fun insertFavouriteCity_InMapViewModel(city: Model_FavouriteCity){
         viewModelScope.launch(Dispatchers.IO){
             weatherRepositoryInterface_Instance_ConstructorParameter_InFavouriteWeatherViewModel.insertFavouriteCity_FromLDS_InWeatherRepository(city)
             getAllLocalFavouriteCity_StoredInDatabase_InMapViewModel()

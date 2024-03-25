@@ -2,7 +2,7 @@ package com.example.weatherapplication.Alert.AlertViewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.productsmvvm.Model.WeatherRepositoryInterface
+import com.example.weatherapplication.Repository.WeatherRepositoryInterface
 
 class AlertViewModelFactory_RDS(private val  weatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModelFactory: WeatherRepositoryInterface): ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
