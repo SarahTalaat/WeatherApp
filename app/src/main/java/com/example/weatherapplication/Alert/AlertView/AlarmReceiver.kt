@@ -25,7 +25,10 @@ class AlarmReceiver : BroadcastReceiver() {
         Log.i("TAG", "onReceive: AlarmReceiver: context = $context ")
         Log.i("TAG", "onReceive: AlarmReceiver: intent.action = ${intent?.action} ")
 
+
+
         if (context != null && intent != null) {
+            MediaPlayerSingleton.getInstance(AlertFragment.getInstance(), context).start()
             val action = intent.action
             if (action != null && action == Utils.STOP_NOTIFICATION) {
                 stopMediaPlayer(context)
