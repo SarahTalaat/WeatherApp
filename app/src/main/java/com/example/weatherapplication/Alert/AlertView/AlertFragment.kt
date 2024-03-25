@@ -52,6 +52,9 @@ class AlertFragment : Fragment() {
     var isAlertsNotEmpty: Boolean = false
     var arrayOfModelTime: ArrayList<Model_Time> = arrayListOf()
     private var notificationCreated = false
+    var isNotification = "true"
+    var alertClicked = false
+    var notificationClicked = false
 
     companion object {
         private var instance: AlertFragment? = null
@@ -115,28 +118,47 @@ class AlertFragment : Fragment() {
     }
 
 
+
     private fun setAlarm(selectedDateTime: Date) {
         val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val alarmIntent = Intent(requireContext(), AlarmReceiver::class.java)
+        alarmIntent.putExtra(Utils.ISNOTIFICATION, "false")
+
         val pendingIntent = PendingIntent.getBroadcast(
             requireContext(),
             Utils.ALARM_REQUEST_CODE,
             alarmIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE // Add FLAG_IMMUTABLE
         )
 
-        // Set the alarm to trigger at the specified selectedDateTime
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, selectedDateTime.time, pendingIntent)
+        // Calculate the time difference between the current time and the selected time
+        val currentTimeMillis = System.currentTimeMillis()
+        val selectedTimeMillis = selectedDateTime.time
+        val delayInMillis = selectedTimeMillis - currentTimeMillis
 
-        // Set default alarm tone
-        val defaultAlarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
-        val mediaPlayer = MediaPlayer.create(requireContext(), defaultAlarmUri)
-        mediaPlayer.start()
+        // Ensure that the delay is positive
+        if (delayInMillis > 0) {
+            // Set the alarm to trigger at the specified selectedDateTime
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setExactAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    selectedTimeMillis,
+                    pendingIntent
+                )
+            } else {
+                alarmManager.setExact(
+                    AlarmManager.RTC_WAKEUP,
+                    selectedTimeMillis,
+                    pendingIntent
+                )
+            }
 
-        // Show a toast message indicating the successful setting of the alarm
-        Toast.makeText(requireContext(), "Alarm set successfully", Toast.LENGTH_SHORT).show()
-
-        // Optionally, add any additional logic specific to setting alarms here
+            // Show a toast message indicating the successful setting of the alarm
+            Toast.makeText(requireContext(), "Alarm set successfully", Toast.LENGTH_SHORT).show()
+        } else {
+            // If the selected time is in the past, show an error message
+            Toast.makeText(requireContext(), "Invalid time selected", Toast.LENGTH_SHORT).show()
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -195,6 +217,9 @@ class AlertFragment : Fragment() {
 
             // Show dialog to choose between notification and alarm
             showNotificationOrAlarmDialog(selectedTime)
+            alertClicked = false
+            notificationClicked = false
+
 
         }, currentHour, currentMinute, true)
 
@@ -219,13 +244,13 @@ class AlertFragment : Fragment() {
             Log.i("TAG", "processSelectedDateTime: scheduledTime: $scheduledTime")
 
             // Schedule notification or alarm for the current date and time
-            scheduleNotificationOrAlarm(scheduledTime)
+            scheduleNotification(scheduledTime)
 
             // Move to the next day
             calendar.add(Calendar.DATE, 1)
         }
     }
-
+/*
     @RequiresApi(Build.VERSION_CODES.S)
     private fun scheduleNotificationOrAlarm(scheduledTime: Date) {
         val currentTime = Calendar.getInstance().timeInMillis
@@ -240,8 +265,7 @@ class AlertFragment : Fragment() {
             ).show()
             return
         }
-        // Increment notification ID for each scheduled notification
-        NOTIFICATION_ID++
+
 
         // Schedule notification
         val alarmManager =
@@ -252,14 +276,15 @@ class AlertFragment : Fragment() {
             getPendingNotificationIntent(NOTIFICATION_ID)
         )
 
-
+        // Increment notification ID for each scheduled notification
+        NOTIFICATION_ID++
 
     }
 
     private fun getPendingNotificationIntent(notificationId: Int): PendingIntent {
         val notificationIntent = Intent(requireContext(), AlarmReceiver::class.java)
         notificationIntent.putExtra("notification_id", notificationId)
-
+        notificationIntent.putExtra(Utils.ISNOTIFICATION, "true")
         return PendingIntent.getBroadcast(
             requireContext(),
             notificationId,
@@ -267,14 +292,14 @@ class AlertFragment : Fragment() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
     }
-
-
+*/
+/*
 
     @RequiresApi(Build.VERSION_CODES.S)
     private fun showNotificationOrAlarmDialog(selectedDateTime: Date) {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Choose Action")
-        builder.setPositiveButton("Set Alarm") { _, _ ->
+        builder.setPositiveButton("Set Alert") { _, _ ->
             setAlarm(selectedDateTime)
         }
         builder.setNegativeButton("Set Notification") { _, _ ->
@@ -284,13 +309,9 @@ class AlertFragment : Fragment() {
         builder.create().show()
     }
 
+*/
 
-    private fun playSound() {
-        MediaPlayerSingleton.getInstance(AlertFragment.getInstance(), requireContext()).start()
-
-    }
-
-
+/*
     @RequiresApi(Build.VERSION_CODES.S)
     private fun requestDrawOverAppsPermission(selectedDateTime: Date) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
@@ -306,8 +327,8 @@ class AlertFragment : Fragment() {
             notificationCreated = true
         }
     }
-
-
+*/
+/*
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -319,10 +340,7 @@ class AlertFragment : Fragment() {
             Toast.makeText(requireContext(), "Permission denied", Toast.LENGTH_SHORT).show()
         }
     }
-
-    private fun playNotificationSound() {
-        MediaPlayerSingleton.getInstance(AlertFragment.getInstance(), requireContext()).start()
-    }
+*/
 
     private fun initUI_InAlertFragment(view: View){
         recyclerView_Instance_InAlertFragment = view.findViewById(R.id.rv_alert)
@@ -339,30 +357,131 @@ class AlertFragment : Fragment() {
 
 
 
+/*
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun showNotificationOrAlarmDialog(selectedDateTime: Date) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Choose Action")
+        builder.setPositiveButton("Set Alert") { _, _ ->
 
-
-
-}
-object MediaPlayerSingleton {
-    private var mediaPlayer: MediaPlayer? = null
-
-    fun getInstance(fragment: Fragment, contextObject: Context): MediaPlayer {
-        if (mediaPlayer == null) {
-            mediaPlayer = MediaPlayer.create(contextObject, R.raw.notification_music)
         }
-        // Additional initialization or configuration based on contextObject if needed
-        return mediaPlayer!!
+        builder.setNegativeButton("Set Notification") { _, _ ->
+            // Check if "Draw over other apps" permission is granted
+            if (!Settings.canDrawOverlays(requireContext())) {
+                // If not granted, request the permission
+                requestDrawOverAppsPermission(selectedDateTime)
+            } else {
+                // If permission is already granted, schedule the notification
+                isNotification = "true"
+                scheduleNotification(selectedDateTime)
+            }
+        }
+        builder.create().show()
     }
 
-    // Optional: Add a method to release the MediaPlayer when it's no longer needed.
-    fun release() {
-        mediaPlayer?.release()
-        mediaPlayer = null
+*/
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun showNotificationOrAlarmDialog(selectedDateTime: Date) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Choose Action")
+        builder.setPositiveButton("Set Alert") { dialog, which ->
+            // Code to execute when "Set Alert" is clicked
+            // Replace the following line with your actual code
+            if (alertClicked == false && notificationClicked == false) {
+                Toast.makeText(requireContext(), "Alert Set", Toast.LENGTH_SHORT).show()
+                // Set the alarm directly
+                isNotification = "false"
+                scheduleNotification(selectedDateTime)
+                alertClicked = true
+
+            }
+        }
+        builder.setNegativeButton("Set Notification") { dialog, which ->
+            // Code to execute when "Set Notification" is clicked
+            // Replace the following line with your actual code
+            if (notificationClicked== false && alertClicked == false) {
+                Toast.makeText(requireContext(), "Notification Set", Toast.LENGTH_SHORT).show()
+                // Check if "Draw over other apps" permission is granted
+                if (!Settings.canDrawOverlays(requireContext())) {
+                    // If not granted, request the permission
+                    requestDrawOverAppsPermission(selectedDateTime)
+                } else {
+                    // If permission is already granted, schedule the notification
+                    isNotification = "true"
+                    scheduleNotification(selectedDateTime)
+                }
+                notificationClicked = true
+
+            }
+        }
+        builder.create().show()
     }
-   
-    fun stop() {
-        mediaPlayer?.stop()
-        mediaPlayer?.release()
-        mediaPlayer = null
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun requestDrawOverAppsPermission(selectedDateTime: Date) {
+        val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + requireContext().packageName))
+        startActivityForResult(intent, Utils.REQUEST_DRAW_OVER_APPS_PERMISSION)
     }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == Utils.REQUEST_DRAW_OVER_APPS_PERMISSION && resultCode == Activity.RESULT_OK) {
+            // Permission granted, schedule the notification
+            scheduleNotification(selectedDateTime!!)
+        } else {
+            // Permission denied, show a message
+            Toast.makeText(requireContext(), "Permission denied", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun scheduleNotification(selectedDateTime: Date) {
+        val currentTime = Calendar.getInstance().timeInMillis
+        val delayInMillis = selectedDateTime.time - currentTime
+
+        if (delayInMillis <= 0) {
+            // If the selected time has already passed, skip scheduling for this time
+            Toast.makeText(
+                requireContext(),
+                "The time you selected has already passed",
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
+
+        if (isNotification == "true") {
+            // Schedule notification
+            val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            alarmManager.setExact(
+                AlarmManager.RTC_WAKEUP,
+                currentTime + delayInMillis,
+                getPendingNotificationIntent(NOTIFICATION_ID)
+            )
+
+            // Increment notification ID for each scheduled notification
+            NOTIFICATION_ID++
+        } else {
+            // Set the alarm
+            setAlarm(selectedDateTime)
+        }
+
+    }
+
+    private fun getPendingNotificationIntent(notificationId: Int): PendingIntent {
+        val notificationIntent = Intent(requireContext(), AlarmReceiver::class.java)
+        notificationIntent.putExtra("notification_id", notificationId)
+        notificationIntent.putExtra(Utils.ISNOTIFICATION, "true")
+        return PendingIntent.getBroadcast(
+            requireContext(),
+            notificationId,
+            notificationIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+    }
+
+
+
+
+
+
 }
