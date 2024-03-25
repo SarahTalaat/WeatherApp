@@ -209,6 +209,8 @@ class AlertFragment : Fragment() {
             return
         }
 
+        
+
         // Increment notification ID for each scheduled notification
         NOTIFICATION_ID++
 
