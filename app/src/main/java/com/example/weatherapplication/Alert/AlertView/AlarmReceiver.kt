@@ -1,5 +1,6 @@
 package com.example.weatherapplication.Alert.AlertView
 
+import AlertFragment
 import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -27,7 +28,74 @@ class AlarmReceiver : BroadcastReceiver() {
         Log.i("TAG", "onReceive: AlarmReceiver: context = $context ")
         Log.i("TAG", "onReceive: AlarmReceiver: intent.action = ${intent?.action} ")
 
+        val data = intent?.getStringExtra(Utils.ISNOTIFICATION)
 
+        Log.i("TAG", "onReceive: data = $data")
+
+        if(data == "true"){
+            showNotification(context,intent)
+        }else if(data == "false"){
+            showHeadsUpNotification(context, intent)
+        }
+
+
+    }
+
+    private fun stopMediaPlayer(context: Context) {
+        // Stop the media player here
+        MediaPlayerSingleton.getInstance(context).stop()
+        Toast.makeText(context, "Media player stopped", Toast.LENGTH_SHORT).show()
+    }
+
+
+
+
+    private fun createNotificationChannel(context: Context) {
+        // Create a notification channel if not exists
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            val name = "Alarm Notifications"
+            val descriptionText = "Channel for alarm notifications"
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel(
+                Utils.CHANNEL_ID,
+                name,
+                importance
+            ).apply {
+                description = descriptionText
+            }
+            val notificationManager =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    private fun getPendingIntentForStopNotification(context: Context): PendingIntent {
+        // Create an intent to stop the notification
+        val stopIntent = Intent(context, AlarmReceiver::class.java).apply {
+            action = Utils.STOP_NOTIFICATION
+        }
+        return PendingIntent.getBroadcast(
+            context,
+            Utils.STOP_NOTIFICATION_REQUEST_CODE,
+            stopIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+    }
+
+    private fun getPendingIntentForDismissNotification(context: Context): PendingIntent {
+        // Create an intent to dismiss the notification
+        val dismissIntent = Intent(context, AlarmReceiver::class.java).apply {
+            action = Utils.DISMISS_NOTIFICATION
+        }
+        return PendingIntent.getBroadcast(
+            context,
+            Utils.DISMISS_NOTIFICATION_REQUEST_CODE,
+            dismissIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+    }
+
+    fun showNotification(context: Context?, intent: Intent?){
 
         if (context != null && intent != null) {
             MediaPlayerSingleton.getInstance(context).start()
@@ -54,6 +122,7 @@ class AlarmReceiver : BroadcastReceiver() {
                 val modelAlert = gson.fromJson(modelAlertJson, Model_Alert::class.java)
 
                 if (modelAlert.alerts.isNotEmpty()) {
+
                     notification(
                         context,
                         "Dangerous Situation",
@@ -68,13 +137,6 @@ class AlarmReceiver : BroadcastReceiver() {
             }
         }
     }
-
-    private fun stopMediaPlayer(context: Context) {
-        // Stop the media player here
-        MediaPlayerSingleton.getInstance(context).stop()
-        Toast.makeText(context, "Media player stopped", Toast.LENGTH_SHORT).show()
-    }
-
 
     private fun notification(context: Context, title: String, contentText: String) {
         createNotificationChannel(context)
@@ -118,52 +180,156 @@ class AlarmReceiver : BroadcastReceiver() {
             notify(Utils.NOTIFICATION_ID, builder.build())
         }
     }
-
-    private fun createNotificationChannel(context: Context) {
-        // Create a notification channel if not exists
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            val name = "Alarm Notifications"
-            val descriptionText = "Channel for alarm notifications"
-            val importance = NotificationManager.IMPORTANCE_HIGH
-            val channel = NotificationChannel(
-                Utils.CHANNEL_ID,
-                name,
-                importance
-            ).apply {
-                description = descriptionText
+/*
+    fun showPopupAlarm(context: Context?, intent: Intent?) {
+        if (context != null && intent != null) {
+            MediaPlayerSingleton.getInstance(context).start()
+            val action = intent.action
+            if (action != null && action == Utils.STOP_NOTIFICATION) {
+                stopMediaPlayer(context)
+                return
+            } else if (action != null && action == Utils.DISMISS_NOTIFICATION) {
+                context?.let {
+                    MediaPlayerSingleton.stop()
+                    NotificationManagerCompat.from(it).cancel(Utils.NOTIFICATION_ID)
+                }
+                return
             }
-            val notificationManager =
-                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
+
+            val sharedPreferences = context.getSharedPreferences(
+                Utils.ALERT_DATA_SP,
+                Context.MODE_PRIVATE
+            )
+            val modelAlertJson = sharedPreferences?.getString(Utils.MODEL_ALERT_GSON, null)
+
+            if (modelAlertJson != null) {
+                val gson = Gson()
+                val modelAlert = gson.fromJson(modelAlertJson, Model_Alert::class.java)
+
+                popupAlarm(context, modelAlert)
+            } else {
+                Toast.makeText(context, "The JSON is null", Toast.LENGTH_SHORT).show()
+                Log.i("TAG", "showPopupAlarm: Alert, The JSON is null ")
+            }
         }
     }
 
-    private fun getPendingIntentForStopNotification(context: Context): PendingIntent {
-        // Create an intent to stop the notification
-        val stopIntent = Intent(context, AlarmReceiver::class.java).apply {
-            action = Utils.STOP_NOTIFICATION
+    private fun popupAlarm(context: Context, modelAlert: Model_Alert) {
+        val alertDialogBuilder = AlertDialog.Builder(context)
+        alertDialogBuilder.setTitle("Alert")
+        if (modelAlert.alerts.isNotEmpty()) {
+            alertDialogBuilder.setMessage(modelAlert.alerts[0].description)
+        } else {
+            alertDialogBuilder.setMessage("The weather is fine. Enjoy your day!")
         }
-        return PendingIntent.getBroadcast(
+        alertDialogBuilder.setPositiveButton("Dismiss") { dialog, _ ->
+            dialog.dismiss()
+        }
+        alertDialogBuilder.setNegativeButton("Stop Music") { dialog, _ ->
+            stopMediaPlayer(context)
+            dialog.dismiss()
+        }
+        val alertDialog = alertDialogBuilder.create()
+        alertDialog.show()
+    }
+
+*/
+
+    fun showHeadsUpNotification(context: Context?, intent: Intent?){
+
+        if (context != null && intent != null) {
+            MediaPlayerSingleton.getInstance(context).start()
+            Log.i("TAG", "showHeadsUpNotification: ")
+            val action = intent.action
+            if (action != null && action == Utils.STOP_NOTIFICATION) {
+                stopMediaPlayer(context)
+                return
+            } else if(action != null && action == Utils.DISMISS_NOTIFICATION){
+                context?.let {
+                    MediaPlayerSingleton.stop()
+                    NotificationManagerCompat.from(it).cancel(Utils.NOTIFICATION_ID)
+                }
+                return
+            }
+
+            val sharedPreferences = context.getSharedPreferences(
+                Utils.ALERT_DATA_SP,
+                Context.MODE_PRIVATE
+            )
+            val modelAlertJson = sharedPreferences?.getString(Utils.MODEL_ALERT_GSON, null)
+
+            if (modelAlertJson != null) {
+                val gson = Gson()
+                val modelAlert = gson.fromJson(modelAlertJson, Model_Alert::class.java)
+
+                if (modelAlert.alerts.isNotEmpty()) {
+
+                    headsUpNotification(
+                        context,
+                        "Dangerous Situation",
+                        "${modelAlert.alerts[0].description}"
+                    )
+                } else {
+                    headsUpNotification(context, "The weather is fine", "Enjoy your day!!")
+                }
+            } else {
+                Toast.makeText(context, "The json is null", Toast.LENGTH_SHORT).show()
+                Log.i("TAG", "onReceive: AlarmReceiver Alart , The json is null ")
+            }
+        }
+    }
+
+    private fun headsUpNotification(context: Context, title: String, contentText: String) {
+        // Step 1: Create notification channel with appropriate importance
+        createNotificationChannel(context)
+
+        Log.i("TAG", "headsUpNotification: ")
+        val soundUri: Uri? = null
+        val intent = Intent(context, AlertFragment::class.java)
+        // Step 2: Use PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_MUTABLE
+        val fullScreenPendingIntent = PendingIntent.getActivity(
             context,
-            Utils.STOP_NOTIFICATION_REQUEST_CODE,
-            stopIntent,
+            0,
+            intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
+        // Step 3: Ensure the notification priority is set to PRIORITY_HIGH or PRIORITY_MAX
+        val builder = NotificationCompat.Builder(context, Utils.CHANNEL_ID)
+            .setSmallIcon(R.drawable.notification_icon)
+            .setContentTitle(title)
+            .setContentText(contentText)
+            .setSound(soundUri)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            // Step 4: Enable heads-up notification with setFullScreenIntent()
+            .setFullScreenIntent(fullScreenPendingIntent, true)
+            .addAction(
+                R.drawable.notification_close,
+                "Stop Music",
+                getPendingIntentForStopNotification(context)
+            )
+            .addAction(
+                R.drawable.baseline_remove_circle_outline_24,
+                "Dismiss",
+                getPendingIntentForDismissNotification(context)
+            )
+
+        with(NotificationManagerCompat.from(context)) {
+            // Check for permission
+            if (ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                // Handle lack of permission
+                return
+            }
+            // Step 5: Notify with appropriate notification ID
+            notify(Utils.NOTIFICATION_ID, builder.build())
+        }
     }
 
-    private fun getPendingIntentForDismissNotification(context: Context): PendingIntent {
-        // Create an intent to dismiss the notification
-        val dismissIntent = Intent(context, AlarmReceiver::class.java).apply {
-            action = Utils.DISMISS_NOTIFICATION
-        }
-        return PendingIntent.getBroadcast(
-            context,
-            Utils.DISMISS_NOTIFICATION_REQUEST_CODE,
-            dismissIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-    }
 
 
 }
@@ -190,4 +356,6 @@ object MediaPlayerSingleton {
         mediaPlayer?.release()
         mediaPlayer = null
     }
+
+
 }
