@@ -65,6 +65,7 @@ class AlertAdapter: RecyclerView.Adapter<AlertAdapter.MyViewHolder_InAlertAdapte
     */
 
 
+
     fun receiveodelTimeInAlertAdapter(model_Time: Model_Time) {
 
         Log.i("TAG", "receiveodelTimeInAlertAdapter: StartDte: ${model_Time.startDate}")
@@ -83,6 +84,15 @@ class AlertAdapter: RecyclerView.Adapter<AlertAdapter.MyViewHolder_InAlertAdapte
             modelTimeArrayList_InAlertAdapter.add(model_Time)
             notifyDataSetChanged()
        }
+
+
+    fun addNotification(timeModel :Model_Time) {
+
+        timeArrayList_InAlertAdapter.add(timeModel)
+        notifyDataSetChanged()
+
+        Log.d("AlertAdapter", "Added notification: $timeModel")
+        Log.d("AlertAdapter", "Size of data list: ${timeArrayList_InAlertAdapter.size}")
 
     }
 
@@ -108,10 +118,16 @@ class AlertAdapter: RecyclerView.Adapter<AlertAdapter.MyViewHolder_InAlertAdapte
 
         Log.i("TAG", "onBindViewHolder: Day Adapter: position = " +position)
 
+
         holder.tv_startDate.setText(modelTimeArrayList_InAlertAdapter.get(position).startDate)
         holder.tv_endDate.setText(modelTimeArrayList_InAlertAdapter.get(position).endDate)
         holder.tv_specficTime.setText(modelTimeArrayList_InAlertAdapter.get(position).specificTime)
         holder.tv_city.setText(modelTimeArrayList_InAlertAdapter.get(position).city)
+
+        holder.tv_hour.setText(timeArrayList_InAlertAdapter.get(position).startDate)
+        holder.tv_month.setText(timeArrayList_InAlertAdapter.get(position).endDate)
+        holder.tv_day.setText(timeArrayList_InAlertAdapter.get(position).specificTime)
+
 
     }
 }

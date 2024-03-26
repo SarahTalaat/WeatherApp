@@ -4,9 +4,13 @@ plugins {
     id ("kotlin-kapt")
 }
 
+
+
 android {
     namespace = "com.example.weatherapplication"
     compileSdk = 34
+
+
 
     defaultConfig {
         applicationId = "com.example.weatherapplication"
@@ -21,6 +25,9 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
+
+
 
     buildTypes {
         release {
@@ -78,11 +85,19 @@ dependencies {
     //Open Street Map
     implementation ("org.osmdroid:osmdroid-android:6.1.14")
 
+
     //JetPackCompose
     implementation ("androidx.activity:activity-compose:1.4.0")
     implementation ("androidx.compose.ui:ui:1.0.5")
     implementation ("androidx.compose.material:material:1.0.5")
     implementation ("androidx.activity:activity-ktx:1.3.1")
+
+    //Floating notifiation
+  //  implementation ("com.github.jineshfrancs:TopAnimationHelper:1.1.0")
+  //  implementation("androidx.core:core-ktx:1.12.0")
+
+
+
 
 
 }
