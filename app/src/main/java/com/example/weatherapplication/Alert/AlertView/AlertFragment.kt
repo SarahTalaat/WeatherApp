@@ -1,8 +1,6 @@
 import android.app.*
 import android.content.Context
 import android.content.Intent
-import android.media.MediaPlayer
-import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -10,7 +8,6 @@ import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.NotificationCompat
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -29,7 +26,6 @@ import com.example.weatherapplication.Alert.AlertViewModel.AlertViewModel
 import com.example.weatherapplication.Alert.AlertViewModel.AlertViewModelFactory_RDS
 import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.Constants.Utils.Companion.NOTIFICATION_ID
-import com.example.weatherapplication.MainActivity
 import com.example.weatherapplication.Model.AlertModel.MyApplicationAlertModel.Model_Time
 import com.example.weatherapplication.Model.FavouriteCityModel.MyApplicationFavouriteCityModel.Model_FavouriteCity
 import com.example.weatherapplication.R
@@ -53,10 +49,17 @@ class AlertFragment : Fragment() {
     var isAlertsNotEmpty: Boolean = false
     var arrayOfModelTime: ArrayList<Model_Time> = arrayListOf()
     private var notificationCreated = false
+
+    var isNotification = true
+    var isDataPutOnIntent= true
+    var isClicked = true
+
+
     var isNotification = "true"
     var alertClicked = false
     var notificationClicked = false
     lateinit var model_time_instance_inAlertFragment: Model_Time
+
 
     companion object {
         private var instance: AlertFragment? = null
@@ -130,11 +133,17 @@ class AlertFragment : Fragment() {
     private fun setAlarm(selectedDateTime: Date) {
         val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val alarmIntent = Intent(requireContext(), AlarmReceiver::class.java)
+
+        if(isClicked == true){
+            alarmIntent.putExtra(Utils.NOTIFICATION_KEY,"false")
+        }
+
         if(notificationClicked == false){
             alarmIntent.putExtra(Utils.ISNOTIFICATION, "false")
             alarmIntent.putExtra(Utils.SPECIFICTIME, selectedDateTime.toString())
             Log.i("TAG", "setAlarm: selectedDateAndTime = $selectedDateTime ")
         }
+
 
 
         val pendingIntent = PendingIntent.getBroadcast(
@@ -300,12 +309,19 @@ class AlertFragment : Fragment() {
         // Increment notification ID for each scheduled notification
         NOTIFICATION_ID++
 
+
     }
 
     private fun getPendingNotificationIntent(notificationId: Int): PendingIntent {
         val notificationIntent = Intent(requireContext(), AlarmReceiver::class.java)
         notificationIntent.putExtra("notification_id", notificationId)
+
+        if(isDataPutOnIntent==false){
+            notificationIntent.putExtra(Utils.NOTIFICATION_KEY,"true")
+        }
+
         notificationIntent.putExtra(Utils.ISNOTIFICATION, "true")
+
         return PendingIntent.getBroadcast(
             requireContext(),
             notificationId,
@@ -320,14 +336,32 @@ class AlertFragment : Fragment() {
     private fun showNotificationOrAlarmDialog(selectedDateTime: Date) {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Choose Action")
+
+        builder.setPositiveButton("Set Alarm") { _, _ ->
+            isNotification = false
+
+            if(isClicked==true){
+                setAlarm(selectedDateTime)
+                isClicked=false
+            }
+
+
         builder.setPositiveButton("Set Alert") { _, _ ->
             setAlarm(selectedDateTime)
+
         }
         builder.setNegativeButton("Set Notification") { _, _ ->
-            // Check for "Draw over other apps" permission
-            requestDrawOverAppsPermission(selectedDateTime)
+            isNotification = true
+
+            if(isClicked==true){
+                requestDrawOverAppsPermission(selectedDateTime)
+                isClicked=false
+            }
+
+
         }
         builder.create().show()
+        isClicked=true
     }
 
 */
