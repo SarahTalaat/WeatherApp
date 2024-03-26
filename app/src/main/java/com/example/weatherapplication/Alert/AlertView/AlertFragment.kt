@@ -49,7 +49,7 @@ class AlertFragment : Fragment() {
     var arrayOfModelTime: ArrayList<Model_Time> = arrayListOf()
     private var notificationCreated = false
     var isNotification = true
-    var isNotificationBool = true
+    var isDataPutOnIntent= true
     var isClicked = true
 
 
@@ -118,7 +118,10 @@ class AlertFragment : Fragment() {
     private fun setAlarm(selectedDateTime: Date) {
         val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val alarmIntent = Intent(requireContext(), AlarmReceiver::class.java)
-        alarmIntent.putExtra(Utils.NOTIFICATION_KEY,"false")
+        if(isClicked == true){
+            alarmIntent.putExtra(Utils.NOTIFICATION_KEY,"false")
+        }
+
         val pendingIntent = PendingIntent.getBroadcast(
             requireContext(),
             Utils.ALARM_REQUEST_CODE,
@@ -270,14 +273,17 @@ class AlertFragment : Fragment() {
 
         // Increment notification ID for each scheduled notification
         NOTIFICATION_ID++
-        isClicked=true
+
 
     }
 
     private fun getPendingNotificationIntent(notificationId: Int): PendingIntent {
         val notificationIntent = Intent(requireContext(), AlarmReceiver::class.java)
         notificationIntent.putExtra("notification_id", notificationId)
-        notificationIntent.putExtra(Utils.NOTIFICATION_KEY,"true")
+        if(isDataPutOnIntent==false){
+            notificationIntent.putExtra(Utils.NOTIFICATION_KEY,"true")
+        }
+
         return PendingIntent.getBroadcast(
             requireContext(),
             notificationId,
@@ -294,6 +300,7 @@ class AlertFragment : Fragment() {
         builder.setTitle("Choose Action")
         builder.setPositiveButton("Set Alarm") { _, _ ->
             isNotification = false
+
             if(isClicked==true){
                 setAlarm(selectedDateTime)
                 isClicked=false
@@ -302,6 +309,7 @@ class AlertFragment : Fragment() {
         }
         builder.setNegativeButton("Set Notification") { _, _ ->
             isNotification = true
+
             if(isClicked==true){
                 requestDrawOverAppsPermission(selectedDateTime)
                 isClicked=false
@@ -310,6 +318,7 @@ class AlertFragment : Fragment() {
 
         }
         builder.create().show()
+        isClicked=true
     }
 
 
