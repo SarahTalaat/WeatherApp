@@ -35,6 +35,13 @@ class Utils {
         const val NOTIFICATION_ID_EXTRA = "notification_id_extra"
         const val DISMISS_NOTIFICATION_REQUEST_CODE = 101
 
+
+        var ISNOTIFICATION = "ISNOTIFICATION"
+        var SPECIFICTIME = "SPECIFICTIME"
+
+
+
+
     }
 
 }
