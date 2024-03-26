@@ -32,6 +32,7 @@ class Utils {
         const val DISMISS_NOTIFICATION_REQUEST_CODE = 101
 
         var ISNOTIFICATION = "ISNOTIFICATION"
+        var SPECIFICTIME = "SPECIFICTIME"
 
 
 

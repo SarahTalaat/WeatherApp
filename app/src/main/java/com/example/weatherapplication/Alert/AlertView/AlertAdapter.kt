@@ -67,22 +67,12 @@ class AlertAdapter: RecyclerView.Adapter<AlertAdapter.MyViewHolder_InAlertAdapte
     */
 
 
-    fun addNotification(selectedDateTime: Date) {
-        val calendar = Calendar.getInstance()
-        calendar.time = selectedDateTime
+    fun addNotification(timeModel :Model_Time) {
 
-        val modelTime = Model_Time(
-            year = calendar.get(Calendar.YEAR).toString(),
-            month = calendar.get(Calendar.MONTH).toString(),
-            day = calendar.get(Calendar.DAY_OF_MONTH).toString(),
-            hour = calendar.get(Calendar.HOUR_OF_DAY).toString(),
-            minutes = calendar.get(Calendar.MINUTE).toString()
-        )
-
-        timeArrayList_InAlertAdapter.add(modelTime)
+        timeArrayList_InAlertAdapter.add(timeModel)
         notifyDataSetChanged()
 
-        Log.d("AlertAdapter", "Added notification: $modelTime")
+        Log.d("AlertAdapter", "Added notification: $timeModel")
         Log.d("AlertAdapter", "Size of data list: ${timeArrayList_InAlertAdapter.size}")
     }
 
@@ -108,10 +98,9 @@ class AlertAdapter: RecyclerView.Adapter<AlertAdapter.MyViewHolder_InAlertAdapte
 
         Log.i("TAG", "onBindViewHolder: Day Adapter: position = " +position)
 
-        holder.tv_hour.setText(timeArrayList_InAlertAdapter.get(position).hour)
-        holder.tv_month.setText(timeArrayList_InAlertAdapter.get(position).month)
-        holder.tv_day.setText(timeArrayList_InAlertAdapter.get(position).day)
-        holder.tv_minute.setText(timeArrayList_InAlertAdapter.get(position).minutes)
+        holder.tv_hour.setText(timeArrayList_InAlertAdapter.get(position).startDate)
+        holder.tv_month.setText(timeArrayList_InAlertAdapter.get(position).endDate)
+        holder.tv_day.setText(timeArrayList_InAlertAdapter.get(position).specificTime)
 
     }
 }
