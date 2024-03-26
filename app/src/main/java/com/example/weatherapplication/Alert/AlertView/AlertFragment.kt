@@ -31,6 +31,7 @@ import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.Constants.Utils.Companion.NOTIFICATION_ID
 import com.example.weatherapplication.MainActivity
 import com.example.weatherapplication.Model.AlertModel.MyApplicationAlertModel.Model_Time
+import com.example.weatherapplication.Model.FavouriteCityModel.MyApplicationFavouriteCityModel.Model_FavouriteCity
 import com.example.weatherapplication.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
@@ -55,6 +56,7 @@ class AlertFragment : Fragment() {
     var isNotification = "true"
     var alertClicked = false
     var notificationClicked = false
+    lateinit var model_time_instance_inAlertFragment: Model_Time
 
     companion object {
         private var instance: AlertFragment? = null
@@ -78,6 +80,8 @@ class AlertFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
 
         fab_addAlert_InAlertFragment = view.findViewById(R.id.floatingActionButton_addAlert)
         fab_addAlert_InAlertFragment.setOnClickListener {
@@ -109,6 +113,10 @@ class AlertFragment : Fragment() {
 
             if (alertResponse.alerts.isNotEmpty()) {
                 isAlertsNotEmpty = true
+                model_time_instance_inAlertFragment=
+                    Model_Time(latitude = alertResponse.lat.toString(), longitude = alertResponse.lon.toString())
+                adapter_Instance_InAlertFragment.addNotification (model_time_instance_inAlertFragment)
+                adapter_Instance_InAlertFragment.notifyDataSetChanged()
             } else {
                 isAlertsNotEmpty = false
             }
@@ -124,6 +132,8 @@ class AlertFragment : Fragment() {
         val alarmIntent = Intent(requireContext(), AlarmReceiver::class.java)
         if(notificationClicked == false){
             alarmIntent.putExtra(Utils.ISNOTIFICATION, "false")
+            alarmIntent.putExtra(Utils.SPECIFICTIME, selectedDateTime.toString())
+            Log.i("TAG", "setAlarm: selectedDateAndTime = $selectedDateTime ")
         }
 
 
@@ -190,7 +200,11 @@ class AlertFragment : Fragment() {
                 Log.i("Alert", "showDateTimePickerDialog: endDate: $endDate")
 
 
-                // Time picker
+
+                model_time_instance_inAlertFragment=
+                    Model_Time(startDate=startDate.toString(), endDate=endDate.toString())
+                adapter_Instance_InAlertFragment.addNotification (model_time_instance_inAlertFragment)
+                adapter_Instance_InAlertFragment.notifyDataSetChanged()
 
                 showTimePickerDialog(startDate, endDate)
             }, currentYear, currentMonth, currentDay)
@@ -214,6 +228,10 @@ class AlertFragment : Fragment() {
 
             val selectedTime = calendar.time
             Log.i("Alert", "showTimePickerDialog: selectedTime: $selectedTime")
+
+            model_time_instance_inAlertFragment= Model_Time(specificTime=selectedTime.toString())
+            adapter_Instance_InAlertFragment.addNotification (model_time_instance_inAlertFragment)
+            adapter_Instance_InAlertFragment.notifyDataSetChanged()
 
             // Process the selected start date, end date, and time
             processSelectedDateTime(startDate, endDate, selectedTime)
@@ -437,6 +455,8 @@ class AlertFragment : Fragment() {
         }
     }
 
+
+
     @RequiresApi(Build.VERSION_CODES.S)
     private fun scheduleNotification(selectedDateTime: Date) {
         val currentTime = Calendar.getInstance().timeInMillis
@@ -473,7 +493,7 @@ class AlertFragment : Fragment() {
     private fun getPendingNotificationIntent(notificationId: Int): PendingIntent {
         val notificationIntent = Intent(requireContext(), AlarmReceiver::class.java)
         notificationIntent.putExtra("notification_id", notificationId)
-        if(alertClicked == true){
+        if(alertClicked == false){
             notificationIntent.putExtra(Utils.ISNOTIFICATION, "true")
         }
 
