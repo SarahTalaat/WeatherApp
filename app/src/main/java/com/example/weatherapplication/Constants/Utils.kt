@@ -12,13 +12,17 @@ class Utils {
         var FAVOURITE_CITY_NAME = "favourite_city_name"
         var LAT_EGYPT = "26.8206"
         var LON_EGYPT = "30.8025"
+     //   var LAT_ALERT = "56.1304"
+     //   var lON_ALERT = "106.3468"
         var LAT_ALERT = "46.8182"
         var lON_ALERT = "8.2275"
         var ALERT_DATA_SP = "AlertData"
         var MODEL_ALERT_GSON ="modelAlert"
         var DISMISS_NOTIFICATION = "DISMISS_NOTIFICATION"
         var STOP_NOTIFICATION = "STOP_NOTIFICATION"
+        var NOTIFICATION_KEY = "NOTIFICATION_KEY"
 
+        //lat=56.1304&lon=106.3468
 
 
         const val ALARM_REQUEST_CODE = 1001
@@ -30,6 +34,7 @@ class Utils {
         const val STOP_NOTIFICATION_REQUEST_CODE = 2003
         const val NOTIFICATION_ID_EXTRA = "notification_id_extra"
         const val DISMISS_NOTIFICATION_REQUEST_CODE = 101
+
     }
 
 }

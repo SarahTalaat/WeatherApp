@@ -1,8 +1,6 @@
 import android.app.*
 import android.content.Context
 import android.content.Intent
-import android.media.MediaPlayer
-import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -10,7 +8,6 @@ import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.NotificationCompat
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -29,7 +26,6 @@ import com.example.weatherapplication.Alert.AlertViewModel.AlertViewModel
 import com.example.weatherapplication.Alert.AlertViewModel.AlertViewModelFactory_RDS
 import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.Constants.Utils.Companion.NOTIFICATION_ID
-import com.example.weatherapplication.MainActivity
 import com.example.weatherapplication.Model.AlertModel.MyApplicationAlertModel.Model_Time
 import com.example.weatherapplication.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -52,6 +48,10 @@ class AlertFragment : Fragment() {
     var isAlertsNotEmpty: Boolean = false
     var arrayOfModelTime: ArrayList<Model_Time> = arrayListOf()
     private var notificationCreated = false
+    var isNotification = true
+    var isNotificationBool = true
+    var isClicked = true
+
 
     companion object {
         private var instance: AlertFragment? = null
@@ -118,6 +118,7 @@ class AlertFragment : Fragment() {
     private fun setAlarm(selectedDateTime: Date) {
         val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val alarmIntent = Intent(requireContext(), AlarmReceiver::class.java)
+        alarmIntent.putExtra(Utils.NOTIFICATION_KEY,"false")
         val pendingIntent = PendingIntent.getBroadcast(
             requireContext(),
             Utils.ALARM_REQUEST_CODE,
@@ -269,13 +270,14 @@ class AlertFragment : Fragment() {
 
         // Increment notification ID for each scheduled notification
         NOTIFICATION_ID++
+        isClicked=true
 
     }
 
     private fun getPendingNotificationIntent(notificationId: Int): PendingIntent {
         val notificationIntent = Intent(requireContext(), AlarmReceiver::class.java)
         notificationIntent.putExtra("notification_id", notificationId)
-
+        notificationIntent.putExtra(Utils.NOTIFICATION_KEY,"true")
         return PendingIntent.getBroadcast(
             requireContext(),
             notificationId,
@@ -291,11 +293,21 @@ class AlertFragment : Fragment() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Choose Action")
         builder.setPositiveButton("Set Alarm") { _, _ ->
-            setAlarm(selectedDateTime)
+            isNotification = false
+            if(isClicked==true){
+                setAlarm(selectedDateTime)
+                isClicked=false
+            }
+
         }
         builder.setNegativeButton("Set Notification") { _, _ ->
-            // Check for "Draw over other apps" permission
-            requestDrawOverAppsPermission(selectedDateTime)
+            isNotification = true
+            if(isClicked==true){
+                requestDrawOverAppsPermission(selectedDateTime)
+                isClicked=false
+            }
+
+
         }
         builder.create().show()
     }
