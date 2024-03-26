@@ -23,7 +23,7 @@ import com.google.gson.Gson
 class AlarmReceiver : BroadcastReceiver() {
 
     var isNotification = true
-  
+
     override fun onReceive(context: Context?, intent: Intent?) {
 
         Log.i("TAG", "onReceive: AlarmReceiver: context = $context ")
