@@ -1,6 +1,7 @@
 import android.app.*
 import android.content.Context
 import android.content.Intent
+import android.location.Geocoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -26,7 +27,10 @@ import com.example.weatherapplication.Alert.AlertViewModel.AlertViewModel
 import com.example.weatherapplication.Alert.AlertViewModel.AlertViewModelFactory_RDS
 import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.Constants.Utils.Companion.NOTIFICATION_ID
+import com.example.weatherapplication.FavouriteCity.FavouriteCityView.FavouriteCityFragment
+import com.example.weatherapplication.FavouriteCityWeather.FavouriteCityWeatherView.FavouriteCityWeatherActivity
 import com.example.weatherapplication.Model.AlertModel.MyApplicationAlertModel.Model_Time
+import com.example.weatherapplication.Model.FavouriteCityModel.MyApplicationFavouriteCityModel.Model_FavouriteCity
 import com.example.weatherapplication.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
@@ -81,6 +85,7 @@ class AlertFragment : Fragment() {
             showDateTimePickerDialog()
         }
 
+
         model_Time_Instance= Model_Time()
         alertViewModelFactory_Instance_RDS_InAlertFragment = AlertViewModelFactory_RDS(
             WeatherRepositoryImplementation.getWeatherRepositoryImplementationInstance(
@@ -109,6 +114,17 @@ class AlertFragment : Fragment() {
             } else {
                 isAlertsNotEmpty = false
             }
+
+            model_Time_Instance.latitude = alertResponse.lat.toString()
+            model_Time_Instance.longitude = alertResponse.lon.toString()
+            if(alertResponse.lat!=null && alertResponse.lon != null){
+                var city = findCityName(alertResponse.lat!! , alertResponse.lon!!)
+                model_Time_Instance.city = city
+            }
+            adapter_Instance_InAlertFragment.receiveodelTimeInAlertAdapter(model_Time_Instance)
+
+
+
         }
 
         alertViewModel_Instance_InAlertFragmet.getAlert_FromRetrofit_InAlertViewModel(Utils.LAT_ALERT,Utils.lON_ALERT, Utils.API_KEY)
@@ -241,9 +257,17 @@ class AlertFragment : Fragment() {
             // Schedule notification or alarm for the current date and time
             scheduleNotificationOrAlarm(scheduledTime)
 
+
+
             // Move to the next day
             calendar.add(Calendar.DATE, 1)
         }
+
+        model_Time_Instance.startDate=startDate.toString()
+        model_Time_Instance.endDate=endDate.toString()
+        model_Time_Instance.specificTime=selectedTime.toString()
+        adapter_Instance_InAlertFragment.receiveodelTimeInAlertAdapter(model_Time_Instance)
+
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -322,7 +346,19 @@ class AlertFragment : Fragment() {
     }
 
 
+    fun findCityName(lat:Double , lon: Double): String{
+        var cityName = ""
+        val geocoder = Geocoder(requireContext(), Locale.getDefault())
+        val fullAddress = geocoder.getFromLocation(lat,lon,1)
+        if(fullAddress != null){
+            if(fullAddress.isNotEmpty()){
+                val address = fullAddress.get(0)
+                cityName = address.adminArea
 
+            }
+        }
+        return cityName
+    }
 
     @RequiresApi(Build.VERSION_CODES.S)
     private fun requestDrawOverAppsPermission(selectedDateTime: Date) {

@@ -12,8 +12,6 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapplication.Model.AlertModel.MyApplicationAlertModel.Model_Time
 import com.example.weatherapplication.R
-import java.util.Calendar
-import java.util.Date
 
 class AlertAdapter: RecyclerView.Adapter<AlertAdapter.MyViewHolder_InAlertAdapter> {
 
@@ -21,7 +19,7 @@ class AlertAdapter: RecyclerView.Adapter<AlertAdapter.MyViewHolder_InAlertAdapte
     private final var tab: String = "team"
 
     var context_Instance_InAlertAdapter: Context
-    var timeArrayList_InAlertAdapter: ArrayList<Model_Time>
+    var modelTimeArrayList_InAlertAdapter: ArrayList<Model_Time>
 
 
     public constructor(
@@ -30,7 +28,7 @@ class AlertAdapter: RecyclerView.Adapter<AlertAdapter.MyViewHolder_InAlertAdapte
     ) {
         this.context_Instance_InAlertAdapter =
             context_Instance_ConstructorParameter_InAlertAdapter
-        this.timeArrayList_InAlertAdapter =
+        this.modelTimeArrayList_InAlertAdapter =
             timeArrayList_ConstructorParameter_InAlertAdapter
     }
 
@@ -50,7 +48,7 @@ class AlertAdapter: RecyclerView.Adapter<AlertAdapter.MyViewHolder_InAlertAdapte
     }
 
     override fun getItemCount(): Int {
-        return timeArrayList_InAlertAdapter.size
+        return modelTimeArrayList_InAlertAdapter.size
     }
 
 
@@ -67,38 +65,40 @@ class AlertAdapter: RecyclerView.Adapter<AlertAdapter.MyViewHolder_InAlertAdapte
     */
 
 
-    fun addNotification(selectedDateTime: Date) {
-        val calendar = Calendar.getInstance()
-        calendar.time = selectedDateTime
+    fun receiveodelTimeInAlertAdapter(model_Time: Model_Time) {
 
-        val modelTime = Model_Time(
-            year = calendar.get(Calendar.YEAR).toString(),
-            month = calendar.get(Calendar.MONTH).toString(),
-            day = calendar.get(Calendar.DAY_OF_MONTH).toString(),
-            hour = calendar.get(Calendar.HOUR_OF_DAY).toString(),
-            minutes = calendar.get(Calendar.MINUTE).toString()
-        )
+        Log.i("TAG", "receiveodelTimeInAlertAdapter: StartDte: ${model_Time.startDate}")
+        Log.i("TAG", "receiveodelTimeInAlertAdapter: StartDte: ${model_Time.endDate}")
+        Log.i("TAG", "receiveodelTimeInAlertAdapter: StartDte: ${model_Time.specificTime}")
+        Log.i("TAG", "receiveodelTimeInAlertAdapter: StartDte: ${model_Time.city}")
+        Log.i("TAG", "receiveodelTimeInAlertAdapter: StartDte: ${model_Time.latitude}")
+        Log.i("TAG", "receiveodelTimeInAlertAdapter: StartDte: ${model_Time.longitude}")
 
-        timeArrayList_InAlertAdapter.add(modelTime)
-        notifyDataSetChanged()
+       if(model_Time.startDate != "nullValue" &&
+          model_Time.endDate != "nullValue" &&
+          model_Time.specificTime != "nullValue" &&
+          model_Time.latitude != "nullValue" &&
+          model_Time.longitude != "nullValue" &&
+          model_Time.city != "nullValue"){
+            modelTimeArrayList_InAlertAdapter.add(model_Time)
+            notifyDataSetChanged()
+       }
 
-        Log.d("AlertAdapter", "Added notification: $modelTime")
-        Log.d("AlertAdapter", "Size of data list: ${timeArrayList_InAlertAdapter.size}")
     }
 
     class MyViewHolder_InAlertAdapter : RecyclerView.ViewHolder {
 
-        var tv_day: TextView
-        var tv_hour: TextView
-        var tv_minute: TextView
-        var tv_month: TextView
+        var tv_specficTime: TextView
+        var tv_startDate: TextView
+        var tv_city: TextView
+        var tv_endDate: TextView
 
 
         constructor(@NonNull itemView: View) : super(itemView) {
-            tv_day = itemView.findViewById(R.id.tv_day_alert)
-            tv_hour = itemView.findViewById(R.id.tv_hour_alert)
-            tv_minute = itemView.findViewById(R.id.tv_minute_alert)
-            tv_month = itemView.findViewById(R.id.tv_month_alert)
+            tv_specficTime = itemView.findViewById(R.id.tv_specificTime_alert)
+            tv_startDate = itemView.findViewById(R.id.tv_startDate_alert)
+            tv_city = itemView.findViewById(R.id.tv_city_alert)
+            tv_endDate = itemView.findViewById(R.id.tv_endDate_alert)
 
         }
     }
@@ -108,10 +108,10 @@ class AlertAdapter: RecyclerView.Adapter<AlertAdapter.MyViewHolder_InAlertAdapte
 
         Log.i("TAG", "onBindViewHolder: Day Adapter: position = " +position)
 
-        holder.tv_hour.setText(timeArrayList_InAlertAdapter.get(position).hour)
-        holder.tv_month.setText(timeArrayList_InAlertAdapter.get(position).month)
-        holder.tv_day.setText(timeArrayList_InAlertAdapter.get(position).day)
-        holder.tv_minute.setText(timeArrayList_InAlertAdapter.get(position).minutes)
+        holder.tv_startDate.setText(modelTimeArrayList_InAlertAdapter.get(position).startDate)
+        holder.tv_endDate.setText(modelTimeArrayList_InAlertAdapter.get(position).endDate)
+        holder.tv_specficTime.setText(modelTimeArrayList_InAlertAdapter.get(position).specificTime)
+        holder.tv_city.setText(modelTimeArrayList_InAlertAdapter.get(position).city)
 
     }
 }

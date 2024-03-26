@@ -9,16 +9,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
-import android.media.RingtoneManager
 import android.net.Uri
-import android.os.Build
 import android.util.Log
-import android.widget.Button
 import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -26,7 +19,6 @@ import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.Model.AlertModel.APIModel.Model_Alert
 import com.example.weatherapplication.R
 import com.google.gson.Gson
-import org.w3c.dom.Text
 
 class AlarmReceiver : BroadcastReceiver() {
 
@@ -213,19 +205,19 @@ class AlarmReceiver : BroadcastReceiver() {
         }
     }
 
-    fun popUpNotificationLogic(context: Context?, intent: Intent?) {
-        if (context != null && intent != null) {
-            val action = intent.action
+    fun popUpNotificationLogic(context_popUp: Context?, intent_popUp: Intent?) {
+        if (context_popUp != null && intent_popUp != null) {
+            val action = intent_popUp.action
             if (action != null && action == Utils.STOP_NOTIFICATION) {
-                stopMediaPlayerMusic(context)
+                stopMediaPlayerMusic(context_popUp)
                 return
             } else if (action != null && action == Utils.DISMISS_NOTIFICATION) {
                 MediaPlayerSingleton.stop()
-                NotificationManagerCompat.from(context).cancel(Utils.NOTIFICATION_ID)
+                NotificationManagerCompat.from(context_popUp).cancel(Utils.NOTIFICATION_ID)
                 return
             }
 
-            val sharedPreferences = context.getSharedPreferences(
+            val sharedPreferences = context_popUp.getSharedPreferences(
                 Utils.ALERT_DATA_SP,
                 Context.MODE_PRIVATE
             )
@@ -237,15 +229,15 @@ class AlarmReceiver : BroadcastReceiver() {
 
                 if (modelAlert.alerts.isNotEmpty()) {
                     popUpNotification(
-                        context,
+                        context_popUp,
                         "Dangerous Situation",
                         "${modelAlert.alerts[0].description}"
                     )
                 } else {
-                    popUpNotification(context, "The weather is fine", "Enjoy your day!!")
+                    popUpNotification(context_popUp, "The weather is fine", "Enjoy your day!!")
                 }
             } else {
-                Toast.makeText(context, "The json is null", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context_popUp, "The json is null", Toast.LENGTH_SHORT).show()
                 Log.i("TAG", "onReceive: AlarmReceiver Alart , The json is null ")
             }
         }
@@ -286,6 +278,11 @@ class AlarmReceiver : BroadcastReceiver() {
         }
     }
 
+
+
+
+
+
 }
 
 object MediaPlayerSingleton {
@@ -310,4 +307,6 @@ object MediaPlayerSingleton {
         mediaPlayer?.release()
         mediaPlayer = null
     }
+
+
 }
