@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.compose.material.rememberDismissState
 import androidx.lifecycle.ViewModelProvider
@@ -53,10 +55,15 @@ class AlertFragment : Fragment() {
     var isAlertsNotEmpty: Boolean = false
     var arrayOfModelTime: ArrayList<Model_Time> = arrayListOf()
     private var notificationCreated = false
-    var isAlarmClicked = true
-     var isAlarmCliked=true
+    var isAlarmClicked = false
     var selectedAtion2 = "Set Notification"
     var selectedAction = "Set Alarm"
+    var isCicked = true
+    var isDataOnIntent  = true
+
+
+
+
 
     companion object {
         private var instance: AlertFragment? = null
@@ -84,6 +91,7 @@ class AlertFragment : Fragment() {
         fab_addAlert_InAlertFragment = view.findViewById(R.id.floatingActionButton_addAlert)
         fab_addAlert_InAlertFragment.setOnClickListener {
             showDateTimePickerDialog()
+            isCicked = true
 
         }
 
@@ -137,8 +145,10 @@ class AlertFragment : Fragment() {
     private fun setAlarm(selectedDateTime: Date) {
         val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val alarmIntent = Intent(requireContext(), AlarmReceiver::class.java)
+        if (isCicked==true){
+            alarmIntent.putExtra(Utils.NOTIFICATION_KEY,"false")
+        }
 
-        alarmIntent.putExtra(Utils.NOTIFICATION_KEY,"false")
 
 
         val pendingIntent = PendingIntent.getBroadcast(
@@ -309,7 +319,9 @@ class AlertFragment : Fragment() {
         val notificationIntent = Intent(requireContext(), AlarmReceiver::class.java)
         notificationIntent.putExtra("notification_id", notificationId)
 
+        if(isDataOnIntent==false){
             notificationIntent.putExtra(Utils.NOTIFICATION_KEY,"true")
+        }
 
 
         return PendingIntent.getBroadcast(
@@ -320,57 +332,51 @@ class AlertFragment : Fragment() {
         )
     }
 
-
-
     @RequiresApi(Build.VERSION_CODES.S)
     private fun showNotificationOrAlarmDialog(selectedDateTime: Date) {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Choose Action")
-        builder.setPositiveButton("Set Alarm") { _, _ ->
+        val context = requireContext()
+
+        // Inflate the custom dialog layout
+        val view = LayoutInflater.from(context).inflate(R.layout.custom_layout, null)
+
+        // Find views within the custom dialog layout
+        val titleTextView: TextView = view.findViewById(R.id.dialog_title)
+        val positiveButton: Button = view.findViewById(R.id.positive_button)
+        val negativeButton: Button = view.findViewById(R.id.negative_button)
+
+        // Set Title
+        titleTextView.text = "Choose Action"
+
+        // Create AlertDialog
+        val dialog = AlertDialog(context)
+
+        // Set the custom view
+        dialog.setView(view)
+
+        // Set Positive Button click listener
+        positiveButton.setOnClickListener {
+            // Add your logic for setting alarm here
+            isAlarmClicked = true
+            requestDrawOverAppsPermission(selectedDateTime)
+            dialog.dismiss() // Dismiss dialog after handling click
         }
 
-        // Negative button click listener
-        builder.setNegativeButton("Set Notification") { _, _ ->
+        // Set Negative Button click listener
+        negativeButton.setOnClickListener {
+            // Add your logic for setting notification here
+            isAlarmClicked = false
+            requestDrawOverAppsPermission(selectedDateTime)
+            dialog.dismiss() // Dismiss dialog after handling click
         }
 
-        builder.create().apply {
-            setOnShowListener {
-                getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                    // Handle positive button click
-                    selectedAction?.let {
-                        // Perform action based on the selectedAction
-                        // For example:
-                        // if (selectedAction == "Set Alarm") {
-                        //     // Handle set alarm action
-                        // } else if (selectedAction == "Set Notification") {
-                        //     // Handle set notification action
-                        // }
-                        isAlarmClicked = true
-                        requestDrawOverAppsPermission(selectedDateTime)
-                    }
-                    dismiss()
-                }
-
-                getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener {
-                    // Handle negative button click
-                    selectedAtion2?.let {
-                        // Perform action based on the selectedAction
-                        // For example:
-                        // if (selectedAction == "Set Alarm") {
-                        //     // Handle set alarm action
-                        // } else if (selectedAction == "Set Notification") {
-                        //     // Handle set notification action
-                        // }
-                        isAlarmClicked = false
-                        requestDrawOverAppsPermission(selectedDateTime)
-                    }
-                    dismiss()
-                }
-            }
-        }.show()
-
-
+        // Show the dialog
+        dialog.show()
     }
+
+
+
+
+
 
 
     fun findCityName(lat:Double , lon: Double): String{
