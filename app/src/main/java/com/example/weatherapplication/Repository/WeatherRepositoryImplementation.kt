@@ -9,6 +9,7 @@ import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_F
 import com.example.weatherapplication.Model.AlertModel.APIModel.Model_Alert
 import com.example.weatherapplication.Model.AlertModel.MyApplicationAlertModel.Model_Time
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 //Singleton
 class WeatherRepositoryImplementation private constructor(
@@ -38,10 +39,15 @@ class WeatherRepositoryImplementation private constructor(
         lat: String,
         lon: String,
         appid: String
-    ): Model_Alert? {
+    ): Flow<Model_Alert?> {
         Log.i("TAG", "getAlert_FromRDS_InWeatherRepository: " + weatherRemoteDataSourceInterface_Instance.getAlert_OverNetwork_InRDS(lat, lon, appid))
 
-        return  weatherRemoteDataSourceInterface_Instance.getAlert_OverNetwork_InRDS(lat, lon, appid)
+        //return  weatherRemoteDataSourceInterface_Instance.getAlert_OverNetwork_InRDS()
+
+        val respons = weatherRemoteDataSourceInterface_Instance.getAlert_OverNetwork_InRDS(lat, lon, appid)
+        return flow {
+            emit(respons)
+        }
 
     }
 
@@ -94,13 +100,18 @@ class WeatherRepositoryImplementation private constructor(
         lat: String,
         lon: String,
         appid: String
-    ): Model_Forecast? {
+    ): Flow<Model_Forecast?> {
         Log.i("TAG", "getForecast_FromRDS_InProductsRepository: "+  weatherRemoteDataSourceInterface_Instance.getForecast_OverNetwork_InRDS(lat, lon, appid))
-        return  weatherRemoteDataSourceInterface_Instance.getForecast_OverNetwork_InRDS(lat, lon, appid)
+       // return  weatherRemoteDataSourceInterface_Instance.getForecast_OverNetwork_InRDS(lat, lon, appid)
+        val respons = weatherRemoteDataSourceInterface_Instance.getForecast_OverNetwork_InRDS(lat, lon, appid)
+        return flow {
+            emit(respons)
+        }
     }
 
     override suspend fun getAllStoredFavouriteCity_FromLDS_InWeatherRepository(): Flow<List<Model_FavouriteCity>> {
         return weatherLocalDataSourceInterface_Instance.getAllStoredFavouriteCityFromDatabase_InLDS()
+
     }
 
     override suspend fun insertFavouriteCity_FromLDS_InWeatherRepository(city: Model_FavouriteCity) {

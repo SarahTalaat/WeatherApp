@@ -6,11 +6,11 @@ import com.example.weatherapplication.Model.FavouriteCityModel.MyApplicationFavo
 
 sealed class ApiState {
 
-    class Success_ModelForecast_InApiState(val data: List<Model_Forecast>): ApiState()
+    class Success_ModelForecast_InApiState(val data: Model_Forecast?): ApiState()
     class Failure(val msg: Throwable): ApiState()
     object Loading: ApiState()
 
-    class Success_ModelAlert_InApiState(val data: List<Model_Alert>): ApiState()
+    class Success_ModelAlert_InApiState(val data: Model_Alert?): ApiState()
 
 
 }

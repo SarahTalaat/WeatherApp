@@ -1,14 +1,15 @@
 package com.example.weatherapplication.FavouriteCityWeather.FavouriteCityWeatherViewModel
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 //import com.example.productsmvvm.Model.Products
 import com.example.weatherapplication.Repository.WeatherRepositoryInterface
-import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_Forecast
+import com.example.weatherapplication.Network.ApiState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class FavouriteCityWeatherViewModel(private val weatherRepositoryInterface_Instance_ConstructorParameter_InFavouriteCityWeatherViewModel: WeatherRepositoryInterface):ViewModel() {
@@ -50,8 +51,8 @@ class FavouriteCityWeatherViewModel(private val weatherRepositoryInterface_Insta
     private var cityMutableLiveData_InFavouriteCityWeatherViewModel: MutableLiveData<Model_City> = MutableLiveData<Model_City>()
     val cityLiveDataList_InFavouriteCityWeatherViewModel: LiveData<Model_City> = cityMutableLiveData_InFavouriteCityWeatherViewModel
 */
-    private var forecastMutableLiveData_InFavouriteCityWeatherViewModel: MutableLiveData<Model_Forecast> = MutableLiveData<Model_Forecast>()
-    val forecastLiveDataList_InFavouriteCityWeatherViewModel: LiveData<Model_Forecast> = forecastMutableLiveData_InFavouriteCityWeatherViewModel
+    private var forecastMutableStateFlow_InFavouriteCityWeatherViewModel: MutableStateFlow<ApiState> = MutableStateFlow<ApiState>(ApiState.Loading)
+    val forecastStateFlow_InFavouriteCityWeatherViewModel: StateFlow<ApiState> = forecastMutableStateFlow_InFavouriteCityWeatherViewModel
 
 /*
 
@@ -158,7 +159,7 @@ class FavouriteCityWeatherViewModel(private val weatherRepositoryInterface_Insta
     fun getForecast_FromRetrofit_InFavouriteCityWeatherViewModel(lat: String, lon: String, appid: String){
 
         Log.i("TAG", "getForecast_FromRetrofit_InFavouriteCityWeatherViewModel: (before the viewModelScope): lat: $lat , lon: $lon , appid: $appid")
-
+/*
         viewModelScope.launch(Dispatchers.IO) {
 
             Log.i("TAG", "getForecast_FromRetrofit_InFavouriteCityWeatherViewModel: (inside the viewModelScope):  lat: $lat , lon: $lon , appid: $appid")
@@ -166,10 +167,26 @@ class FavouriteCityWeatherViewModel(private val weatherRepositoryInterface_Insta
                     weatherRepositoryInterface_Instance_ConstructorParameter_InFavouriteCityWeatherViewModel.getForecast_FromRDS_InWeatherRepository(lat, lon, appid))
 
 
-            forecastMutableLiveData_InFavouriteCityWeatherViewModel.postValue(
+            forecastMutableStateFlow_InFavouriteCityWeatherViewModel.postValue(
                 weatherRepositoryInterface_Instance_ConstructorParameter_InFavouriteCityWeatherViewModel.getForecast_FromRDS_InWeatherRepository(lat, lon, appid)
             )
         }
+    */
+
+    viewModelScope.launch(Dispatchers.IO) {
+        weatherRepositoryInterface_Instance_ConstructorParameter_InFavouriteCityWeatherViewModel.getForecast_FromRDS_InWeatherRepository(lat, lon, appid)
+            .catch { e ->
+                forecastMutableStateFlow_InFavouriteCityWeatherViewModel.value = ApiState.Failure(e)
+            }
+            .collect{data ->
+                forecastMutableStateFlow_InFavouriteCityWeatherViewModel.value=ApiState.Success_ModelForecast_InApiState(data)
+            }
+
+    }
+
+
+
+
 
         Log.i("TAG", "getForecast_FromRetrofit_InFavouriteCityWeatherViewModel: (after the viewModelScope): lat: $lat , lon: $lon , appid: $appid")
     }
