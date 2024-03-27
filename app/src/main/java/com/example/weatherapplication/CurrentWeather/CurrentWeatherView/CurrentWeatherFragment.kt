@@ -135,14 +135,14 @@ class CurrentWeatherFragment : Fragment() {
             )
 
         )
-
+  
         currentWeatherViewModel_Instance_InCurrentWeatherFragmet = ViewModelProvider(this,currentWeatherViewModelFactory_Instance_RDS_InCurrentWeatherFragment).get(
             CurrentWeatherViewModel::class.java)
 
         initUI_InCurrentWeatherFragment(view)
         setUpRecyclerView_Hour_InCurrentWeatherFragment()
         setUpRecyclerView_Day_InCurrentWeatherFragment()
-        
+
         lifecycleScope.launch {
             currentWeatherViewModel_Instance_InCurrentWeatherFragmet.forecastStateFlow_InCurrentWeatherViewModel.collectLatest { result ->
                 when(result){
