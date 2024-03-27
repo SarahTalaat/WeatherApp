@@ -24,8 +24,8 @@ interface WeatherRepositoryInterface {
 */
 
 
-    suspend fun getAlert_FromRDS_InWeatherRepository(lat: String, lon: String, appid: String): Model_Alert?
-    suspend fun getForecast_FromRDS_InWeatherRepository(lat: String, lon: String, appid: String): Model_Forecast?
+    suspend fun getAlert_FromRDS_InWeatherRepository(lat: String, lon: String, appid: String): Flow<Model_Alert?>
+    suspend fun getForecast_FromRDS_InWeatherRepository(lat: String, lon: String, appid: String): Flow<Model_Forecast?>
     suspend fun getAllStoredFavouriteCity_FromLDS_InWeatherRepository(): Flow<List<Model_FavouriteCity>>
     suspend fun insertFavouriteCity_FromLDS_InWeatherRepository(city: Model_FavouriteCity)
     suspend fun deleteFavouriteCity_FromLDS_InWeatherRepository(city: Model_FavouriteCity)

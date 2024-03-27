@@ -97,21 +97,21 @@ class FavouriteCityWeatherActivity : AppCompatActivity() {
         setUpRecyclerView_Day_InFavouriteCityWeatherActivity()
 
 
-        favouriteCityWeatherViewModel_Instance_InFavouriteCityWeatherActivity.forecastLiveDataList_InFavouriteCityWeatherViewModel.observe(this){
+        favouriteCityWeatherViewModel_Instance_InFavouriteCityWeatherActivity.forecastStateFlow_InFavouriteCityWeatherViewModel.observe(this){
                 forecastModel ->
             adapter_Instance_Hour_InFavouriteCityWeatherActivity.settingWeatherArrayList_InCurrentWeatherAdapter_Hour(forecastModel.modelWeatherArrayList)
             adapter_Instance_Hour_InFavouriteCityWeatherActivity.notifyDataSetChanged()
         }
 
 
-        favouriteCityWeatherViewModel_Instance_InFavouriteCityWeatherActivity.forecastLiveDataList_InFavouriteCityWeatherViewModel.observe(this){
+        favouriteCityWeatherViewModel_Instance_InFavouriteCityWeatherActivity.forecastStateFlow_InFavouriteCityWeatherViewModel.observe(this){
                 forecastModel ->
             adapter_Instance_Day_InFavouriteCityWeatherActivity.settingWeatherArrayList_InCurrentWeatherAdapter_Day(forecastModel.modelWeatherArrayList)
             adapter_Instance_Day_InFavouriteCityWeatherActivity.notifyDataSetChanged()
         }
 
 
-        favouriteCityWeatherViewModel_Instance_InFavouriteCityWeatherActivity.forecastLiveDataList_InFavouriteCityWeatherViewModel.observe(this){
+        favouriteCityWeatherViewModel_Instance_InFavouriteCityWeatherActivity.forecastStateFlow_InFavouriteCityWeatherViewModel.observe(this){
                 forecastModel ->
 
 
