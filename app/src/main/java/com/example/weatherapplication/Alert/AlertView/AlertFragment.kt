@@ -13,10 +13,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ProgressBar
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.productsmvvm.Database.WeatherLocalDataSourceImplementation
 import com.example.weatherapplication.Repository.WeatherRepositoryImplementation
 import com.example.productsmvvm.Network.WeatherRemoteDataSourceImplementation
@@ -27,10 +30,18 @@ import com.example.weatherapplication.Alert.AlertViewModel.AlertViewModel
 import com.example.weatherapplication.Alert.AlertViewModel.AlertViewModelFactory_RDS
 import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.Constants.Utils.Companion.NOTIFICATION_ID
+import com.example.weatherapplication.Model.AlertModel.APIModel.Alerts
+import com.example.weatherapplication.Model.AlertModel.APIModel.Model_Alert
 import com.example.weatherapplication.Model.AlertModel.MyApplicationAlertModel.Model_Time
+import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_WeatherArrayList
+import com.example.weatherapplication.Network.ApiState
 import com.example.weatherapplication.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -50,6 +61,7 @@ class AlertFragment : Fragment() {
     private var notificationCreated = false
     var isClicked = true
     var isAppear = false
+    lateinit var progressBar:ProgressBar
 
 
 
@@ -80,7 +92,10 @@ class AlertFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         fab_addAlert_InAlertFragment = view.findViewById(R.id.floatingActionButton_addAlert)
+        progressBar=view.findViewById(R.id.progressBar_alert)
+
         fab_addAlert_InAlertFragment.setOnClickListener {
 
             showDateTimePickerDialog()
@@ -104,31 +119,61 @@ class AlertFragment : Fragment() {
         initUI_InAlertFragment(view)
         setUpRecyclerView_InAlertFragment()
 
-        alertViewModel_Instance_InAlertFragmet.alertLiveDataList_InAlertViewModel.observe(viewLifecycleOwner) { alertResponse ->
-            Log.i("TAG", "onViewCreated: AlertFragment : alertResponse:  $alertResponse")
-            val gson = Gson()
-            val modelAlertJson = gson.toJson(alertResponse)
-            val sharedPreferences = requireContext().getSharedPreferences(Utils.ALERT_DATA_SP, Context.MODE_PRIVATE)
-            val editor = sharedPreferences.edit()
-            editor.putString(Utils.MODEL_ALERT_GSON, modelAlertJson)
-            editor.apply()
 
-            if (alertResponse.alerts.isNotEmpty()) {
-                isAlertsNotEmpty = true
-            } else {
-                isAlertsNotEmpty = false
+
+        lifecycleScope.launch {
+            alertViewModel_Instance_InAlertFragmet.alertStateFlow_InAlertViewModel.collectLatest { result ->
+                when(result){
+                    is ApiState.Loading -> {
+                        progressBar.visibility = View.VISIBLE
+                        recyclerView_Instance_InAlertFragment.visibility = View.GONE
+
+                    }
+                    is ApiState.Success_ModelForecast_InApiState -> {
+
+                        Log.i("TAG", "onViewCreated: AlertFragment APIStateResult ")
+
+                    }
+                    is ApiState.Failure -> {
+                        progressBar.visibility = View.GONE
+                        Toast.makeText(context,"There is problem in the server", Toast.LENGTH_LONG).show()
+                    }
+                    is ApiState.Success_ModelAlert_InApiState ->{
+                        progressBar.visibility = View.GONE
+                        recyclerView_Instance_InAlertFragment.visibility = View.VISIBLE
+
+
+                        Log.i("TAG", "onViewCreated: AlertFragment : alertResponse:  ${result.data}")
+                        val gson = Gson()
+                        val modelAlertJson = gson.toJson(result.data)
+                        val sharedPreferences = requireContext().getSharedPreferences(Utils.ALERT_DATA_SP, Context.MODE_PRIVATE)
+                        val editor = sharedPreferences.edit()
+                        editor.putString(Utils.MODEL_ALERT_GSON, modelAlertJson)
+                        editor.apply()
+
+
+
+                        if (result.data?.alerts?.isNotEmpty() == true) {
+                            isAlertsNotEmpty = true
+                        } else {
+                            isAlertsNotEmpty = false
+                        }
+
+                        model_Time_Instance.latitude = result.data?.lat.toString()
+
+                        model_Time_Instance.longitude = result.data?.lon.toString()
+                        if(result.data?.lat!=null && result.data.lon != null){
+                            var city = findCityName(result.data.lat!! , result.data.lon!!)
+                            model_Time_Instance.city = city
+                        }
+                        adapter_Instance_InAlertFragment.receiveodelTimeInAlertAdapter(model_Time_Instance)
+                        
+                        adapter_Instance_InAlertFragment.receiveodelTimeInAlertAdapter(result.data as Model_Time)
+                        adapter_Instance_InAlertFragment.notifyDataSetChanged()
+                    }
+                }
+
             }
-
-            model_Time_Instance.latitude = alertResponse.lat.toString()
-
-            model_Time_Instance.longitude = alertResponse.lon.toString()
-            if(alertResponse.lat!=null && alertResponse.lon != null){
-                var city = findCityName(alertResponse.lat!! , alertResponse.lon!!)
-                model_Time_Instance.city = city
-            }
-            adapter_Instance_InAlertFragment.receiveodelTimeInAlertAdapter(model_Time_Instance)
-
-
 
         }
 
