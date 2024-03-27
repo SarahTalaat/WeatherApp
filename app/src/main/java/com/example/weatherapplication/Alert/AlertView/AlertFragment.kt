@@ -55,6 +55,8 @@ class AlertFragment : Fragment() {
     private var notificationCreated = false
     var isAlarmClicked = true
      var isAlarmCliked=true
+    var selectedAtion2 = "Set Notification"
+    var selectedAction = "Set Alarm"
 
     companion object {
         private var instance: AlertFragment? = null
@@ -324,18 +326,48 @@ class AlertFragment : Fragment() {
     private fun showNotificationOrAlarmDialog(selectedDateTime: Date) {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Choose Action")
-        var selectedAction: String? = null
         builder.setPositiveButton("Set Alarm") { _, _ ->
-            setAlarm(selectedDateTime)
         }
+
+        // Negative button click listener
         builder.setNegativeButton("Set Notification") { _, _ ->
+        }
 
+        builder.create().apply {
+            setOnShowListener {
+                getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                    // Handle positive button click
+                    selectedAction?.let {
+                        // Perform action based on the selectedAction
+                        // For example:
+                        // if (selectedAction == "Set Alarm") {
+                        //     // Handle set alarm action
+                        // } else if (selectedAction == "Set Notification") {
+                        //     // Handle set notification action
+                        // }
+                        isAlarmClicked = true
+                        requestDrawOverAppsPermission(selectedDateTime)
+                    }
+                    dismiss()
+                }
 
-            requestDrawOverAppsPermission(selectedDateTime)
-
-        } 
-
-        builder.create().show()
+                getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener {
+                    // Handle negative button click
+                    selectedAtion2?.let {
+                        // Perform action based on the selectedAction
+                        // For example:
+                        // if (selectedAction == "Set Alarm") {
+                        //     // Handle set alarm action
+                        // } else if (selectedAction == "Set Notification") {
+                        //     // Handle set notification action
+                        // }
+                        isAlarmClicked = false
+                        requestDrawOverAppsPermission(selectedDateTime)
+                    }
+                    dismiss()
+                }
+            }
+        }.show()
 
 
     }
@@ -366,8 +398,13 @@ class AlertFragment : Fragment() {
             startActivityForResult(intent, Utils.REQUEST_DRAW_OVER_APPS_PERMISSION)
         } else {
             // Permission already granted, create notification directly
-            scheduleNotificationOrAlarm(selectedDateTime)
-            notificationCreated = true
+            if (isAlarmClicked) {
+                setAlarm(selectedDateTime!!)
+            } else {
+                scheduleNotificationOrAlarm(selectedDateTime!!)
+            }
+
+
         }
     }
 
