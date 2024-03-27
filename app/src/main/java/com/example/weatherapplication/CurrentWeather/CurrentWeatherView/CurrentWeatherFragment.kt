@@ -135,7 +135,7 @@ class CurrentWeatherFragment : Fragment() {
             )
 
         )
-  
+   
         currentWeatherViewModel_Instance_InCurrentWeatherFragmet = ViewModelProvider(this,currentWeatherViewModelFactory_Instance_RDS_InCurrentWeatherFragment).get(
             CurrentWeatherViewModel::class.java)
 
