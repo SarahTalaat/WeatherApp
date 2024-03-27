@@ -1,17 +1,19 @@
 package com.example.productsmvvm.AllProducts.AllProductsViewModel
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 //import com.example.productsmvvm.Model.Products
 import com.example.weatherapplication.Repository.WeatherRepositoryInterface
 import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_Forecast
+import com.example.weatherapplication.Network.ApiState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
-class CurrentWeatherViewModel(private val currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel: WeatherRepositoryInterface):ViewModel() {
+class CurrentWeatherViewModel(private val weatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel: WeatherRepositoryInterface):ViewModel() {
 
 /*
     private var productsMutableLiveDataList_InAllProductsViewModel: MutableLiveData<List<Products>> = MutableLiveData<List<Products>>()
@@ -51,11 +53,12 @@ class CurrentWeatherViewModel(private val currentWeatherRepositoryInterface_Inst
     val cityLiveDataList_InCurrentWeatherViewModel: LiveData<Model_City> = cityMutableLiveData_InCurrentWeatherViewModel
 
    */
-    private var forecastMutableLiveData_InCurrentWeatherViewModel: MutableLiveData<Model_Forecast> = MutableLiveData<Model_Forecast>()
-    val forecastLiveDataList_InCurrentWeatherViewModel: LiveData<Model_Forecast> = forecastMutableLiveData_InCurrentWeatherViewModel
+    private var forecastMutableStateFlow_InCurrentWeatherViewModel: MutableStateFlow<ApiState> = MutableStateFlow<ApiState>(ApiState.Loading)
+    val forecastStateFlow_InCurrentWeatherViewModel: StateFlow<ApiState> = forecastMutableStateFlow_InCurrentWeatherViewModel
 
 
-/*
+
+    /*
     fun getCod_FromRetrofit_InCurrentWeatherViewModel(lat: String, lon: String, appid: String){
 
         Log.i("TAG", "getCod_FromRetrofit_InCurrentWeatherViewModel: (before the viewModelScope):  lat: $lat , lon: $lon , appid: $appid")
@@ -159,20 +162,19 @@ class CurrentWeatherViewModel(private val currentWeatherRepositoryInterface_Inst
     fun getForecast_FromRetrofit_InCurrentWeatherViewModel(lat: String, lon: String, appid: String){
 
         Log.i("TAG", "getForecast_FromRetrofit_InCurrentWeatherViewModel: (before the viewModelScope): lat: $lat , lon: $lon , appid: $appid")
+    viewModelScope.launch(Dispatchers.IO) {
+        weatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getForecast_FromRDS_InWeatherRepository(lat, lon, appid)
+            .catch { e ->
+                forecastMutableStateFlow_InCurrentWeatherViewModel.value = ApiState.Failure(e)
+            }
+            .collect{data ->
+                forecastMutableStateFlow_InCurrentWeatherViewModel.value= ApiState.Success_ModelForecast_InApiState(data)
+            }
 
-        viewModelScope.launch(Dispatchers.IO) {
-
-            Log.i("TAG", "getForecast_FromRetrofit_InCurrentWeatherViewModel: (inside the viewModelScope):  lat: $lat , lon: $lon , appid: $appid")
-            Log.i("TAG", "getForecast_FromRetrofit_InCurrentWeatherViewModel: (inside the viewModelScope) : "+
-                    currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getForecast_FromRDS_InWeatherRepository(lat, lon, appid))
+    }
 
 
-            forecastMutableLiveData_InCurrentWeatherViewModel.postValue(
-                currentWeatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getForecast_FromRDS_InWeatherRepository(lat, lon, appid)
-            )
-        }
-
-        Log.i("TAG", "getForecast_FromRetrofit_InCurrentWeatherViewModel: (after the viewModelScope): lat: $lat , lon: $lon , appid: $appid")
+    Log.i("TAG", "getForecast_FromRetrofit_InCurrentWeatherViewModel: (after the viewModelScope): lat: $lat , lon: $lon , appid: $appid")
     }
 
 }
