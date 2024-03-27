@@ -7,9 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 //import com.example.productsmvvm.Model.Products
 import com.example.weatherapplication.Repository.WeatherRepositoryInterface
-import com.example.weatherapplication.Model.AlertModel.APIModel.Model_Alert
 import com.example.weatherapplication.Model.AlertModel.MyApplicationAlertModel.Model_Time
+import com.example.weatherapplication.Network.ApiState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class AlertViewModel(private val weatherRepositoryInterface_Instance_ConstructorParameter_InAlertViewModel: WeatherRepositoryInterface):ViewModel() {
@@ -38,18 +40,20 @@ class AlertViewModel(private val weatherRepositoryInterface_Instance_Constructor
 
  */
 
-    private var alertMutableLiveData_InAlertViewModel: MutableLiveData<Model_Alert> = MutableLiveData<Model_Alert>()
-    val alertLiveDataList_InAlertViewModel: LiveData<Model_Alert> = alertMutableLiveData_InAlertViewModel
+    private var alertMutableStateFlow_InAlertViewModel: MutableStateFlow<ApiState> = MutableStateFlow<ApiState>(ApiState.Loading)
+    val alertStateFlow_InAlertViewModel: MutableStateFlow<ApiState> = alertMutableStateFlow_InAlertViewModel
 
     private var alertMutableLiveData_ModelTime_InAlertViewModel: MutableLiveData<List<Model_Time>> = MutableLiveData<List<Model_Time>>()
     val alertLiveDataList_ModelTime_InAlertViewModel:LiveData<List<Model_Time>> = alertMutableLiveData_ModelTime_InAlertViewModel
 
 
 
+
+
     fun getAlert_FromRetrofit_InAlertViewModel(lat: String, lon: String, appid: String){
 
         Log.i("TAG", "getAlert_FromRetrofit_InAlertViewModel: (before the viewModelScope): lat: $lat , lon: $lon , appid: $appid")
-
+/*
         viewModelScope.launch(Dispatchers.IO) {
 
             Log.i("TAG", "getAlert_FromRetrofit_InAlertViewModel: (inside the viewModelScope):  lat: $lat , lon: $lon , appid: $appid")
@@ -57,9 +61,23 @@ class AlertViewModel(private val weatherRepositoryInterface_Instance_Constructor
                     weatherRepositoryInterface_Instance_ConstructorParameter_InAlertViewModel.getAlert_FromRDS_InWeatherRepository(lat, lon, appid))
 
 
-            alertMutableLiveData_InAlertViewModel.postValue(
+            alertMutableStateFlow_InAlertViewModel.postValue(
                 weatherRepositoryInterface_Instance_ConstructorParameter_InAlertViewModel.getAlert_FromRDS_InWeatherRepository(lat, lon, appid)
             )
+        }
+        */
+
+
+
+        viewModelScope.launch(Dispatchers.IO) {
+            weatherRepositoryInterface_Instance_ConstructorParameter_InAlertViewModel.getAlert_FromRDS_InWeatherRepository(lat, lon, appid)
+                .catch { e ->
+                    alertMutableStateFlow_InAlertViewModel.value = ApiState.Failure(e)
+                }
+                .collect{data ->
+                    alertMutableStateFlow_InAlertViewModel.value=ApiState.Success_ModelAlert_InApiState(data)
+                }
+
         }
 
         Log.i("TAG", "getAlert_FromRetrofit_InAlertViewModel: (after the viewModelScope): lat: $lat , lon: $lon , appid: $appid")
