@@ -64,7 +64,7 @@ class AlertViewModel(private val weatherRepositoryInterface_Instance_Constructor
 
         Log.i("TAG", "getAlert_FromRetrofit_InAlertViewModel: (after the viewModelScope): lat: $lat , lon: $lon , appid: $appid")
     }
-/*
+
     fun getAlert_FromDatabase_InAlertViewModel(time: Model_Time){
         viewModelScope.launch(Dispatchers.IO) {
 
@@ -79,6 +79,6 @@ class AlertViewModel(private val weatherRepositoryInterface_Instance_Constructor
 
         }
     }
-    */
+
 
 }

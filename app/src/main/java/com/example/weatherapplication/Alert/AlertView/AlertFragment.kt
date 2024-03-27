@@ -84,6 +84,7 @@ class AlertFragment : Fragment() {
 
         fab_addAlert_InAlertFragment = view.findViewById(R.id.floatingActionButton_addAlert)
         fab_addAlert_InAlertFragment.setOnClickListener {
+
             showDateTimePickerDialog()
 
 
