@@ -14,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.compose.material.rememberDismissState
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -52,10 +53,8 @@ class AlertFragment : Fragment() {
     var isAlertsNotEmpty: Boolean = false
     var arrayOfModelTime: ArrayList<Model_Time> = arrayListOf()
     private var notificationCreated = false
-    var isNotification = true
-    var isDataPutOnIntent= true
-    var isClicked = true
-
+    var isAlarmClicked = true
+     var isAlarmCliked=true
 
     companion object {
         private var instance: AlertFragment? = null
@@ -83,7 +82,9 @@ class AlertFragment : Fragment() {
         fab_addAlert_InAlertFragment = view.findViewById(R.id.floatingActionButton_addAlert)
         fab_addAlert_InAlertFragment.setOnClickListener {
             showDateTimePickerDialog()
+
         }
+
 
 
         model_Time_Instance= Model_Time()
@@ -134,9 +135,9 @@ class AlertFragment : Fragment() {
     private fun setAlarm(selectedDateTime: Date) {
         val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val alarmIntent = Intent(requireContext(), AlarmReceiver::class.java)
-        if(isClicked == true){
-            alarmIntent.putExtra(Utils.NOTIFICATION_KEY,"false")
-        }
+
+        alarmIntent.putExtra(Utils.NOTIFICATION_KEY,"false")
+
 
         val pendingIntent = PendingIntent.getBroadcast(
             requireContext(),
@@ -299,14 +300,15 @@ class AlertFragment : Fragment() {
         NOTIFICATION_ID++
 
 
+
     }
 
     private fun getPendingNotificationIntent(notificationId: Int): PendingIntent {
         val notificationIntent = Intent(requireContext(), AlarmReceiver::class.java)
         notificationIntent.putExtra("notification_id", notificationId)
-        if(isDataPutOnIntent==false){
+
             notificationIntent.putExtra(Utils.NOTIFICATION_KEY,"true")
-        }
+
 
         return PendingIntent.getBroadcast(
             requireContext(),
@@ -322,27 +324,20 @@ class AlertFragment : Fragment() {
     private fun showNotificationOrAlarmDialog(selectedDateTime: Date) {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Choose Action")
+        var selectedAction: String? = null
         builder.setPositiveButton("Set Alarm") { _, _ ->
-            isNotification = false
-
-            if(isClicked==true){
-                setAlarm(selectedDateTime)
-                isClicked=false
-            }
-
+            setAlarm(selectedDateTime)
         }
         builder.setNegativeButton("Set Notification") { _, _ ->
-            isNotification = true
-
-            if(isClicked==true){
-                requestDrawOverAppsPermission(selectedDateTime)
-                isClicked=false
-            }
 
 
-        }
+            requestDrawOverAppsPermission(selectedDateTime)
+
+        } 
+
         builder.create().show()
-        isClicked=true
+
+
     }
 
 

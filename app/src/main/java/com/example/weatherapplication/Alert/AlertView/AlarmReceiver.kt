@@ -22,7 +22,7 @@ import com.google.gson.Gson
 
 class AlarmReceiver : BroadcastReceiver() {
 
-    var isNotification = true
+
 
     override fun onReceive(context: Context?, intent: Intent?) {
 
@@ -45,12 +45,12 @@ class AlarmReceiver : BroadcastReceiver() {
 
         val retrievedValue = intent?.getStringExtra(Utils.NOTIFICATION_KEY)
 
+        Log.i("TAG", "onReceive: retrievedValue: $retrievedValue")
+
         if(retrievedValue== "true"){
-            isNotification = true
-            notificationLogic(context, intent)
-        }else if(retrievedValue == "false"){
-            isNotification = false
             popUpNotificationLogic(context, intent)
+        }else if(retrievedValue == "false"){
+            notificationLogic(context, intent)
         }else{
             Log.i("TAG", "onReceive: No true or false value on the intent")
         }
