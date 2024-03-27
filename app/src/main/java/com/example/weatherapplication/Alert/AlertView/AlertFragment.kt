@@ -330,10 +330,10 @@ class AlertFragment : Fragment() {
         }
         builder.setNegativeButton("Set Notification") { _, _ ->
 
-            
+
             requestDrawOverAppsPermission(selectedDateTime)
 
-        }
+        } 
 
         builder.create().show()
 
