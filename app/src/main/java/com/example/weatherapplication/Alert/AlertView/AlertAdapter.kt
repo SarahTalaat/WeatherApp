@@ -1,5 +1,6 @@
 package com.example.weatherapplication.Alert.AlertView
 
+import AlertFragment
 import android.content.Context
 import android.os.Build
 import android.util.Log
@@ -79,7 +80,8 @@ class AlertAdapter: RecyclerView.Adapter<AlertAdapter.MyViewHolder_InAlertAdapte
           model_Time.specificTime != "nullValue" &&
           model_Time.latitude != "nullValue" &&
           model_Time.longitude != "nullValue" &&
-          model_Time.city != "nullValue"){
+          model_Time.city != "nullValue" &&
+           AlertFragment.getInstance().isClicked == true){
             modelTimeArrayList_InAlertAdapter.add(model_Time)
             notifyDataSetChanged()
        }

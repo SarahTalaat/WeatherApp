@@ -47,13 +47,11 @@ class AlertFragment : Fragment() {
     private lateinit var adapter_Instance_InAlertFragment: AlertAdapter
     lateinit var model_Time_Instance : Model_Time
     var isAlertsNotEmpty: Boolean = false
-    var arrayOfModelTime: ArrayList<Model_Time> = arrayListOf()
     private var notificationCreated = false
-    var isAlarmClicked = false
-    var selectedAtion2 = "Set Notification"
-    var selectedAction = "Set Alarm"
     var isClicked = true
-    var isDataOnIntent  = true
+    var isAppear = false
+
+
 
 
 
@@ -84,6 +82,7 @@ class AlertFragment : Fragment() {
 
         fab_addAlert_InAlertFragment = view.findViewById(R.id.floatingActionButton_addAlert)
         fab_addAlert_InAlertFragment.setOnClickListener {
+
             showDateTimePickerDialog()
 
 
@@ -141,6 +140,7 @@ class AlertFragment : Fragment() {
         val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val alarmIntent = Intent(requireContext(), AlarmReceiver::class.java)
         if (isClicked==true){
+            isAppear=true
             alarmIntent.putExtra(Utils.NOTIFICATION_KEY,"false")
         }
 
@@ -167,12 +167,14 @@ class AlertFragment : Fragment() {
                     selectedTimeMillis,
                     pendingIntent
                 )
+
             } else {
                 alarmManager.setExact(
                     AlarmManager.RTC_WAKEUP,
                     selectedTimeMillis,
                     pendingIntent
                 )
+
             }
 
             // Show a toast message indicating the successful setting of the alarm
@@ -316,6 +318,7 @@ class AlertFragment : Fragment() {
         notificationIntent.putExtra("notification_id", notificationId)
 
         if(isClicked==false){
+            isAppear=true
             notificationIntent.putExtra(Utils.NOTIFICATION_KEY,"true")
         }
 

@@ -41,8 +41,8 @@ class AlertViewModel(private val weatherRepositoryInterface_Instance_Constructor
     private var alertMutableLiveData_InAlertViewModel: MutableLiveData<Model_Alert> = MutableLiveData<Model_Alert>()
     val alertLiveDataList_InAlertViewModel: LiveData<Model_Alert> = alertMutableLiveData_InAlertViewModel
 
-    private var alertMutableLiveData_ModelTime_InAlertViewModel: MutableLiveData<Model_Time> = MutableLiveData<Model_Time>()
-    val alertLiveDataList_ModelTime_InAlertViewModel: LiveData<Model_Time> = alertMutableLiveData_ModelTime_InAlertViewModel
+    private var alertMutableLiveData_ModelTime_InAlertViewModel: MutableLiveData<List<Model_Time>> = MutableLiveData<List<Model_Time>>()
+    val alertLiveDataList_ModelTime_InAlertViewModel:LiveData<List<Model_Time>> = alertMutableLiveData_ModelTime_InAlertViewModel
 
 
 
@@ -65,7 +65,7 @@ class AlertViewModel(private val weatherRepositoryInterface_Instance_Constructor
         Log.i("TAG", "getAlert_FromRetrofit_InAlertViewModel: (after the viewModelScope): lat: $lat , lon: $lon , appid: $appid")
     }
 /*
-    fun getAlert_FromDatabase_InAlertViewModel(time: Model_Time){
+    fun getAlert_FromDatabase_InAlertViewModel(){
         viewModelScope.launch(Dispatchers.IO) {
 
             Log.i("TAG", "getAlert_FromDatabase_InAlertViewModel: (inside the viewModelScope): ")
@@ -79,6 +79,6 @@ class AlertViewModel(private val weatherRepositoryInterface_Instance_Constructor
 
         }
     }
-    */
+*/
 
 }
