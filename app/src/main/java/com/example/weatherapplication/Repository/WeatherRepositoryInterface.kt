@@ -3,6 +3,7 @@ package com.example.weatherapplication.Repository
 import com.example.weatherapplication.Model.FavouriteCityModel.MyApplicationFavouriteCityModel.Model_FavouriteCity
 import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_Forecast
 import com.example.weatherapplication.Model.AlertModel.APIModel.Model_Alert
+import com.example.weatherapplication.Model.AlertModel.MyApplicationAlertModel.Model_Time
 import kotlinx.coroutines.flow.Flow
 
 interface WeatherRepositoryInterface {
@@ -28,6 +29,12 @@ interface WeatherRepositoryInterface {
     suspend fun getAllStoredFavouriteCity_FromLDS_InWeatherRepository(): Flow<List<Model_FavouriteCity>>
     suspend fun insertFavouriteCity_FromLDS_InWeatherRepository(city: Model_FavouriteCity)
     suspend fun deleteFavouriteCity_FromLDS_InWeatherRepository(city: Model_FavouriteCity)
+
+
+
+    suspend fun getAllStoredModelTime_FromLDS_InWeatherRepository(): Flow<List<Model_Time>>
+    suspend fun insertModelTime_FromLDS_InWeatherRepository(time: Model_Time)
+    suspend fun deleteModelTime_FromLDS_InWeatherRepository(time: Model_Time)
 
     /*
         suspend fun getCodOverNetwork_InRDS(lat: String, lon: String, appid: String): String?

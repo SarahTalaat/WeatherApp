@@ -7,6 +7,7 @@ import com.example.productsmvvm.Network.WeatherRemoteDataSourceInterface
 import com.example.weatherapplication.Model.FavouriteCityModel.MyApplicationFavouriteCityModel.Model_FavouriteCity
 import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_Forecast
 import com.example.weatherapplication.Model.AlertModel.APIModel.Model_Alert
+import com.example.weatherapplication.Model.AlertModel.MyApplicationAlertModel.Model_Time
 import kotlinx.coroutines.flow.Flow
 
 //Singleton
@@ -108,6 +109,20 @@ class WeatherRepositoryImplementation private constructor(
 
     override suspend fun deleteFavouriteCity_FromLDS_InWeatherRepository(city: Model_FavouriteCity) {
         return weatherLocalDataSourceInterface_Instance.deleteFavouriteCityFromDatabase_InLDS(city)
+
+    }
+
+
+    override suspend fun getAllStoredModelTime_FromLDS_InWeatherRepository(): Flow<List<Model_Time>> {
+        return weatherLocalDataSourceInterface_Instance.getAllStoredModelTimeFromDatabase_InLDS()
+    }
+
+    override suspend fun insertModelTime_FromLDS_InWeatherRepository(time: Model_Time) {
+        return weatherLocalDataSourceInterface_Instance.insertModelTimeIntoDatabase_InLDS(time)
+    }
+
+    override suspend fun deleteModelTime_FromLDS_InWeatherRepository(time: Model_Time) {
+        return weatherLocalDataSourceInterface_Instance.deleteModelTimeFromDatabase_InLDS(time)
 
     }
 
