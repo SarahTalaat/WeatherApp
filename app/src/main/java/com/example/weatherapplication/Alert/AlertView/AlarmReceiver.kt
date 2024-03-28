@@ -1,7 +1,6 @@
 package com.example.weatherapplication.Alert.AlertView
 
 import android.Manifest
-import android.app.Dialog
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -9,16 +8,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.media.MediaPlayer
-import android.media.audiofx.EnvironmentalReverb
 import android.net.Uri
-import android.os.Build
 import android.util.Log
-import android.view.LayoutInflater
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -27,9 +19,6 @@ import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.Model.AlertModel.APIModel.Model_Alert
 import com.example.weatherapplication.R
 import com.google.gson.Gson
-import android.provider.Settings
-import android.view.WindowManager
-import androidx.core.app.ActivityCompat.startActivityForResult
 
 class AlarmReceiver : BroadcastReceiver() {
 
@@ -99,13 +88,13 @@ class AlarmReceiver : BroadcastReceiver() {
             val gson = Gson()
             val modelAlert = gson.fromJson(modelAlertJson, Model_Alert::class.java)
             if (modelAlert.alerts.isNotEmpty()) {
-                showCustomNotificationDialog(
+                notification(
                     context,
                     "Dangerous Situation",
                     "${modelAlert.alerts[0].description}"
                 )
             } else {
-                showCustomNotificationDialog(context, "The weather is fine", "Enjoy your day!!")
+                notification(context, "The weather is fine", "Enjoy your day!!")
             }
         } else {
             Toast.makeText(context, "The json is null", Toast.LENGTH_SHORT).show()
@@ -114,7 +103,6 @@ class AlarmReceiver : BroadcastReceiver() {
     }
 
 }
-    /*
     private fun notification(context: Context, title: String, contentText: String) {
         createNotificationChannel(context)
 
@@ -157,70 +145,6 @@ class AlarmReceiver : BroadcastReceiver() {
             notify(Utils.NOTIFICATION_ID, builder.build())
         }
     }
-
-     */
-
-
-
-    private var overlayPermissionCallback: (() -> Unit)? = null
-
-    private fun checkOverlayPermission(context: Context, callback: (() -> Unit)? = null) {
-        overlayPermissionCallback = callback
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(context)) {
-            val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:${context.packageName}"))
-            context.startActivity(intent)
-        } else {
-            // Permission already granted
-            showCustomNotificationDialog(context, "Title", "Content")
-        }
-    }
-
-
-    private fun showCustomNotificationDialog(context: Context, title: String, contentText: String) {
-        // Inflate the custom layout for the dialog
-        val dialogView = LayoutInflater.from(context).inflate(R.layout.custom_alam_dialog, null)
-
-        // Find views within the dialog layout
-        val titleTextView = dialogView.findViewById<TextView>(R.id.titleTextView)
-        val contentTextView = dialogView.findViewById<TextView>(R.id.contentTextView)
-        val dismissButton = dialogView.findViewById<Button>(R.id.dismissButton)
-        val stopMusicButton = dialogView.findViewById<Button>(R.id.stopMusicButton)
-
-        // Set the title and content text
-        titleTextView.text = title
-        contentTextView.text = contentText
-
-        // Create the custom dialog
-        val dialog = Dialog(context)
-        dialog.setContentView(dialogView)
-        dialog.setCancelable(false)
-
-        // Set click listeners for buttons
-        dismissButton.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        stopMusicButton.setOnClickListener {
-            // Implement action to stop music here
-            dialog.dismiss()
-        }
-
-        // Show the dialog as a popup
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Settings.canDrawOverlays(context)) {
-            val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-            val layoutParams = WindowManager.LayoutParams()
-            layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT
-            layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
-            layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-            windowManager.addView(dialogView, layoutParams)
-        } else {
-            Toast.makeText(context, "Overlay permission not granted", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-
 
     private fun createNotificationChannel(context: Context) {
         // Create a notification channel if not exists

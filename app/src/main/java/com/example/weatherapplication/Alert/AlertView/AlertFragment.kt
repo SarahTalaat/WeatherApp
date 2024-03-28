@@ -64,11 +64,6 @@ class AlertFragment : Fragment() {
     lateinit var progressBar:ProgressBar
 
 
-
-
-
-
-
     companion object {
         private var instance: AlertFragment? = null
 

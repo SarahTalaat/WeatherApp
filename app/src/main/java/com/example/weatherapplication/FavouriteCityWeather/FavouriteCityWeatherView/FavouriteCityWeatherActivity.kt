@@ -33,6 +33,7 @@ import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_W
 import com.example.weatherapplication.Network.ApiState
 import com.example.weatherapplication.R
 import com.google.android.gms.location.FusedLocationProviderClient
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -116,7 +117,7 @@ class FavouriteCityWeatherActivity : AppCompatActivity() {
 
 
 
-        lifecycleScope.launch {
+        lifecycleScope.launch() {
             favouriteCityWeatherViewModel_Instance_InFavouriteCityWeatherActivity.forecastStateFlow_InFavouriteCityWeatherViewModel.collectLatest { result ->
                 when(result){
                     is ApiState.Loading -> {
@@ -126,53 +127,59 @@ class FavouriteCityWeatherActivity : AppCompatActivity() {
                     }
                     is ApiState.Success_ModelForecast_InApiState -> {
                         progressBar.visibility = View.GONE
+                        btn_back_InFavouriteCityWeatherActivity.visibility=View.VISIBLE
                         recyclerView_Instance_Day_InFavouriteCityWeatherActivity.visibility = View.VISIBLE
                         recyclerView_Instance_Hour_InFavouriteCityWeatherActivity.visibility =View.VISIBLE
+                        btn_back_InFavouriteCityWeatherActivity.setVisibility(View.VISIBLE)
+                        var receivedData = result.data
 
-                        adapter_Instance_Day_InFavouriteCityWeatherActivity.settingWeatherArrayList_InCurrentWeatherAdapter_Day(result.data as java.util.ArrayList<Model_WeatherArrayList>)
-                        adapter_Instance_Hour_InFavouriteCityWeatherActivity.settingWeatherArrayList_InCurrentWeatherAdapter_Hour(result.data as java.util.ArrayList<Model_WeatherArrayList>)
-                        adapter_Instance_Hour_InFavouriteCityWeatherActivity.notifyDataSetChanged()
-                        adapter_Instance_Day_InFavouriteCityWeatherActivity.notifyDataSetChanged()
+                        if (receivedData!=null){
+                            adapter_Instance_Day_InFavouriteCityWeatherActivity.settingWeatherArrayList_InCurrentWeatherAdapter_Day(receivedData.modelWeatherArrayList)
+                            adapter_Instance_Hour_InFavouriteCityWeatherActivity.settingWeatherArrayList_InCurrentWeatherAdapter_Hour(receivedData.modelWeatherArrayList)
+                            adapter_Instance_Hour_InFavouriteCityWeatherActivity.notifyDataSetChanged()
+                            adapter_Instance_Day_InFavouriteCityWeatherActivity.notifyDataSetChanged()
+
+                        }
 
 
-                        var dateAndTimeFromWeatherArrayList = result.data.modelWeatherArrayList.get(0).dtTxt?.split(" ")
+                        var dateAndTimeFromWeatherArrayList = result.data?.modelWeatherArrayList?.get(0)?.dtTxt?.split(" ")
 
-                        Log.i("TAG", "onCreateView: weatherStatus: "+ result.data.modelWeatherArrayList.get(2).modelWeather.get(0).description)
+                        Log.i("TAG", "onCreateView: weatherStatus: "+ result.data?.modelWeatherArrayList?.get(2)?.modelWeather?.get(0)?.description)
 
 
-                        var dtTxt_value = result.data.modelWeatherArrayList.get(0).dtTxt
+                        var dtTxt_value = result.data?.modelWeatherArrayList?.get(0)?.dtTxt
                         Log.i("TAG", "onCreateView: Current Weather Activity: dtTxtValue : " + dtTxt_value)
                         val firstApiFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
                         val date = LocalDate.parse(dtTxt_value , firstApiFormat)
 
                         tv_date_InFavouriteCityWeatherActivity.setText(date.dayOfWeek.toString() + System.getProperty("line.separator") +"${dateAndTimeFromWeatherArrayList?.get(0)}")
 
-                        tv_weatherStatus_InFavouriteCityWeatherActivity.setText(result.data.modelWeatherArrayList.get(2).modelWeather.get(0).description)
+                        tv_weatherStatus_InFavouriteCityWeatherActivity.setText(result.data?.modelWeatherArrayList?.get(2)?.modelWeather?.get(0)?.description)
 
-                        var tempratureFehrenheit = result.data.modelWeatherArrayList.get(0).modelMain?.feelsLike
+                        var tempratureFehrenheit = result.data?.modelWeatherArrayList?.get(0)?.modelMain?.feelsLike
                         var tempratureCelsius = tempratureFehrenheit?.minus(273.15)
                         val tempFormated = String.format("%.2f", tempratureCelsius)
                         tv_degreeOfTemprature_InFavouriteCityWeatherActivity.setText(tempFormated+"°C")
 
-                        var imageIconCode = result.data.modelWeatherArrayList.get(0).modelWeather.get(0).icon
+                        var imageIconCode = result.data?.modelWeatherArrayList?.get(0)?.modelWeather?.get(0)?.icon
                         var imageIcon = "https://openweathermap.org/img/wn/$imageIconCode@2x.png"
 
-                        var weatherDescription = result.data.modelWeatherArrayList.get(2).modelWeather.get(0).description
+                        var weatherDescription = result.data?.modelWeatherArrayList?.get(2)?.modelWeather?.get(0)?.description
                         Glide.with(this@FavouriteCityWeatherActivity)
                             .load(imageIcon)
                             .into(img_weatherStatus_InFavouriteCityWeatherActivity)
 
 
-                        var cityName = result.data.modelCity?.name
-                        var countryCode = result.data.modelCity?.country
+                        var cityName = result.data?.modelCity?.name
+                        var countryCode = result.data?.modelCity?.country
                         var countryName = Locale("", countryCode).displayCountry
                         tv_country_InFavouriteCityWeatherActivity.setText(cityName + " , " + countryName)
 
-                        var pressure = result.data.modelWeatherArrayList.get(0).modelMain?.pressure
-                        var humidity = result.data.modelWeatherArrayList.get(0).modelMain?.humidity
-                        var wind = result.data.modelWeatherArrayList.get(0).modelWind?.speed
-                        var clouds = result.data.modelWeatherArrayList.get(0).modelClouds?.all
-                        var visibility = result.data.modelWeatherArrayList.get(0).visibility
+                        var pressure = result.data?.modelWeatherArrayList?.get(0)?.modelMain?.pressure
+                        var humidity = result.data?.modelWeatherArrayList?.get(0)?.modelMain?.humidity
+                        var wind = result.data?.modelWeatherArrayList?.get(0)?.modelWind?.speed
+                        var clouds = result.data?.modelWeatherArrayList?.get(0)?.modelClouds?.all
+                        var visibility = result.data?.modelWeatherArrayList?.get(0)?.visibility
 
                         tv_pressure_InFavouriteCityWeatherActivity.setText(pressure.toString() +" hpa")
                         tv_humidity_InFavouriteCityWeatherActivity.setText(humidity.toString()+ " %")

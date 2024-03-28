@@ -147,12 +147,12 @@ class CurrentWeatherFragment : Fragment() {
             currentWeatherViewModel_Instance_InCurrentWeatherFragmet.forecastStateFlow_InCurrentWeatherViewModel.collectLatest { result ->
                 when(result){
                     is ApiState.Loading -> {
-
+                        progressBar.visibility = View.VISIBLE
                         recyclerView_Instance_Day_InCurrentWeatherFragment.visibility = View.GONE
                         recyclerView_Instance_Hour_InCurrentWeatherFragment.visibility =View.GONE
                     }
                     is ApiState.Success_ModelForecast_InApiState -> {
-
+                        progressBar.visibility = View.GONE
                         recyclerView_Instance_Day_InCurrentWeatherFragment.visibility = View.VISIBLE
                         recyclerView_Instance_Hour_InCurrentWeatherFragment.visibility =View.VISIBLE
 
@@ -212,7 +212,7 @@ class CurrentWeatherFragment : Fragment() {
 
                     }
                     is ApiState.Failure -> {
-
+                        progressBar.visibility = View.GONE
                         Toast.makeText(context,"There is problem in the server", Toast.LENGTH_LONG).show()
                     }
                     is ApiState.Success_ModelAlert_InApiState ->{
