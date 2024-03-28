@@ -8,9 +8,16 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Resources
+import android.graphics.PixelFormat
 import android.media.MediaPlayer
 import android.net.Uri
 import android.util.Log
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.WindowManager
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -88,13 +95,13 @@ class AlarmReceiver : BroadcastReceiver() {
             val gson = Gson()
             val modelAlert = gson.fromJson(modelAlertJson, Model_Alert::class.java)
             if (modelAlert.alerts.isNotEmpty()) {
-                notification(
+                showNotificationWindow(
                     context,
                     "Dangerous Situation",
                     "${modelAlert.alerts[0].description}"
                 )
             } else {
-                notification(context, "The weather is fine", "Enjoy your day!!")
+                showNotificationWindow(context, "The weather is fine", "Enjoy your day!!")
             }
         } else {
             Toast.makeText(context, "The json is null", Toast.LENGTH_SHORT).show()
@@ -103,6 +110,52 @@ class AlarmReceiver : BroadcastReceiver() {
     }
 
 }
+    private fun showNotificationWindow(context: Context, title: String, contentText: String) {
+        createNotificationChannel(context)
+
+        val soundUri: Uri? = null
+
+        // Create a custom layout for the notification window
+        val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val screenWidth = Resources.getSystem().displayMetrics.widthPixels
+        val layoutParams = WindowManager.LayoutParams(
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR,
+            PixelFormat.TRANSLUCENT
+        ).apply {
+            gravity = Gravity.TOP or Gravity.START
+            x = 0 // Adjust as needed
+            y = 0 // Adjust as needed
+        }
+
+        val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val view = inflater.inflate(R.layout.custom_alam_dialog, null)
+
+        // Set the title and content text
+        view.findViewById<TextView>(R.id.titleTextView).text = title
+        view.findViewById<TextView>(R.id.contentTextView).text = contentText
+
+        // Set up the stop music button
+        view.findViewById<Button>(R.id.stopMusicButton).setOnClickListener {
+            // Perform actions to stop music
+            stopMediaPlayerMusic(context)
+            windowManager.removeView(view)
+        }
+
+        // Set up the dismiss button
+        view.findViewById<Button>(R.id.dismissButton).setOnClickListener {
+            // Dismiss the window
+            stopMediaPlayerMusic(context)
+            windowManager.removeView(view)
+        }
+
+        // Add the view to the window manager
+        windowManager.addView(view, layoutParams)
+    }
+
+
     private fun notification(context: Context, title: String, contentText: String) {
         createNotificationChannel(context)
 

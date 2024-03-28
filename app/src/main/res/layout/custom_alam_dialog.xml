@@ -33,10 +33,11 @@
         android:id="@+id/dismissButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Dismiss"
-        android:textColor="@android:color/white"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="#00204A"
         android:padding="12dp"
-        android:layout_marginBottom="8dp"/>
+        android:text="Dismiss"
+        android:textColor="@android:color/white" />
 
     <Button
         android:id="@+id/stopMusicButton"
