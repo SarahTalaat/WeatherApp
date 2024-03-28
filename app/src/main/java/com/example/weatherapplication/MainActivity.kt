@@ -1,6 +1,7 @@
 package com.example.weatherapplication
 
 import AlertFragment
+import AlertFragment2
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -89,7 +90,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when(item.itemId){
             R.id.nav_home -> replaceFragment(CurrentWeatherFragment())
             R.id.nav_favourites -> replaceFragment(FavouriteCityFragment())
-            R.id.nav_alerts -> replaceFragment(AlertFragment())
+            R.id.nav_alerts -> replaceFragment(AlertFragment2())
             R.id.nav_settings -> replaceFragment(SettingsFragment())
         }
 

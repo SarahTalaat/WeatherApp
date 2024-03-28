@@ -35,6 +35,9 @@ class Utils {
         const val NOTIFICATION_ID_EXTRA = "notification_id_extra"
         const val DISMISS_NOTIFICATION_REQUEST_CODE = 101
 
+        private const val REQUEST_NOTIFICATION_PERMISSION = 101
+        private const val REQUEST_ALARM_PERMISSION = 102
+
     }
 
 }

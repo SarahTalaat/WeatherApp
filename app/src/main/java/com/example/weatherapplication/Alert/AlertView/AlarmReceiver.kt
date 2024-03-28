@@ -19,11 +19,21 @@ import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.Model.AlertModel.APIModel.Model_Alert
 import com.example.weatherapplication.R
 import com.google.gson.Gson
+import android.graphics.PixelFormat
+import android.os.Build
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.WindowManager
+import android.widget.Button
+import android.widget.TextView
+import androidx.annotation.RequiresApi
+import kotlinx.coroutines.*
 
 class AlarmReceiver : BroadcastReceiver() {
+    var windowManager: WindowManager? = null
+    var floatingView: TextView? = null
 
-
-
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onReceive(context: Context?, intent: Intent?) {
 
         Log.i("TAG", "onReceive: AlarmReceiver: context = $context ")
@@ -36,6 +46,7 @@ class AlarmReceiver : BroadcastReceiver() {
                 Utils.STOP_NOTIFICATION -> {
                     stopMediaPlayerMusic(context)
                 }
+
                 Utils.DISMISS_NOTIFICATION -> {
                     stopMediaPlayerMusic(context)
                     dismissNotification(context)
@@ -47,62 +58,141 @@ class AlarmReceiver : BroadcastReceiver() {
 
         Log.i("TAG", "onReceive: retrievedValue: $retrievedValue")
 
-        if(retrievedValue== "true"){
+        if (retrievedValue == "true") {
             popUpNotificationLogic(context, intent)
-        }else if(retrievedValue == "false"){
+        } else if (retrievedValue == "false") {
             notificationLogic(context, intent)
-        }else{
+        } else {
             Log.i("TAG", "onReceive: No true or false value on the intent")
         }
 
     }
 
-    fun notificationLogic(context:Context?, intent: Intent?){
 
-    if (context != null && intent != null) {
+    private fun showFloatingNotification(context: Context, desc: String) {
+
+
+        windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+
+        val params = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            WindowManager.LayoutParams(
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                PixelFormat.TRANSLUCENT
+            ).apply {
+                gravity = Gravity.CENTER
+            }
+        } else {
+            WindowManager.LayoutParams(
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.TYPE_PHONE,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                PixelFormat.TRANSLUCENT
+            ).apply {
+                gravity = Gravity.CENTER
+            }
+        }
+
+        val inflater =
+            context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        floatingView = inflater.inflate(R.layout.floating_notification, null) as TextView?
+
+        floatingView?.let { view ->
+            val stopMusicButton = view.findViewById<Button>(R.id.stopMusicButton)
+            val dismissButton = view.findViewById<Button>(R.id.dismissButton)
+            val description = view.findViewById<TextView>(R.id.contentTextView)
+
+            description.setText(desc)
+            stopMusicButton.setOnClickListener {
+                // Add logic to stop music
+                MediaPlayerSingleton.getInstance(context).stop()
+            }
+
+            dismissButton.setOnClickListener {
+                MediaPlayerSingleton.getInstance(context).stop()
+                removeFloatingNotification()
+            }
+
+            windowManager?.addView(view, params)
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChannel(context)
+        }
+
+    }
+
+    private fun removeFloatingNotification() {
+        floatingView?.let {
+            windowManager?.removeView(it)
+            floatingView = null // Clear the reference to floatingView
+        }
+    }
+    fun notificationLogic(context: Context?, intent: Intent?) {
+
+        if (context != null && intent != null) {
 
             MediaPlayerSingleton.getInstance(context).start()
 
-        val action = intent.action
-        if (action != null && action == Utils.STOP_NOTIFICATION) {
+            val action = intent.action
+            if (action != null && action == Utils.STOP_NOTIFICATION) {
 
-            stopMediaPlayerMusic(context)
+                stopMediaPlayerMusic(context)
 
-            return
-        }else if(action != null && action == Utils.DISMISS_NOTIFICATION){
-            context?.let {
-                MediaPlayerSingleton.stop()
-                NotificationManagerCompat.from(it).cancel(Utils.NOTIFICATION_ID)
+                return
+            } else if (action != null && action == Utils.DISMISS_NOTIFICATION) {
+                context?.let {
+                    MediaPlayerSingleton.stop()
+                    NotificationManagerCompat.from(it).cancel(Utils.NOTIFICATION_ID)
+                }
+                return
             }
-            return
-        }
 
-        val sharedPreferences = context.getSharedPreferences(
-            Utils.ALERT_DATA_SP,
-            Context.MODE_PRIVATE
-        )
-        val modelAlertJson = sharedPreferences?.getString(Utils.MODEL_ALERT_GSON, null)
-        Log.i("TAG", "notificationLogic: modelAlertJson: $modelAlertJson")
+            val sharedPreferences = context.getSharedPreferences(
+                Utils.ALERT_DATA_SP,
+                Context.MODE_PRIVATE
+            )
+            val modelAlertJson = sharedPreferences?.getString(Utils.MODEL_ALERT_GSON, null)
+            Log.i("TAG", "notificationLogic: modelAlertJson: $modelAlertJson")
 
-        if (modelAlertJson != null) {
-            val gson = Gson()
-            val modelAlert = gson.fromJson(modelAlertJson, Model_Alert::class.java)
-            if (modelAlert.alerts.isNotEmpty()) {
-                notification(
-                    context,
-                    "Dangerous Situation",
-                    "${modelAlert.alerts[0].description}"
-                )
+            if (modelAlertJson != null) {
+                val gson = Gson()
+                val modelAlert = gson.fromJson(modelAlertJson, Model_Alert::class.java)
+                if (modelAlert.alerts.isNotEmpty()) {
+                    showFloatingNotification(
+                        context,
+                        "Dangerous Situation : ${modelAlert.alerts[0].description}"
+                    )
+                } else {
+                    showFloatingNotification(context, "The weather is fine, Enjoy your day!!")
+                }
             } else {
-                notification(context, "The weather is fine", "Enjoy your day!!")
+                Toast.makeText(context, "The json is null", Toast.LENGTH_SHORT).show()
+                Log.i("TAG", "onReceive: AlarmReceiver Alert , The json is null ")
             }
-        } else {
-            Toast.makeText(context, "The json is null", Toast.LENGTH_SHORT).show()
-            Log.i("TAG", "onReceive: AlarmReceiver Alart , The json is null ")
         }
-    }
 
+    }
 }
+
+@RequiresApi(Build.VERSION_CODES.O)
+private fun createNotificationChannel(context: Context) {
+    val channelId = "floating_notification_channel"
+    val channelName = "Floating Notification Channel"
+    val importance = NotificationManager.IMPORTANCE_HIGH
+    val channel = NotificationChannel(channelId, channelName, importance)
+
+    val notificationManager =
+        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    notificationManager.createNotificationChannel(channel)
+}
+
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun notification(context: Context, title: String, contentText: String) {
         createNotificationChannel(context)
 
@@ -115,7 +205,6 @@ class AlarmReceiver : BroadcastReceiver() {
             .setSound(soundUri)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .setOngoing(true)
             .addAction(
                 R.drawable.notification_close,
                 "Stop Music",
@@ -146,7 +235,7 @@ class AlarmReceiver : BroadcastReceiver() {
             notify(Utils.NOTIFICATION_ID, builder.build())
         }
     }
-
+/*
     private fun createNotificationChannel(context: Context) {
         // Create a notification channel if not exists
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -165,7 +254,7 @@ class AlarmReceiver : BroadcastReceiver() {
             notificationManager.createNotificationChannel(channel)
         }
     }
-
+*/
     private fun getPendingIntentForStopNotification(context: Context): PendingIntent {
         // Create an intent to stop the notification
         val stopIntent = Intent(context, AlarmReceiver::class.java).apply {
@@ -206,6 +295,7 @@ class AlarmReceiver : BroadcastReceiver() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun popUpNotificationLogic(context_popUp: Context?, intent_popUp: Intent?) {
         if (context_popUp != null && intent_popUp != null) {
             val action = intent_popUp.action
@@ -244,6 +334,7 @@ class AlarmReceiver : BroadcastReceiver() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun popUpNotification(context: Context, title: String, contentText: String) {
         createNotificationChannel(context)
 
@@ -284,7 +375,7 @@ class AlarmReceiver : BroadcastReceiver() {
 
 
 
-}
+
 
 object MediaPlayerSingleton {
     private var mediaPlayer: MediaPlayer? = null
