@@ -61,7 +61,6 @@ class AlertFragment : Fragment() {
     private var notificationCreated = false
     var isClicked = true
     var isAppear = false
-    lateinit var progressBar:ProgressBar
 
 
 
@@ -94,7 +93,7 @@ class AlertFragment : Fragment() {
 
 
         fab_addAlert_InAlertFragment = view.findViewById(R.id.floatingActionButton_addAlert)
-        progressBar=view.findViewById(R.id.progressBar_alert)
+
 
         fab_addAlert_InAlertFragment.setOnClickListener {
 
@@ -123,7 +122,7 @@ class AlertFragment : Fragment() {
             alertViewModel_Instance_InAlertFragmet.alertStateFlow_InAlertViewModel.collectLatest { result ->
                 when(result){
                     is ApiState.Loading -> {
-                        progressBar.visibility = View.VISIBLE
+
                         recyclerView_Instance_InAlertFragment.visibility = View.GONE
 
                     }
@@ -133,11 +132,11 @@ class AlertFragment : Fragment() {
 
                     }
                     is ApiState.Failure -> {
-                        progressBar.visibility = View.GONE
+
                         Toast.makeText(context,"There is problem in the server", Toast.LENGTH_LONG).show()
                     }
                     is ApiState.Success_ModelAlert_InApiState ->{
-                        progressBar.visibility = View.GONE
+
                         recyclerView_Instance_InAlertFragment.visibility = View.VISIBLE
 
 
@@ -467,7 +466,11 @@ class AlertFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == Utils.REQUEST_DRAW_OVER_APPS_PERMISSION && resultCode == Activity.RESULT_OK && !notificationCreated) {
             // Permission granted and notification not yet created, create notification
-            scheduleNotificationOrAlarm(selectedDateTime!!)
+            if (isClicked) {
+                setAlarm(selectedDateTime!!)
+            } else {
+                scheduleNotificationOrAlarm(selectedDateTime!!)
+            }
             notificationCreated = true
         }else {
             Toast.makeText(requireContext(), "Permission denied", Toast.LENGTH_SHORT).show()
