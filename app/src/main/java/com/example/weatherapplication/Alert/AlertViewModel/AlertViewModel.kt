@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 //import com.example.productsmvvm.Model.Products
 import com.example.weatherapplication.Repository.WeatherRepositoryInterface
 import com.example.weatherapplication.Model.AlertModel.MyApplicationAlertModel.Model_Time
+import com.example.weatherapplication.Model.FavouriteCityModel.MyApplicationFavouriteCityModel.Model_FavouriteCity
 import com.example.weatherapplication.Network.ApiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -53,22 +54,6 @@ class AlertViewModel(private val weatherRepositoryInterface_Instance_Constructor
     fun getAlert_FromRetrofit_InAlertViewModel(lat: String, lon: String, appid: String){
 
         Log.i("TAG", "getAlert_FromRetrofit_InAlertViewModel: (before the viewModelScope): lat: $lat , lon: $lon , appid: $appid")
-/*
-        viewModelScope.launch(Dispatchers.IO) {
-
-            Log.i("TAG", "getAlert_FromRetrofit_InAlertViewModel: (inside the viewModelScope):  lat: $lat , lon: $lon , appid: $appid")
-            Log.i("TAG", "getAlert_FromRetrofit_InAlertViewModel: (inside the viewModelScope) : "+
-                    weatherRepositoryInterface_Instance_ConstructorParameter_InAlertViewModel.getAlert_FromRDS_InWeatherRepository(lat, lon, appid))
-
-
-            alertMutableStateFlow_InAlertViewModel.postValue(
-                weatherRepositoryInterface_Instance_ConstructorParameter_InAlertViewModel.getAlert_FromRDS_InWeatherRepository(lat, lon, appid)
-            )
-        }
-        */
-
-
-
         viewModelScope.launch(Dispatchers.IO) {
             weatherRepositoryInterface_Instance_ConstructorParameter_InAlertViewModel.getAlert_FromRDS_InWeatherRepository(lat, lon, appid)
                 .catch { e ->
@@ -82,21 +67,50 @@ class AlertViewModel(private val weatherRepositoryInterface_Instance_Constructor
 
         Log.i("TAG", "getAlert_FromRetrofit_InAlertViewModel: (after the viewModelScope): lat: $lat , lon: $lon , appid: $appid")
     }
-/*
+
     fun getAlert_FromDatabase_InAlertViewModel(){
         viewModelScope.launch(Dispatchers.IO) {
-
             Log.i("TAG", "getAlert_FromDatabase_InAlertViewModel: (inside the viewModelScope): ")
             Log.i("TAG", "getAlert_FromDatabase_InAlertViewModel: (inside the viewModelScope) : "+
                     weatherRepositoryInterface_Instance_ConstructorParameter_InAlertViewModel.getAllStoredModelTime_FromLDS_InWeatherRepository())
 
-
-            alertMutableLiveData_ModelTime_InAlertViewModel.postValue(
-                weatherRepositoryInterface_Instance_ConstructorParameter_InAlertViewModel.getAllStoredModelTime_FromLDS_InWeatherRepository()
-            )
-
+            // Collect the flow
+            weatherRepositoryInterface_Instance_ConstructorParameter_InAlertViewModel
+                .getAllStoredModelTime_FromLDS_InWeatherRepository()
+                .collect { modelTimeList ->
+                    // Post the value to LiveData
+                    alertMutableLiveData_ModelTime_InAlertViewModel.postValue(modelTimeList)
+                }
         }
     }
-*/
 
+    fun deleteModelTime_InAlertViewModel(lat:String,
+                                         lon:String,
+                                         startDate: String,
+                                         endDate: String,
+                                         specificTime: String,
+                                         city: String){
+        viewModelScope.launch(Dispatchers.IO){
+            weatherRepositoryInterface_Instance_ConstructorParameter_InAlertViewModel.deleteModelTime_FromLDS_InWeatherRepository(lat, lon, startDate, endDate, specificTime, city)
+            getAllLocalModelTime_StoredInDatabase_InAlertViewModel()
+        }
+    }
+
+    fun insertModelTime_InAlertViewModel(lat:String,
+                                         lon:String,
+                                         startDate: String,
+                                         endDate: String,
+                                         specificTime: String,
+                                         city: String){
+        viewModelScope.launch(Dispatchers.IO){
+            weatherRepositoryInterface_Instance_ConstructorParameter_InAlertViewModel.insertModelTime_FromLDS_InWeatherRepository(lat, lon, startDate, endDate, specificTime, city)
+            getAllLocalModelTime_StoredInDatabase_InAlertViewModel()
+        }
+    }
+
+    fun getAllLocalModelTime_StoredInDatabase_InAlertViewModel(){
+        viewModelScope.launch(Dispatchers.IO){
+            weatherRepositoryInterface_Instance_ConstructorParameter_InAlertViewModel.getAllStoredModelTime_FromLDS_InWeatherRepository().collect{ modelTime -> alertMutableLiveData_ModelTime_InAlertViewModel.postValue(modelTime)}
+        }
+    }
 }
