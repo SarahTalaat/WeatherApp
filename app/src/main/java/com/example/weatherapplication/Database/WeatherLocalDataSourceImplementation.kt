@@ -33,12 +33,22 @@ class WeatherLocalDataSourceImplementation (context: Context) : WeatherLocalData
         return weatherDAOInterface_InLDSImp.getAllStoredFavouriteCity_InDAOInterface()
     }
 
-    override suspend fun insertModelTimeIntoDatabase_InLDS(time: Model_Time) {
-        modelTimeDAOInterface_InLDSImp.insertModelTime_InDAOInterface(time)
+    override suspend fun insertModelTimeIntoDatabase_InLDS(lat:String,
+                                                           lon:String,
+                                                           startDate: String,
+                                                           endDate: String,
+                                                           specificTime: String,
+                                                           city: String) {
+        modelTimeDAOInterface_InLDSImp.insertModelTime_InDAOInterface(lat, lon, startDate, endDate, specificTime, city)
     }
 
-    override suspend fun deleteModelTimeFromDatabase_InLDS(time: Model_Time) {
-        modelTimeDAOInterface_InLDSImp.deleteModelTime_InDAOInterface(time)
+    override suspend fun deleteModelTimeFromDatabase_InLDS(lat:String,
+                                                           lon:String,
+                                                           startDate: String,
+                                                           endDate: String,
+                                                           specificTime: String,
+                                                           city: String) {
+        modelTimeDAOInterface_InLDSImp.deleteModelTime_InDAOInterface(lat, lon, startDate, endDate, specificTime, city)
     }
 
     override suspend fun getAllStoredModelTimeFromDatabase_InLDS(): Flow<List<Model_Time>> {

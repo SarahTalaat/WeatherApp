@@ -14,9 +14,19 @@ interface ModelTimeDAOInterface {
     fun getAllStoredModelTime_InDAOInterface(): Flow<List<Model_Time>>
 
     @Insert(onConflict =  OnConflictStrategy.IGNORE)
-    suspend fun insertModelTime_InDAOInterface (time: Model_Time) : Long
+    suspend fun insertModelTime_InDAOInterface (lat:String="",
+                                                lon:String="",
+                                                startDate: String ="",
+                                                endDate: String ="",
+                                                specificTime: String="",
+                                                city: String="")
 
     @Delete
-    suspend fun deleteModelTime_InDAOInterface(time: Model_Time): Int
+    suspend fun deleteModelTime_InDAOInterface(lat:String="",
+                                               lon:String="",
+                                               startDate: String ="",
+                                               endDate: String ="",
+                                               specificTime: String="",
+                                               city: String=""): Int
 
 }
