@@ -135,7 +135,7 @@ class CurrentWeatherFragment : Fragment() {
             )
 
         )
-   
+
         currentWeatherViewModel_Instance_InCurrentWeatherFragmet = ViewModelProvider(this,currentWeatherViewModelFactory_Instance_RDS_InCurrentWeatherFragment).get(
             CurrentWeatherViewModel::class.java)
 
@@ -147,58 +147,62 @@ class CurrentWeatherFragment : Fragment() {
             currentWeatherViewModel_Instance_InCurrentWeatherFragmet.forecastStateFlow_InCurrentWeatherViewModel.collectLatest { result ->
                 when(result){
                     is ApiState.Loading -> {
-                        progressBar.visibility = View.VISIBLE
+
                         recyclerView_Instance_Day_InCurrentWeatherFragment.visibility = View.GONE
                         recyclerView_Instance_Hour_InCurrentWeatherFragment.visibility =View.GONE
                     }
                     is ApiState.Success_ModelForecast_InApiState -> {
-                        progressBar.visibility = View.GONE
+
                         recyclerView_Instance_Day_InCurrentWeatherFragment.visibility = View.VISIBLE
                         recyclerView_Instance_Hour_InCurrentWeatherFragment.visibility =View.VISIBLE
 
-                        adapter_Instance_Day_InCurrentWeatherFragment.settingWeatherArrayList_InCurrentWeatherAdapter_Day(result.data as java.util.ArrayList<Model_WeatherArrayList>)
-                        adapter_Instance_Hour_InCurrentWeatherFragment.settingWeatherArrayList_InCurrentWeatherAdapter_Hour(result.data as java.util.ArrayList<Model_WeatherArrayList>)
-                        adapter_Instance_Day_InCurrentWeatherFragment.notifyDataSetChanged()
-                        adapter_Instance_Hour_InCurrentWeatherFragment.notifyDataSetChanged()
+                        val weatherArrayList: ArrayList<Model_WeatherArrayList>? = result.data?.modelWeatherArrayList
+                        if(weatherArrayList!=null){
+                            adapter_Instance_Day_InCurrentWeatherFragment.settingWeatherArrayList_InCurrentWeatherAdapter_Day(weatherArrayList)
+                            adapter_Instance_Hour_InCurrentWeatherFragment.settingWeatherArrayList_InCurrentWeatherAdapter_Hour(weatherArrayList)
+                            adapter_Instance_Day_InCurrentWeatherFragment.notifyDataSetChanged()
+                            adapter_Instance_Hour_InCurrentWeatherFragment.notifyDataSetChanged()
 
-                        var dateAndTimeFromWeatherArrayList = result.data.modelWeatherArrayList.get(0).dtTxt?.split(" ")
+                        }
 
-                        Log.i("TAG", "onCreateView: weatherStatus: "+ result.data.modelWeatherArrayList.get(2).modelWeather.get(0).description)
+                        var dateAndTimeFromWeatherArrayList = result.data?.modelWeatherArrayList?.get(0)?.dtTxt?.split(" ")
+
+                        Log.i("TAG", "onCreateView: weatherStatus: "+ result.data?.modelWeatherArrayList?.get(2)?.modelWeather?.get(0)?.description)
 
 
-                        var dtTxt_value = result.data.modelWeatherArrayList.get(0).dtTxt
+                        var dtTxt_value = result.data?.modelWeatherArrayList?.get(0)?.dtTxt
                         Log.i("TAG", "onCreateView: Current Weather Fragment: dtTxtValue : " + dtTxt_value)
                         val firstApiFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
                         val date = LocalDate.parse(dtTxt_value , firstApiFormat)
 
                         tv_date_InCurrentWeatherFagment.setText(date.dayOfWeek.toString() + System.getProperty("line.separator") +"${dateAndTimeFromWeatherArrayList?.get(0)}")
 
-                        tv_weatherStatus_InCurrentWeatherFagment.setText(result.data.modelWeatherArrayList.get(2).modelWeather.get(0).description)
+                        tv_weatherStatus_InCurrentWeatherFagment.setText(result.data?.modelWeatherArrayList?.get(2)?.modelWeather?.get(0)?.description)
 
-                        var tempratureFehrenheit = result.data.modelWeatherArrayList.get(0).modelMain?.feelsLike
+                        var tempratureFehrenheit = result.data?.modelWeatherArrayList?.get(0)?.modelMain?.feelsLike
                         var tempratureCelsius = tempratureFehrenheit?.minus(273.15)
                         val tempFormated = String.format("%.2f", tempratureCelsius)
                         tv_degreeOfTemprature_InCurrentWeatherFagment.setText(tempFormated+"°C")
 
-                        var imageIconCode = result.data.modelWeatherArrayList.get(0).modelWeather.get(0).icon
+                        var imageIconCode = result.data?.modelWeatherArrayList?.get(0)?.modelWeather?.get(0)?.icon
                         var imageIcon = "https://openweathermap.org/img/wn/$imageIconCode@2x.png"
 
-                        var weatherDescription = result.data.modelWeatherArrayList.get(2).modelWeather.get(0).description
+                        var weatherDescription = result.data?.modelWeatherArrayList?.get(2)?.modelWeather?.get(0)?.description
                         Glide.with(requireContext())
                             .load(imageIcon)
                             .into(img_weatherStatus_InCurrentWeatherFagment)
 
 
-                        var cityName = result.data.modelCity?.name
-                        var countryCode = result.data.modelCity?.country
+                        var cityName = result.data?.modelCity?.name
+                        var countryCode = result.data?.modelCity?.country
                         var countryName = Locale("", countryCode).displayCountry
                         tv_country_InCurrentWeatherFagment.setText(cityName + " , " + countryName)
 
-                        var pressure = result.data.modelWeatherArrayList.get(0).modelMain?.pressure
-                        var humidity = result.data.modelWeatherArrayList.get(0).modelMain?.humidity
-                        var wind = result.data.modelWeatherArrayList.get(0).modelWind?.speed
-                        var clouds = result.data.modelWeatherArrayList.get(0).modelClouds?.all
-                        var visibility = result.data.modelWeatherArrayList.get(0).visibility
+                        var pressure = result.data?.modelWeatherArrayList?.get(0)?.modelMain?.pressure
+                        var humidity = result.data?.modelWeatherArrayList?.get(0)?.modelMain?.humidity
+                        var wind = result.data?.modelWeatherArrayList?.get(0)?.modelWind?.speed
+                        var clouds = result.data?.modelWeatherArrayList?.get(0)?.modelClouds?.all
+                        var visibility = result.data?.modelWeatherArrayList?.get(0)?.visibility
 
                         tv_pressure_InCurrentWeatherFagment.setText(pressure.toString() +" hpa")
                         tv_humidity_InCurrentWeatherFagment.setText(humidity.toString()+ " %")
@@ -208,7 +212,7 @@ class CurrentWeatherFragment : Fragment() {
 
                     }
                     is ApiState.Failure -> {
-                        progressBar.visibility = View.GONE
+
                         Toast.makeText(context,"There is problem in the server", Toast.LENGTH_LONG).show()
                     }
                     is ApiState.Success_ModelAlert_InApiState ->{

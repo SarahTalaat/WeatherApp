@@ -165,8 +165,6 @@ class AlertFragment : Fragment() {
                             model_Time_Instance.city = city
                         }
                         adapter_Instance_InAlertFragment.receiveodelTimeInAlertAdapter(model_Time_Instance)
-
-                        adapter_Instance_InAlertFragment.receiveodelTimeInAlertAdapter(result.data as Model_Time)
                         adapter_Instance_InAlertFragment.notifyDataSetChanged()
                     }
                 }
