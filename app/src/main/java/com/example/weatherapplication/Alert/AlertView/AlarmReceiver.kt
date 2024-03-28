@@ -115,6 +115,7 @@ class AlarmReceiver : BroadcastReceiver() {
             .setSound(soundUri)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setOngoing(true)
             .addAction(
                 R.drawable.notification_close,
                 "Stop Music",
