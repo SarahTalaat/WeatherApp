@@ -33,18 +33,18 @@ interface WeatherRepositoryInterface {
 
 
     suspend fun getAllStoredModelTime_FromLDS_InWeatherRepository(): Flow<List<Model_Time>>
-    suspend fun insertModelTime_FromLDS_InWeatherRepository(lat:String="",
-                                                            lon:String="",
-                                                            startDate: String ="",
-                                                            endDate: String ="",
-                                                            specificTime: String="",
-                                                            city: String="")
-    suspend fun deleteModelTime_FromLDS_InWeatherRepository(lat:String="",
-                                                            lon:String="",
-                                                            startDate: String ="",
-                                                            endDate: String ="",
-                                                            specificTime: String="",
-                                                            city: String="")
+    suspend fun insertModelTime_FromLDS_InWeatherRepository(lat:String,
+                                                            lon:String,
+                                                            startDate: String,
+                                                            endDate: String,
+                                                            specificTime: String,
+                                                            city: String)
+    suspend fun deleteModelTime_FromLDS_InWeatherRepository(lat:String,
+                                                            lon:String,
+                                                            startDate: String,
+                                                            endDate: String,
+                                                            specificTime: String,
+                                                            city: String)
 
     /*
         suspend fun getCodOverNetwork_InRDS(lat: String, lon: String, appid: String): String?

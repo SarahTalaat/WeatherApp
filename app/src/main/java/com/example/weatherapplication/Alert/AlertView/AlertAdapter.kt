@@ -12,6 +12,7 @@ import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapplication.Model.AlertModel.MyApplicationAlertModel.Model_Time
+import com.example.weatherapplication.Model.FavouriteCityModel.MyApplicationFavouriteCityModel.Model_FavouriteCity
 import com.example.weatherapplication.R
 
 class AlertAdapter: RecyclerView.Adapter<AlertAdapter.MyViewHolder_InAlertAdapter> {
@@ -75,17 +76,12 @@ class AlertAdapter: RecyclerView.Adapter<AlertAdapter.MyViewHolder_InAlertAdapte
         Log.i("TAG", "receiveodelTimeInAlertAdapter: StartDte: ${model_Time.latitude}")
         Log.i("TAG", "receiveodelTimeInAlertAdapter: StartDte: ${model_Time.longitude}")
 
-       if(model_Time.startDate != "nullValue" &&
-          model_Time.endDate != "nullValue" &&
-          model_Time.specificTime != "nullValue" &&
-          model_Time.latitude != "nullValue" &&
-          model_Time.longitude != "nullValue" &&
-          model_Time.city != "nullValue" &&
-           AlertFragment.getInstance().isClicked == true){
-            modelTimeArrayList_InAlertAdapter.add(model_Time)
-            notifyDataSetChanged()
-       }
 
+    }
+    fun setModelTimeList_InFavouriteCityAdapter(modelTimeArrayList: java.util.ArrayList<Model_Time>){
+        Log.i("TAG", "setModelTimeList_InFavouriteCityAdapter: modelTimeArrayList :" + modelTimeArrayList)
+        this.modelTimeArrayList_InAlertAdapter = modelTimeArrayList
+        notifyDataSetChanged()
     }
 
     class MyViewHolder_InAlertAdapter : RecyclerView.ViewHolder {

@@ -64,10 +64,6 @@ class AlertFragment : Fragment() {
 
 
 
-
-
-
-
     companion object {
         private var instance: AlertFragment? = null
 
@@ -112,7 +108,7 @@ class AlertFragment : Fragment() {
 
         alertViewModel_Instance_InAlertFragmet.alertLiveDataList_ModelTime_InAlertViewModel.observe(viewLifecycleOwner){
             model ->
-                    adapter_Instance_InAlertFragment.receiveodelTimeInAlertAdapter(model)
+                    adapter_Instance_InAlertFragment.setModelTimeList_InFavouriteCityAdapter(model as java.util.ArrayList<Model_Time>)
                     adapter_Instance_InAlertFragment.notifyDataSetChanged()
         }
 

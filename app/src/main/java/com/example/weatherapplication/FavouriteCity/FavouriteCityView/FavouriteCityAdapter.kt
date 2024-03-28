@@ -57,7 +57,7 @@ class FavouriteProductsAdapter: RecyclerView.Adapter<FavouriteProductsAdapter.My
 
         constructor(@NonNull itemView: View): super(itemView){
                 tv_cityName_InFavouriteCityAdapter = itemView.findViewById(R.id.tv_cityName)
-                btn_deleteFromFavourite_InFavouriteCityAdapter = itemView.findViewById(R.id.btn_delete)
+                btn_deleteFromFavourite_InFavouriteCityAdapter = itemView.findViewById(R.id.btn_delete_alert)
             }
     }
 
