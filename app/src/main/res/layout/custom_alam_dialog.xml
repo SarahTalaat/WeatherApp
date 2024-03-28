@@ -1,50 +1,55 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- res/layout/custom_notification_dialog.xml -->
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:layout_margin="16dp"
+app:cardCornerRadius="8dp"
+app:cardElevation="4dp">
 
-<!-- res/layout/custom_notification_dialog.xml -->
-
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp">
-
-    <TextView
-        android:id="@+id/titleTextView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:gravity="center"
-        android:layout_marginBottom="8dp"/>
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <TextView
-        android:id="@+id/contentTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textColor="@android:color/black"
-        android:gravity="center"
-        android:layout_marginBottom="16dp"/>
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/dismissButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:backgroundTint="#00204A"
-        android:padding="12dp"
-        android:text="Dismiss"
-        android:textColor="@android:color/white" />
+        <TextView
+            android:id="@+id/contentTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
 
-    <Button
-        android:id="@+id/stopMusicButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Stop Music"
-        android:textColor="@android:color/white"
-        android:padding="12dp"/>
+        <Button
+            android:id="@+id/dismissButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:backgroundTint="#00204A"
+            android:padding="12dp"
+            android:text="Dismiss"
+            android:textColor="@android:color/white" />
 
-</LinearLayout>
+        <Button
+            android:id="@+id/stopMusicButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#00204A"
+            android:padding="12dp"
+            android:text="Stop Music"
+            android:textColor="@android:color/white" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

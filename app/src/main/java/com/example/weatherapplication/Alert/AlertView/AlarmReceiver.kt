@@ -119,15 +119,15 @@ class AlarmReceiver : BroadcastReceiver() {
         val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val screenWidth = Resources.getSystem().displayMetrics.widthPixels
         val layoutParams = WindowManager.LayoutParams(
-            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.MATCH_PARENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR,
             PixelFormat.TRANSLUCENT
         ).apply {
             gravity = Gravity.TOP or Gravity.START
-            x = 0 // Adjust as needed
-            y = 0 // Adjust as needed
+            x = 50 // Adjust as needed
+            y = 50 // Adjust as needed
         }
 
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
