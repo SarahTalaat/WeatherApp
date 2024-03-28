@@ -61,7 +61,7 @@ class AlertFragment : Fragment() {
     private var notificationCreated = false
     var isClicked = true
     var isAppear = false
-
+    var index = 0
 
 
     companion object {
@@ -137,6 +137,7 @@ class AlertFragment : Fragment() {
                         if(result.data?.lat!=null && result.data.lon != null){
                             var city = findCityName(result.data.lat!! , result.data.lon!!)
                             model_Time_Instance.city = city
+                            Log.i("NULL", "onViewCreated: city: ${index+1}")
                             alertViewModel_Instance_InAlertFragmet.insertModelTime_InAlertViewModel(city=city)
                         }
                         adapter_Instance_InAlertFragment.receiveodelTimeInAlertAdapter(model_Time_Instance)
@@ -291,8 +292,15 @@ class AlertFragment : Fragment() {
         }
 
         model_Time_Instance.startDate=startDate.toString()
+        Log.i("NULL", "processSelectedDateTime: startDate ${index+1}")
         model_Time_Instance.endDate=endDate.toString()
+        Log.i("NULL", "processSelectedDateTime: endDate ${index+1}")
         model_Time_Instance.specificTime=selectedTime.toString()
+        Log.i("NULL", "processSelectedDateTime: specificTime${index+1}")
+
+
+
+
         adapter_Instance_InAlertFragment.receiveodelTimeInAlertAdapter(model_Time_Instance)
 
     }
