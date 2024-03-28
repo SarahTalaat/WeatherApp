@@ -24,7 +24,7 @@ class Utils {
 
         //lat=56.1304&lon=106.3468
 
-
+        var REQUEST_OVERLAY_PERMISSION = 123
         const val ALARM_REQUEST_CODE = 1001
         const val REQUEST_DRAW_OVER_APPS_PERMISSION = 1002
         const val CHANNEL_ID = "my_channel_id"
