@@ -172,7 +172,7 @@ class AlarmReceiver : BroadcastReceiver() {
                 R.drawable.notification_close,
                 "Stop Music",
                 getPendingIntentForStopNotification(context)
-            )
+            )  
             .addAction(
                 R.drawable.baseline_remove_circle_outline_24,
                 "Dismiss",
