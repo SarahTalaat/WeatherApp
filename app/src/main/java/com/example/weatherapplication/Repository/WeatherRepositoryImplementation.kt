@@ -128,22 +128,12 @@ class WeatherRepositoryImplementation private constructor(
         return weatherLocalDataSourceInterface_Instance.getAllStoredModelTimeFromDatabase_InLDS()
     }
 
-    override suspend fun insertModelTime_FromLDS_InWeatherRepository(lat:String,
-                                                                     lon:String,
-                                                                     startDate: String,
-                                                                     endDate: String,
-                                                                     specificTime: String,
-                                                                     city: String) {
-        return weatherLocalDataSourceInterface_Instance.insertModelTimeIntoDatabase_InLDS(lat, lon, startDate, endDate, specificTime)
+    override suspend fun insertModelTime_FromLDS_InWeatherRepository(modelTime: Model_Time) {
+        return weatherLocalDataSourceInterface_Instance.insertModelTimeIntoDatabase_InLDS(modelTime)
     }
 
-    override suspend fun deleteModelTime_FromLDS_InWeatherRepository(lat:String,
-                                                                     lon:String,
-                                                                     startDate: String,
-                                                                     endDate: String,
-                                                                     specificTime: String,
-                                                                     city: String) {
-        return weatherLocalDataSourceInterface_Instance.deleteModelTimeFromDatabase_InLDS(lat, lon, startDate, endDate, specificTime)
+    override suspend fun deleteModelTime_FromLDS_InWeatherRepository(modelTime: Model_Time) {
+        return weatherLocalDataSourceInterface_Instance.deleteModelTimeFromDatabase_InLDS(modelTime)
 
     }
 

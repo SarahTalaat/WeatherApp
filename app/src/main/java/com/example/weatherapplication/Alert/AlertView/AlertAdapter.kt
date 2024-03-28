@@ -7,10 +7,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
+import com.example.productsmvvm.FavouriteProducts.FavouriteProductsView.OnAlertClickListenerInterface
 import com.example.weatherapplication.Model.AlertModel.MyApplicationAlertModel.Model_Time
 import com.example.weatherapplication.Model.FavouriteCityModel.MyApplicationFavouriteCityModel.Model_FavouriteCity
 import com.example.weatherapplication.R
@@ -22,16 +24,19 @@ class AlertAdapter: RecyclerView.Adapter<AlertAdapter.MyViewHolder_InAlertAdapte
 
     var context_Instance_InAlertAdapter: Context
     var modelTimeArrayList_InAlertAdapter: ArrayList<Model_Time>
+    var onAlertClickListenerInterface: OnAlertClickListenerInterface
 
 
     public constructor(
         context_Instance_ConstructorParameter_InAlertAdapter: Context,
         timeArrayList_ConstructorParameter_InAlertAdapter: ArrayList<Model_Time>,
+        onAlertClickListenerInterface: OnAlertClickListenerInterface
     ) {
         this.context_Instance_InAlertAdapter =
             context_Instance_ConstructorParameter_InAlertAdapter
         this.modelTimeArrayList_InAlertAdapter =
             timeArrayList_ConstructorParameter_InAlertAdapter
+        this.onAlertClickListenerInterface=onAlertClickListenerInterface
     }
 
 
@@ -56,7 +61,7 @@ class AlertAdapter: RecyclerView.Adapter<AlertAdapter.MyViewHolder_InAlertAdapte
 
 
 /*
-    fun settingTimeArrayList_InAlertAdapter(timeModel: Model_Time) {
+    fun set*tingTimeArrayList_InAlertAdapter(timeModel: Model_Time) {
         Log.i(
             "TAG",
             "settingTimeArrayList_InAlertAdapter: TimeArrayList :" + timeModel
@@ -79,9 +84,20 @@ class AlertAdapter: RecyclerView.Adapter<AlertAdapter.MyViewHolder_InAlertAdapte
 
     }
     fun setModelTimeList_InFavouriteCityAdapter(modelTimeArrayList: java.util.ArrayList<Model_Time>){
-        Log.i("TAG", "setModelTimeList_InFavouriteCityAdapter: modelTimeArrayList :" + modelTimeArrayList)
-        this.modelTimeArrayList_InAlertAdapter = modelTimeArrayList
-        notifyDataSetChanged()
+        Log.i("TAG", "setModelTimeList_InModelTimeAdapter: modelTimeArrayList :" + modelTimeArrayList)
+
+        var model_Time = AlertFragment.getInstance().model_Time_Instance
+        if(model_Time.city!= "nullValue" &&
+           model_Time.specificTime != "nullValue" &&
+           model_Time.endDate !="nullValue" &&
+           model_Time.latitude !="nullValue" &&
+           model_Time.startDate != "nullValue" &&
+           model_Time.longitude != "nullValue" &&
+            AlertFragment.getInstance().shallCardAppear == true){
+
+            this.modelTimeArrayList_InAlertAdapter = modelTimeArrayList
+            notifyDataSetChanged()
+        }
     }
 
     class MyViewHolder_InAlertAdapter : RecyclerView.ViewHolder {
@@ -90,6 +106,7 @@ class AlertAdapter: RecyclerView.Adapter<AlertAdapter.MyViewHolder_InAlertAdapte
         var tv_startDate: TextView
         var tv_city: TextView
         var tv_endDate: TextView
+        var btn_delete: Button
 
 
         constructor(@NonNull itemView: View) : super(itemView) {
@@ -97,7 +114,7 @@ class AlertAdapter: RecyclerView.Adapter<AlertAdapter.MyViewHolder_InAlertAdapte
             tv_startDate = itemView.findViewById(R.id.tv_startDate_alert)
             tv_city = itemView.findViewById(R.id.tv_city_alert)
             tv_endDate = itemView.findViewById(R.id.tv_endDate_alert)
-
+            btn_delete = itemView.findViewById(R.id.btn_delete_alert)
         }
     }
 
@@ -110,6 +127,9 @@ class AlertAdapter: RecyclerView.Adapter<AlertAdapter.MyViewHolder_InAlertAdapte
         holder.tv_endDate.setText(modelTimeArrayList_InAlertAdapter.get(position).endDate)
         holder.tv_specficTime.setText(modelTimeArrayList_InAlertAdapter.get(position).specificTime)
         holder.tv_city.setText(modelTimeArrayList_InAlertAdapter.get(position).city)
-
+        holder.btn_delete.setOnClickListener(){
+            var model_Time = modelTimeArrayList_InAlertAdapter.get(position)
+            onAlertClickListenerInterface.onClick_DeleteModelTimeFromAlertFragment_InOnAlertClickListenerInterface(model_Time)
+        }
     }
 }

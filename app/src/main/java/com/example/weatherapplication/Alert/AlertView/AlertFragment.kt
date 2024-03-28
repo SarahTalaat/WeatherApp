@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.productsmvvm.Database.WeatherLocalDataSourceImplementation
+import com.example.productsmvvm.FavouriteProducts.FavouriteProductsView.OnAlertClickListenerInterface
 import com.example.weatherapplication.Repository.WeatherRepositoryImplementation
 import com.example.productsmvvm.Network.WeatherRemoteDataSourceImplementation
 import com.example.weatherapplication.Alert.AlertView.AlarmReceiver
@@ -47,7 +48,7 @@ import kotlin.collections.ArrayList
 
 const val REQUEST_LOCATION_CODE = 2005
 
-class AlertFragment : Fragment() {
+class AlertFragment : Fragment() , OnAlertClickListenerInterface {
 
     private lateinit var fab_addAlert_InAlertFragment: FloatingActionButton
     private var selectedDateTime: Date? = null
@@ -62,6 +63,7 @@ class AlertFragment : Fragment() {
     var isClicked = true
     var isAppear = false
     var index = 0
+    var shallCardAppear = false
 
 
     companion object {
@@ -90,6 +92,9 @@ class AlertFragment : Fragment() {
         fab_addAlert_InAlertFragment.setOnClickListener {
             showDateTimePickerDialog()
         }
+
+
+
 
         model_Time_Instance= Model_Time()
 
@@ -133,12 +138,15 @@ class AlertFragment : Fragment() {
                             isAlertsNotEmpty = false
                         }
                         model_Time_Instance.latitude = result.data?.lat.toString()
+                        Log.i("NULL", "onViewCreated: lat : ${index+1} ")
                         model_Time_Instance.longitude = result.data?.lon.toString()
+                        Log.i("NULL", "onViewCreated: lon : ${index+1} ")
+
                         if(result.data?.lat!=null && result.data.lon != null){
                             var city = findCityName(result.data.lat!! , result.data.lon!!)
                             model_Time_Instance.city = city
                             Log.i("NULL", "onViewCreated: city: ${index+1}")
-                            alertViewModel_Instance_InAlertFragmet.insertModelTime_InAlertViewModel(city=city)
+                            alertViewModel_Instance_InAlertFragmet.insertModelTime_InAlertViewModel(model_Time_Instance)
                         }
                         adapter_Instance_InAlertFragment.receiveodelTimeInAlertAdapter(model_Time_Instance)
                         adapter_Instance_InAlertFragment.notifyDataSetChanged()
@@ -158,6 +166,7 @@ class AlertFragment : Fragment() {
         val alarmIntent = Intent(requireContext(), AlarmReceiver::class.java)
         if (isClicked==true){
             isAppear=true
+            shallCardAppear = true
             alarmIntent.putExtra(Utils.NOTIFICATION_KEY,"false")
         }
 
@@ -343,6 +352,7 @@ class AlertFragment : Fragment() {
 
         if(isClicked==false){
             isAppear=true
+            shallCardAppear=true
             notificationIntent.putExtra(Utils.NOTIFICATION_KEY,"true")
         }
 
@@ -478,15 +488,18 @@ class AlertFragment : Fragment() {
     private fun setUpRecyclerView_InAlertFragment(){
         layoutManager_Instance_InAlertFragment = LinearLayoutManager(requireContext())
         layoutManager_Instance_InAlertFragment.orientation = RecyclerView.VERTICAL
-        adapter_Instance_InAlertFragment = AlertAdapter(requireContext(), ArrayList())
+        adapter_Instance_InAlertFragment = AlertAdapter(requireContext(), ArrayList(),this)
         recyclerView_Instance_InAlertFragment.adapter = adapter_Instance_InAlertFragment
         recyclerView_Instance_InAlertFragment.layoutManager = layoutManager_Instance_InAlertFragment
     }
 
+    override fun onClick_DeleteModelTimeFromAlertFragment_InOnAlertClickListenerInterface(modelTime: Model_Time) {
+        alertViewModel_Instance_InAlertFragmet.deleteModelTime_InAlertViewModel(modelTime)
+    }
 
-
-
-
+    override fun onClick_InserModelTimeToAlertFragment_InOnAlertClickListenerInterface(modelTime: Model_Time) {
+        alertViewModel_Instance_InAlertFragmet.insertModelTime_InAlertViewModel(modelTime)
+    }
 
 
 }

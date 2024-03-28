@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.favouriteCitymvvm.FavouriteCity.FavouriteCityViewModel.FavouriteCityViewModel
 import com.example.productsmvvm.Database.WeatherLocalDataSourceImplementation
 import com.example.productsmvvm.FavouriteProducts.FavouriteProductsView.FavouriteProductsAdapter
+import com.example.productsmvvm.FavouriteProducts.FavouriteProductsView.OnAlertClickListenerInterface
 import com.example.productsmvvm.FavouriteProducts.FavouriteProductsView.OnFavouriteCityClickListenerInterface
 import com.example.productsmvvm.FavouriteProducts.FavouriteProductsViewModel.FavouriteCityViewModelFactory_LDS
 import com.example.weatherapplication.Repository.WeatherRepositoryImplementation
@@ -116,29 +117,16 @@ class FavouriteCityFragment : Fragment(), OnFavouriteCityClickListenerInterface 
 
     }
 
-    override fun onClick_NavigateToFavouriteCityWeatherActivity_InOnFavouriteClickListenerInterface(latitude: String?, longitude: String?) {
-/*
-        val latitude: String? = arguments?.getString(Utils.FAVOURITE_CITY_LATITUDE)
-        val logitude: String? = arguments?.getString(Utils.FAVOURITE_CITY_LONGITUDE)
-        Log.i(
-            "TAG",
-            "onClick_NavigateToFavouriteCityWeatherActivity_InOnFavouriteClickListenerInterface: lat = " + latitude)
-
-        val bundle = Bundle()
-        bundle.putString(Utils.FAVOURITE_CITY_LATITUDE, latitude)
-        bundle.putString(Utils.FAVOURITE_CITY_LONGITUDE, logitude)
-        val intent = Intent(requireContext(), FavouriteCityWeatherActivity::class.java)
-        intent.putExtras(bundle)
-*/
-
+    override fun onClick_NavigateToFavouriteCityWeatherActivity_InOnFavouriteClickListenerInterface(
+        latitude: String?,
+        longitude: String?
+    ) {
         val bundle = Bundle()
         bundle.putString(Utils.FAVOURITE_CITY_LATITUDE, latitude)
         bundle.putString(Utils.FAVOURITE_CITY_LONGITUDE, longitude)
         val intent = Intent(requireContext(), FavouriteCityWeatherActivity::class.java)
         intent.putExtras(bundle)
         startActivity(intent)
-
-
 
     }
 
