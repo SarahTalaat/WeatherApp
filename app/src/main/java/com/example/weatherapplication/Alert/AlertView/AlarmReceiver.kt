@@ -141,7 +141,6 @@ class AlarmReceiver : BroadcastReceiver() {
         view.findViewById<Button>(R.id.stopMusicButton).setOnClickListener {
             // Perform actions to stop music
             stopMediaPlayerMusic(context)
-            windowManager.removeView(view)
         }
 
         // Set up the dismiss button
