@@ -84,24 +84,24 @@ class AlertViewModel(private val weatherRepositoryInterface_Instance_Constructor
         }
     }
 
-    fun deleteModelTime_InAlertViewModel(lat:String,
-                                         lon:String,
-                                         startDate: String,
-                                         endDate: String,
-                                         specificTime: String,
-                                         city: String){
+    fun deleteModelTime_InAlertViewModel(lat:String="",
+                                         lon:String="",
+                                         startDate: String="",
+                                         endDate: String="",
+                                         specificTime: String="",
+                                         city: String=""){
         viewModelScope.launch(Dispatchers.IO){
             weatherRepositoryInterface_Instance_ConstructorParameter_InAlertViewModel.deleteModelTime_FromLDS_InWeatherRepository(lat, lon, startDate, endDate, specificTime, city)
             getAllLocalModelTime_StoredInDatabase_InAlertViewModel()
         }
     }
 
-    fun insertModelTime_InAlertViewModel(lat:String,
-                                         lon:String,
-                                         startDate: String,
-                                         endDate: String,
-                                         specificTime: String,
-                                         city: String){
+    fun insertModelTime_InAlertViewModel(lat:String="",
+                                         lon:String="",
+                                         startDate: String="",
+                                         endDate: String="",
+                                         specificTime: String="",
+                                         city: String=""){
         viewModelScope.launch(Dispatchers.IO){
             weatherRepositoryInterface_Instance_ConstructorParameter_InAlertViewModel.insertModelTime_FromLDS_InWeatherRepository(lat, lon, startDate, endDate, specificTime, city)
             getAllLocalModelTime_StoredInDatabase_InAlertViewModel()

@@ -90,21 +90,13 @@ class AlertFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
         fab_addAlert_InAlertFragment = view.findViewById(R.id.floatingActionButton_addAlert)
-
-
         fab_addAlert_InAlertFragment.setOnClickListener {
-
             showDateTimePickerDialog()
-
-
         }
 
-
-
         model_Time_Instance= Model_Time()
+
         alertViewModelFactory_Instance_RDS_InAlertFragment = AlertViewModelFactory_RDS(
             WeatherRepositoryImplementation.getWeatherRepositoryImplementationInstance(
                 WeatherRemoteDataSourceImplementation.getWeatherRemoteDataSourceImplementation_Instance() ,
@@ -118,50 +110,38 @@ class AlertFragment : Fragment() {
         initUI_InAlertFragment(view)
         setUpRecyclerView_InAlertFragment()
 
+        alertViewModel_Instance_InAlertFragmet.alertLiveDataList_ModelTime_InAlertViewModel.observe(viewLifecycleOwner){
+            model ->
+                    adapter_Instance_InAlertFragment.receiveodelTimeInAlertAdapter(model)
+                    adapter_Instance_InAlertFragment.notifyDataSetChanged()
+        }
+
         lifecycleScope.launch {
             alertViewModel_Instance_InAlertFragmet.alertStateFlow_InAlertViewModel.collectLatest { result ->
                 when(result){
                     is ApiState.Loading -> {
-
                         recyclerView_Instance_InAlertFragment.visibility = View.GONE
-
                     }
                     is ApiState.Success_ModelForecast_InApiState -> {
-
-                        Log.i("TAG", "onViewCreated: AlertFragment APIStateResult ")
-
+                        Log.i("TAG", "onViewCreated: AlertFragment APIStateResult sucess modelforecast ")
                     }
                     is ApiState.Failure -> {
-
                         Toast.makeText(context,"There is problem in the server", Toast.LENGTH_LONG).show()
                     }
                     is ApiState.Success_ModelAlert_InApiState ->{
-
                         recyclerView_Instance_InAlertFragment.visibility = View.VISIBLE
-
-
-                        Log.i("TAG", "onViewCreated: AlertFragment : alertResponse:  ${result.data}")
-                        val gson = Gson()
-                        val modelAlertJson = gson.toJson(result.data)
-                        val sharedPreferences = requireContext().getSharedPreferences(Utils.ALERT_DATA_SP, Context.MODE_PRIVATE)
-                        val editor = sharedPreferences.edit()
-                        editor.putString(Utils.MODEL_ALERT_GSON, modelAlertJson)
-                        editor.apply()
-
-
 
                         if (result.data?.alerts?.isNotEmpty() == true) {
                             isAlertsNotEmpty = true
                         } else {
                             isAlertsNotEmpty = false
                         }
-
                         model_Time_Instance.latitude = result.data?.lat.toString()
-
                         model_Time_Instance.longitude = result.data?.lon.toString()
                         if(result.data?.lat!=null && result.data.lon != null){
                             var city = findCityName(result.data.lat!! , result.data.lon!!)
                             model_Time_Instance.city = city
+                            alertViewModel_Instance_InAlertFragmet.insertModelTime_InAlertViewModel(city=city)
                         }
                         adapter_Instance_InAlertFragment.receiveodelTimeInAlertAdapter(model_Time_Instance)
                         adapter_Instance_InAlertFragment.notifyDataSetChanged()
@@ -171,7 +151,7 @@ class AlertFragment : Fragment() {
             }
 
         }
-
+        saveInSharedPreferencesToAlarmReceiver()
         alertViewModel_Instance_InAlertFragmet.getAlert_FromRetrofit_InAlertViewModel(Utils.LAT_ALERT,Utils.lON_ALERT, Utils.API_KEY)
     }
 
@@ -371,6 +351,15 @@ class AlertFragment : Fragment() {
         )
     }
 
+    fun saveInSharedPreferencesToAlarmReceiver(){
+        Log.i("TAG", "onViewCreated: AlertFragment : alertResponse:  $model_Time_Instance")
+        val gson = Gson()
+        val modelAlertJson = gson.toJson(model_Time_Instance)
+        val sharedPreferences = requireContext().getSharedPreferences(Utils.ALERT_DATA_SP, Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString(Utils.MODEL_ALERT_GSON, modelAlertJson)
+        editor.apply()
+    }
 
 /*
     @RequiresApi(Build.VERSION_CODES.S)
