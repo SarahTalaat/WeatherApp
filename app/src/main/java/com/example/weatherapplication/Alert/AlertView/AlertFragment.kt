@@ -298,6 +298,9 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
 
             val scheduledTime = calendar.time
             Log.i("TAG", "processSelectedDateTime: scheduledTime: $scheduledTime")
+            model_Time_Instance.specificTime=scheduledTime.toString()
+            //  alertViewModel_Instance_InAlertFragmet.insertModelTime_InAlertViewModel(model_Time_Instance)
+            Log.i("NULL", "processSelectedDateTime: specificTime${index+1}")
 
             // Schedule notification or alarm for the current date and time
             scheduleNotificationOrAlarm(scheduledTime)
@@ -312,9 +315,7 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
         Log.i("NULL", "processSelectedDateTime: startDate ${index+1}")
         model_Time_Instance.endDate=endDate.toString()
         Log.i("NULL", "processSelectedDateTime: endDate ${index+1}")
-        model_Time_Instance.specificTime=selectedTime.toString()
-      //  alertViewModel_Instance_InAlertFragmet.insertModelTime_InAlertViewModel(model_Time_Instance)
-        Log.i("NULL", "processSelectedDateTime: specificTime${index+1}")
+
 
 
 

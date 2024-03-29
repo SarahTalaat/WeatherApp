@@ -54,17 +54,18 @@ class AlarmReceiver : BroadcastReceiver() {
 
         Log.i("TAG", "onReceive: retrievedValue: $retrievedValue")
 
+
         if(retrievedValue== "true"){
-            popUpNotificationLogic(context, intent)
-        }else if(retrievedValue == "false"){
             notificationLogic(context, intent)
+        }else if(retrievedValue == "false"){
+            alarmLogic(context, intent)
         }else{
             Log.i("TAG", "onReceive: No true or false value on the intent")
         }
 
     }
 
-    fun notificationLogic(context:Context?, intent: Intent?){
+    fun alarmLogic(context:Context?, intent: Intent?){
 
     if (context != null && intent != null) {
 
@@ -95,13 +96,13 @@ class AlarmReceiver : BroadcastReceiver() {
             val gson = Gson()
             val modelAlert = gson.fromJson(modelAlertJson, Model_Alert::class.java)
             if (modelAlert.alerts.isNotEmpty()) {
-                showNotificationWindow(
+                showAlarm(
                     context,
                     "Dangerous Situation",
                     "${modelAlert.alerts[0].description}"
                 )
             } else {
-                showNotificationWindow(context, "The weather is fine", "Enjoy your day!!")
+                showAlarm(context, "The weather is fine", "Enjoy your day!!")
             }
         } else {
             Toast.makeText(context, "The json is null", Toast.LENGTH_SHORT).show()
@@ -110,8 +111,8 @@ class AlarmReceiver : BroadcastReceiver() {
     }
 
 }
-    private fun showNotificationWindow(context: Context, title: String, contentText: String) {
-        createNotificationChannel(context)
+    private fun showAlarm(context: Context, title: String, contentText: String) {
+        createAlarmChannel(context)
 
         val soundUri: Uri? = null
 
@@ -156,7 +157,7 @@ class AlarmReceiver : BroadcastReceiver() {
 
 
     private fun notification(context: Context, title: String, contentText: String) {
-        createNotificationChannel(context)
+        createAlarmChannel(context)
 
         val soundUri: Uri? = null
         // Create a notification with dismiss and stop music actions
@@ -199,7 +200,7 @@ class AlarmReceiver : BroadcastReceiver() {
         }
     }
 
-    private fun createNotificationChannel(context: Context) {
+    private fun createAlarmChannel(context: Context) {
         // Create a notification channel if not exists
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             val name = "Alarm Notifications"
@@ -258,7 +259,7 @@ class AlarmReceiver : BroadcastReceiver() {
         }
     }
 
-    fun popUpNotificationLogic(context_popUp: Context?, intent_popUp: Intent?) {
+    fun notificationLogic(context_popUp: Context?, intent_popUp: Intent?) {
         if (context_popUp != null && intent_popUp != null) {
             val action = intent_popUp.action
             if (action != null && action == Utils.STOP_NOTIFICATION) {
@@ -281,13 +282,13 @@ class AlarmReceiver : BroadcastReceiver() {
                 val modelAlert = gson.fromJson(modelAlertJson, Model_Alert::class.java)
 
                 if (modelAlert.alerts.isNotEmpty()) {
-                    popUpNotification(
+                    notification(
                         context_popUp,
                         "Dangerous Situation",
                         "${modelAlert.alerts[0].description}"
                     )
                 } else {
-                    popUpNotification(context_popUp, "The weather is fine", "Enjoy your day!!")
+                    notification(context_popUp, "The weather is fine", "Enjoy your day!!")
                 }
             } else {
                 Toast.makeText(context_popUp, "The json is null", Toast.LENGTH_SHORT).show()
@@ -296,8 +297,8 @@ class AlarmReceiver : BroadcastReceiver() {
         }
     }
 
-    private fun popUpNotification(context: Context, title: String, contentText: String) {
-        createNotificationChannel(context)
+    private fun showNotification(context: Context, title: String, contentText: String) {
+        createAlarmChannel(context)
 
 
         val builder = NotificationCompat.Builder(context, Utils.CHANNEL_ID)
