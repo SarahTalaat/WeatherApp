@@ -139,10 +139,10 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
                             var city = findCityName(result.data.lat!! , result.data.lon!!)
                             model_Time_Instance.city = city
                             Log.i("NULL", "onViewCreated: city: ${index+1}")
-                            alertViewModel_Instance_InAlertFragmet.insertModelTime_InAlertViewModel(model_Time_Instance)
+                          //  alertViewModel_Instance_InAlertFragmet.insertModelTime_InAlertViewModel(model_Time_Instance)
                         }
-                        adapter_Instance_InAlertFragment.receiveModelTimeInAlertAdapter(model_Time_Instance)
-                        adapter_Instance_InAlertFragment.notifyDataSetChanged()
+                     //   adapter_Instance_InAlertFragment.receiveModelTimeInAlertAdapter(model_Time_Instance)
+                     //   adapter_Instance_InAlertFragment.notifyDataSetChanged()
                     }
                 }
 
@@ -150,6 +150,7 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
 
         }
         saveInSharedPreferencesToAlarmReceiver()
+        alertViewModel_Instance_InAlertFragmet.getAllLocalModelTime_StoredInDatabase_InAlertViewModel()
         alertViewModel_Instance_InAlertFragmet.getAlert_FromRetrofit_InAlertViewModel(Utils.LAT_ALERT,Utils.lON_ALERT, Utils.API_KEY)
     }
 
@@ -159,6 +160,7 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
         val alarmIntent = Intent(requireContext(), AlarmReceiver::class.java)
         if (isClicked==true){
             isAppear=true
+            model_Time_Instance.shallCardAppear=true
             alarmIntent.putExtra(Utils.NOTIFICATION_KEY,"false")
         }
 
@@ -260,6 +262,7 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
             // Show dialog to choose between notification and alarm
             var context: Context = requireContext()
             showNotificationOrAlarmDialog(context,selectedTime)
+            model_Time_Instance.shallCardAppear=true
 
         }, currentHour, currentMinute, true)
 
@@ -297,7 +300,7 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
         model_Time_Instance.endDate=endDate.toString()
         Log.i("NULL", "processSelectedDateTime: endDate ${index+1}")
         model_Time_Instance.specificTime=selectedTime.toString()
-        alertViewModel_Instance_InAlertFragmet.insertModelTime_InAlertViewModel(model_Time_Instance)
+      //  alertViewModel_Instance_InAlertFragmet.insertModelTime_InAlertViewModel(model_Time_Instance)
         Log.i("NULL", "processSelectedDateTime: specificTime${index+1}")
 
 
@@ -345,7 +348,7 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
 
         if(isClicked==false){
             isAppear=true
-
+            model_Time_Instance.shallCardAppear=true
             notificationIntent.putExtra(Utils.NOTIFICATION_KEY,"true")
         }
 
@@ -407,6 +410,7 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
             requestDrawOverAppsPermission(selectedDateTime)
             dialog.dismiss()
             model_Time_Instance.shallCardAppear=true
+            alertViewModel_Instance_InAlertFragmet.insertModelTime_InAlertViewModel(model_Time_Instance)
             adapter_Instance_InAlertFragment.notifyDataSetChanged()
         }
 
@@ -417,6 +421,7 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
             requestDrawOverAppsPermission(selectedDateTime)
             dialog.dismiss()
             model_Time_Instance.shallCardAppear=true
+            alertViewModel_Instance_InAlertFragmet.insertModelTime_InAlertViewModel(model_Time_Instance)
             adapter_Instance_InAlertFragment.notifyDataSetChanged()
         }
 
