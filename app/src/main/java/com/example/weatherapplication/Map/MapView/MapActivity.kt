@@ -1,6 +1,9 @@
 package com.example.weatherapplication.Map.MapView
 
 
+import android.app.Activity
+import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 
@@ -9,6 +12,7 @@ import android.location.Geocoder
 import android.location.GpsStatus
 import android.util.Log
 import android.view.MotionEvent
+import android.widget.Button
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -23,6 +27,7 @@ import com.example.weatherapplication.Map.MapViewModel.MapViewModelFactory_LDS
 import com.example.weatherapplication.Model.FavouriteCityModel.MyApplicationFavouriteCityModel.Model_FavouriteCity
 import com.example.weatherapplication.R
 import com.example.weatherapplication.databinding.ActivityMapBinding
+import org.osmdroid.api.IGeoPoint
 import org.osmdroid.api.IMapController
 import org.osmdroid.config.Configuration
 import org.osmdroid.events.MapListener
@@ -180,15 +185,19 @@ class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener ,
             binding.osmmap.invalidate()
 
             binding.btnConfirmLocation.setOnClickListener() {
+
+
+                mapCustomDialog(this@MapActivity , point)
+
                 Log.i(
                     "TAG",
                     "onSingleTapConfirmed_InInnerClass_InMapActivity: Latitude:  ${point.latitude}  Longitude: ${point.longitude}")
 
-                if (point.latitude != null && point.longitude != null) {
-                    var latitude = point.latitude
-                    var longitude = point.longitude
-                    findCityName(latitude,longitude)
-                }
+//                if (point.latitude != null && point.longitude != null) {
+//                    var latitude = point.latitude
+//                    var longitude = point.longitude
+//                    findCityName(latitude,longitude)
+//                }
 /*
                 if (point.latitude != null && point.longitude != null) {
                      val geoUtils = GeoUtils(this@MapActivity)
@@ -209,6 +218,57 @@ class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener ,
     override fun onClick_insertFavouriteCityToFavouriteActivity_InFavouriteCityClickListenerInterface(city: Model_FavouriteCity) {
         mapWeatherViewModel_Instance_InMapActivity.insertFavouriteCity_InMapViewModel(city)
 
+    }
+
+    fun mapCustomDialog(context: Context , point: IGeoPoint){
+
+            val dialog = Dialog(context)
+            dialog.setContentView(R.layout.custom_dialog_map)
+
+
+            val favouriteCityButton = dialog.findViewById<Button>(R.id.favouriteCityButton)
+            favouriteCityButton.setOnClickListener {
+                // Handle setting a notification here
+                if (point.latitude != null && point.longitude != null) {
+                    var latitude = point.latitude
+                    var longitude = point.longitude
+                    findCityName(latitude,longitude)
+                }
+                dialog.dismiss()
+
+            }
+
+            val alertButton = dialog.findViewById<Button>(R.id.alertButton)
+            alertButton.setOnClickListener {
+                // Handle setting an alarm here
+
+                if (point.latitude != null && point.longitude != null){
+
+                    saveLocationToSharedPreferences(this,point.latitude.toString(),point.longitude.toString())
+                    setResult(Activity.RESULT_OK);
+                    finish();
+                }
+
+
+                dialog.dismiss()
+
+
+            }
+
+
+            dialog.show()
+
+    }
+    fun saveLocationToSharedPreferences(context: Context, latitude: String, longitude: String) {
+        // Get SharedPreferences instance
+        val sharedPreferences = context.getSharedPreferences(Utils.ALERT_MAP_SP_KEY, Context.MODE_PRIVATE)
+        // Get SharedPreferences editor
+        val editor = sharedPreferences.edit()
+        // Put latitude and longitude into SharedPreferences
+        editor.putString(Utils.ALERT_MAP_SP_LAT, latitude)
+        editor.putString(Utils.ALERT_MAP_SP_LON, longitude)
+        // Commit changes
+        editor.apply()
     }
 
 

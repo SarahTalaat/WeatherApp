@@ -1,4 +1,9 @@
-import android.app.*
+import android.app.Activity
+import android.app.AlarmManager
+import android.app.DatePickerDialog
+import android.app.Dialog
+import android.app.PendingIntent
+import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.location.Geocoder
@@ -7,47 +12,43 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.productsmvvm.Database.WeatherLocalDataSourceImplementation
-import com.example.weatherapplication.Repository.WeatherRepositoryImplementation
+import com.example.productsmvvm.FavouriteProducts.FavouriteProductsView.OnAlertClickListenerInterface
 import com.example.productsmvvm.Network.WeatherRemoteDataSourceImplementation
 import com.example.weatherapplication.Alert.AlertView.AlarmReceiver
 import com.example.weatherapplication.Alert.AlertView.AlertAdapter
-
 import com.example.weatherapplication.Alert.AlertViewModel.AlertViewModel
 import com.example.weatherapplication.Alert.AlertViewModel.AlertViewModelFactory_RDS
 import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.Constants.Utils.Companion.NOTIFICATION_ID
-import com.example.weatherapplication.Model.AlertModel.APIModel.Alerts
-import com.example.weatherapplication.Model.AlertModel.APIModel.Model_Alert
+import com.example.weatherapplication.Map.MapView.MapActivity
 import com.example.weatherapplication.Model.AlertModel.MyApplicationAlertModel.Model_Time
-import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_WeatherArrayList
 import com.example.weatherapplication.Network.ApiState
 import com.example.weatherapplication.R
+import com.example.weatherapplication.Repository.WeatherRepositoryImplementation
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.*
-import kotlin.collections.ArrayList
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
+
 
 const val REQUEST_LOCATION_CODE = 2005
 
-class AlertFragment : Fragment() {
+class AlertFragment : Fragment() , OnAlertClickListenerInterface {
 
     private lateinit var fab_addAlert_InAlertFragment: FloatingActionButton
     private var selectedDateTime: Date? = null
@@ -56,14 +57,14 @@ class AlertFragment : Fragment() {
     private lateinit var recyclerView_Instance_InAlertFragment: RecyclerView
     private lateinit var layoutManager_Instance_InAlertFragment: LinearLayoutManager
     private lateinit var adapter_Instance_InAlertFragment: AlertAdapter
-    lateinit var model_Time_Instance : Model_Time
+    var model_Time_Instance : Model_Time = Model_Time()
     var isAlertsNotEmpty: Boolean = false
     private var notificationCreated = false
     var isClicked = true
     var isAppear = false
-
-
-
+    var index = 0
+    var shallCardAppear = false
+    private val REQUEST_CODE_MAP_ACTIVITY = 123
 
 
 
@@ -90,21 +91,13 @@ class AlertFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
         fab_addAlert_InAlertFragment = view.findViewById(R.id.floatingActionButton_addAlert)
-
-
         fab_addAlert_InAlertFragment.setOnClickListener {
-
-            showDateTimePickerDialog()
-
-
+            val intent = Intent(activity, MapActivity::class.java)
+            startActivityForResult(intent, REQUEST_CODE_MAP_ACTIVITY)
+          //  showDateTimePickerDialog()
         }
 
-
-
-        model_Time_Instance= Model_Time()
         alertViewModelFactory_Instance_RDS_InAlertFragment = AlertViewModelFactory_RDS(
             WeatherRepositoryImplementation.getWeatherRepositoryImplementationInstance(
                 WeatherRemoteDataSourceImplementation.getWeatherRemoteDataSourceImplementation_Instance() ,
@@ -118,53 +111,52 @@ class AlertFragment : Fragment() {
         initUI_InAlertFragment(view)
         setUpRecyclerView_InAlertFragment()
 
+        alertViewModel_Instance_InAlertFragmet.alertLiveDataList_ModelTime_InAlertViewModel.observe(viewLifecycleOwner){
+            model ->
+                    Log.i("Size", "onViewCreated: alert db size = ${model.size}")
+                    adapter_Instance_InAlertFragment.setModelTimeArrayList_StoredInDatabase_InAlertAdapter(model as ArrayList<Model_Time>)
+                    adapter_Instance_InAlertFragment.notifyDataSetChanged()
+        }
+        alertViewModel_Instance_InAlertFragmet.getAllLocalModelTime_StoredInDatabase_InAlertViewModel()
+
+        saveInSharedPreferencesToAlarmReceiver()
+
         lifecycleScope.launch {
             alertViewModel_Instance_InAlertFragmet.alertStateFlow_InAlertViewModel.collectLatest { result ->
                 when(result){
                     is ApiState.Loading -> {
-
-                        recyclerView_Instance_InAlertFragment.visibility = View.GONE
-
+                        recyclerView_Instance_InAlertFragment.visibility = View.VISIBLE
                     }
                     is ApiState.Success_ModelForecast_InApiState -> {
-
-                        Log.i("TAG", "onViewCreated: AlertFragment APIStateResult ")
-
+                        Log.i("TAG", "onViewCreated: AlertFragment APIStateResult sucess modelforecast ")
                     }
                     is ApiState.Failure -> {
-
                         Toast.makeText(context,"There is problem in the server", Toast.LENGTH_LONG).show()
                     }
                     is ApiState.Success_ModelAlert_InApiState ->{
-
                         recyclerView_Instance_InAlertFragment.visibility = View.VISIBLE
-
-
-                        Log.i("TAG", "onViewCreated: AlertFragment : alertResponse:  ${result.data}")
-                        val gson = Gson()
-                        val modelAlertJson = gson.toJson(result.data)
-                        val sharedPreferences = requireContext().getSharedPreferences(Utils.ALERT_DATA_SP, Context.MODE_PRIVATE)
-                        val editor = sharedPreferences.edit()
-                        editor.putString(Utils.MODEL_ALERT_GSON, modelAlertJson)
-                        editor.apply()
-
-
 
                         if (result.data?.alerts?.isNotEmpty() == true) {
                             isAlertsNotEmpty = true
                         } else {
                             isAlertsNotEmpty = false
                         }
-
                         model_Time_Instance.latitude = result.data?.lat.toString()
-
+                        Log.i("NULL", "onViewCreated: lat : ${index+1} ")
                         model_Time_Instance.longitude = result.data?.lon.toString()
+                        Log.i("NULL", "onViewCreated: lon : ${index+1} ")
+
                         if(result.data?.lat!=null && result.data.lon != null){
                             var city = findCityName(result.data.lat!! , result.data.lon!!)
                             model_Time_Instance.city = city
+                            var lat = result.data.lat
+                            var lon = result.data.lon
+
+                            Log.i("NULL", "onViewCreated: city: ${index+1}")
+                            //  alertViewModel_Instance_InAlertFragmet.insertModelTime_InAlertViewModel(model_Time_Instance)
                         }
-                        adapter_Instance_InAlertFragment.receiveodelTimeInAlertAdapter(model_Time_Instance)
-                        adapter_Instance_InAlertFragment.notifyDataSetChanged()
+                        //   adapter_Instance_InAlertFragment.receiveModelTimeInAlertAdapter(model_Time_Instance)
+                        //   adapter_Instance_InAlertFragment.notifyDataSetChanged()
                     }
                 }
 
@@ -172,7 +164,7 @@ class AlertFragment : Fragment() {
 
         }
 
-        alertViewModel_Instance_InAlertFragmet.getAlert_FromRetrofit_InAlertViewModel(Utils.LAT_ALERT,Utils.lON_ALERT, Utils.API_KEY)
+
     }
 
 
@@ -181,6 +173,7 @@ class AlertFragment : Fragment() {
         val alarmIntent = Intent(requireContext(), AlarmReceiver::class.java)
         if (isClicked==true){
             isAppear=true
+            model_Time_Instance.shallCardAppear=true
             alarmIntent.putExtra(Utils.NOTIFICATION_KEY,"false")
         }
 
@@ -282,6 +275,7 @@ class AlertFragment : Fragment() {
             // Show dialog to choose between notification and alarm
             var context: Context = requireContext()
             showNotificationOrAlarmDialog(context,selectedTime)
+            model_Time_Instance.shallCardAppear=true
 
         }, currentHour, currentMinute, true)
 
@@ -304,6 +298,9 @@ class AlertFragment : Fragment() {
 
             val scheduledTime = calendar.time
             Log.i("TAG", "processSelectedDateTime: scheduledTime: $scheduledTime")
+            model_Time_Instance.specificTime=scheduledTime.toString()
+            //  alertViewModel_Instance_InAlertFragmet.insertModelTime_InAlertViewModel(model_Time_Instance)
+            Log.i("NULL", "processSelectedDateTime: specificTime${index+1}")
 
             // Schedule notification or alarm for the current date and time
             scheduleNotificationOrAlarm(scheduledTime)
@@ -315,9 +312,15 @@ class AlertFragment : Fragment() {
         }
 
         model_Time_Instance.startDate=startDate.toString()
+        Log.i("NULL", "processSelectedDateTime: startDate ${index+1}")
         model_Time_Instance.endDate=endDate.toString()
-        model_Time_Instance.specificTime=selectedTime.toString()
-        adapter_Instance_InAlertFragment.receiveodelTimeInAlertAdapter(model_Time_Instance)
+        Log.i("NULL", "processSelectedDateTime: endDate ${index+1}")
+
+
+
+
+
+
 
     }
 
@@ -355,10 +358,11 @@ class AlertFragment : Fragment() {
 
     private fun getPendingNotificationIntent(notificationId: Int): PendingIntent {
         val notificationIntent = Intent(requireContext(), AlarmReceiver::class.java)
-        notificationIntent.putExtra("notification_id", notificationId)
+       // notificationIntent.putExtra("notification_id", notificationId)
 
         if(isClicked==false){
             isAppear=true
+            model_Time_Instance.shallCardAppear=true
             notificationIntent.putExtra(Utils.NOTIFICATION_KEY,"true")
         }
 
@@ -371,6 +375,15 @@ class AlertFragment : Fragment() {
         )
     }
 
+    fun saveInSharedPreferencesToAlarmReceiver(){
+        Log.i("TAG", "onViewCreated: AlertFragment : alertResponse:  $model_Time_Instance")
+        val gson = Gson()
+        val modelAlertJson = gson.toJson(model_Time_Instance)
+        val sharedPreferences = requireContext().getSharedPreferences(Utils.ALERT_DATA_SP, Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString(Utils.MODEL_ALERT_GSON, modelAlertJson)
+        editor.apply()
+    }
 
 /*
     @RequiresApi(Build.VERSION_CODES.S)
@@ -410,6 +423,9 @@ class AlertFragment : Fragment() {
             isClicked=false
             requestDrawOverAppsPermission(selectedDateTime)
             dialog.dismiss()
+            model_Time_Instance.shallCardAppear=true
+            alertViewModel_Instance_InAlertFragmet.insertModelTime_InAlertViewModel(model_Time_Instance)
+            adapter_Instance_InAlertFragment.notifyDataSetChanged()
         }
 
         val alarmButton = dialog.findViewById<Button>(R.id.alarmButton)
@@ -418,6 +434,9 @@ class AlertFragment : Fragment() {
             isClicked=true
             requestDrawOverAppsPermission(selectedDateTime)
             dialog.dismiss()
+            model_Time_Instance.shallCardAppear=true
+            alertViewModel_Instance_InAlertFragmet.insertModelTime_InAlertViewModel(model_Time_Instance)
+            adapter_Instance_InAlertFragment.notifyDataSetChanged()
         }
 
 
@@ -472,8 +491,27 @@ class AlertFragment : Fragment() {
                 scheduleNotificationOrAlarm(selectedDateTime!!)
             }
             notificationCreated = true
-        }else {
+        }else if(requestCode == REQUEST_CODE_MAP_ACTIVITY){
+            if (resultCode == Activity.RESULT_OK) {
+                if(getLatitudeFromSharedPreferences(requireContext()) != null && getLongitudeFromSharedPreferences(requireContext()) != null){
+                    var choosenLat = getLatitudeFromSharedPreferences(requireContext())!!
+                    Log.i("TAG", "onViewCreated: Alert Fragment : choosenLat: $choosenLat")
+
+                    var choosenLon = getLongitudeFromSharedPreferences(requireContext())!!
+                    Log.i("TAG", "onViewCreated: Alert Fragment : choosenLon: $choosenLon")
+
+                    alertViewModel_Instance_InAlertFragmet.getAlert_FromRetrofit_InAlertViewModel(choosenLat,choosenLon, Utils.API_KEY)
+                    adapter_Instance_InAlertFragment.setModelTimeArrayList_FromRetrofit_InAlertAdapter(model_Time_Instance)
+                    adapter_Instance_InAlertFragment.notifyDataSetChanged()
+                }
+                showDateTimePickerDialog()
+                // Continue your code from where you left
+            } else {
+                // Handle if the activity was not finished successfully
+            }
+        }else{
             Toast.makeText(requireContext(), "Permission denied", Toast.LENGTH_SHORT).show()
+
         }
     }
 
@@ -485,15 +523,33 @@ class AlertFragment : Fragment() {
     private fun setUpRecyclerView_InAlertFragment(){
         layoutManager_Instance_InAlertFragment = LinearLayoutManager(requireContext())
         layoutManager_Instance_InAlertFragment.orientation = RecyclerView.VERTICAL
-        adapter_Instance_InAlertFragment = AlertAdapter(requireContext(), ArrayList())
+        adapter_Instance_InAlertFragment = AlertAdapter(requireContext(), ArrayList(),this)
         recyclerView_Instance_InAlertFragment.adapter = adapter_Instance_InAlertFragment
         recyclerView_Instance_InAlertFragment.layoutManager = layoutManager_Instance_InAlertFragment
     }
 
+    override fun onClick_DeleteModelTimeFromAlertFragment_InOnAlertClickListenerInterface(modelTime: Model_Time) {
+        alertViewModel_Instance_InAlertFragmet.deleteModelTime_InAlertViewModel(modelTime)
+    }
 
+    override fun onClick_InserModelTimeToAlertFragment_InOnAlertClickListenerInterface(modelTime: Model_Time) {
+        alertViewModel_Instance_InAlertFragmet.insertModelTime_InAlertViewModel(modelTime)
+    }
 
+    fun getLatitudeFromSharedPreferences(context: Context): String? {
+        // Get SharedPreferences instance
+        val sharedPreferences = context.getSharedPreferences(Utils.ALERT_MAP_SP_KEY, Context.MODE_PRIVATE)
+        // Retrieve latitude from SharedPreferences
+        return sharedPreferences.getString(Utils.ALERT_MAP_SP_LAT, "")
+    }
 
-
+    // Function to retrieve longitude from SharedPreferences
+    fun getLongitudeFromSharedPreferences(context: Context): String? {
+        // Get SharedPreferences instance
+        val sharedPreferences = context.getSharedPreferences(Utils.ALERT_MAP_SP_KEY, Context.MODE_PRIVATE)
+        // Retrieve longitude from SharedPreferences
+        return sharedPreferences.getString(Utils.ALERT_MAP_SP_LON, "")
+    }
 
 
 }

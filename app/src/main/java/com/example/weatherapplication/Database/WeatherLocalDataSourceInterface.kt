@@ -11,18 +11,8 @@ interface WeatherLocalDataSourceInterface {
     suspend fun deleteFavouriteCityFromDatabase_InLDS(city: Model_FavouriteCity)
     suspend fun getAllStoredFavouriteCityFromDatabase_InLDS() : Flow<List<Model_FavouriteCity>>
 
-    suspend fun insertModelTimeIntoDatabase_InLDS(lat:String="",
-                                                  lon:String="",
-                                                  startDate: String ="",
-                                                  endDate: String ="",
-                                                  specificTime: String="",
-                                                  city: String="")
-    suspend fun deleteModelTimeFromDatabase_InLDS(lat:String="",
-                                                  lon:String="",
-                                                  startDate: String ="",
-                                                  endDate: String ="",
-                                                  specificTime: String="",
-                                                  city: String="")
+    suspend fun insertModelTimeIntoDatabase_InLDS(modelTime: Model_Time)
+    suspend fun deleteModelTimeFromDatabase_InLDS(modelTime: Model_Time)
     suspend fun getAllStoredModelTimeFromDatabase_InLDS() : Flow<List<Model_Time>>
 
 }

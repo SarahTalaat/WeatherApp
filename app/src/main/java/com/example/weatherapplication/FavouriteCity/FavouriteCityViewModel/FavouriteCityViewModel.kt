@@ -38,7 +38,10 @@ class FavouriteCityViewModel(private val weatherRepositoryInterface_Instance_Con
 
     fun getAllLocalFavouriteCity_StoredInDatabase_InFavouriteCityViewModel(){
         viewModelScope.launch(Dispatchers.IO){
-            weatherRepositoryInterface_Instance_ConstructorParameter_InFavouriteWeatherViewModel.getAllStoredFavouriteCity_FromLDS_InWeatherRepository().collect{ favouriteCity -> favouriteCityMutableLiveDataList_InFavouriteCityViewModel.postValue(favouriteCity)}
+            weatherRepositoryInterface_Instance_ConstructorParameter_InFavouriteWeatherViewModel.
+            getAllStoredFavouriteCity_FromLDS_InWeatherRepository().
+            collect{ favouriteCity ->
+                favouriteCityMutableLiveDataList_InFavouriteCityViewModel.postValue(favouriteCity)}
         }
     }
 

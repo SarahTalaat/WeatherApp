@@ -22,10 +22,10 @@ class FavouriteProductsAdapter: RecyclerView.Adapter<FavouriteProductsAdapter.My
     var favouriteCityArrayList_InFavouriteCityAdapter: ArrayList<Model_FavouriteCity>
     var onFavouriteCityClickListenerInterface_Instance_InFavouriteProductsAdapterCity: OnFavouriteCityClickListenerInterface
 
-    public constructor(context_Instance_ConstructorParameter_InFavouriteProductsAdapter: Context, productsArrayList_ConstructorParameter_InFavouriteProductsAdapter: ArrayList<Model_FavouriteCity>, onFavouriteClickListenerInterfaceInstance_ConstructorParameter_InFavouriteProductsAdapterCity: OnFavouriteCityClickListenerInterface){
+    public constructor(context_Instance_ConstructorParameter_InFavouriteProductsAdapter: Context, productsArrayList_ConstructorParameter_InFavouriteProductsAdapter: ArrayList<Model_FavouriteCity>, onClick_NavigateToFavouriteCityWeatherActivity_InOnFavouriteClickListenerInterface: OnFavouriteCityClickListenerInterface){
         this.context_Instance_InFavouriteCityAdapter=context_Instance_ConstructorParameter_InFavouriteProductsAdapter
         this.favouriteCityArrayList_InFavouriteCityAdapter=productsArrayList_ConstructorParameter_InFavouriteProductsAdapter
-        this.onFavouriteCityClickListenerInterface_Instance_InFavouriteProductsAdapterCity = onFavouriteClickListenerInterfaceInstance_ConstructorParameter_InFavouriteProductsAdapterCity
+        this.onFavouriteCityClickListenerInterface_Instance_InFavouriteProductsAdapterCity = onClick_NavigateToFavouriteCityWeatherActivity_InOnFavouriteClickListenerInterface
     }
 
 
@@ -57,7 +57,7 @@ class FavouriteProductsAdapter: RecyclerView.Adapter<FavouriteProductsAdapter.My
 
         constructor(@NonNull itemView: View): super(itemView){
                 tv_cityName_InFavouriteCityAdapter = itemView.findViewById(R.id.tv_cityName)
-                btn_deleteFromFavourite_InFavouriteCityAdapter = itemView.findViewById(R.id.btn_delete)
+                btn_deleteFromFavourite_InFavouriteCityAdapter = itemView.findViewById(R.id.btn_delete_alert)
             }
     }
 

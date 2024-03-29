@@ -8,22 +8,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface WeatherRepositoryInterface {
 
-    /*
-    suspend fun getAllProducts_FromRDS_InProductsRepository(): List<Products>
-    suspend fun getAllStoredProducts_FromLDS_InProductsRepository(): Flow<List<Products>>
-    suspend fun insertProduct_FromLDS_InProductsRepository(product: Products)
-    suspend fun deleteProduct_FromLDS_InProductsRepository(product: Products)
-    */
-/*
-    suspend fun getCod_FromRDS_InWeatherRepository(lat: String, lon: String, appid: String): String?
-    suspend fun getMessage_FromRDS_InWeatherRepository(lat: String, lon: String, appid: String): Int?
-    suspend fun getCnt_FromRDS_InWeatherRepository(lat: String, lon: String, appid: String): Int?
-    suspend fun getList_FromRDS_InWeatherRepository(lat: String, lon: String, appid: String): ArrayList<Model_WeatherArrayList>
-    suspend fun getCity_FromRDS_InWeatherRepository(city: String, appid:String): Model_City?
-
-*/
-
-
     suspend fun getAlert_FromRDS_InWeatherRepository(lat: String, lon: String, appid: String): Flow<Model_Alert?>
     suspend fun getForecast_FromRDS_InWeatherRepository(lat: String, lon: String, appid: String): Flow<Model_Forecast?>
     suspend fun getAllStoredFavouriteCity_FromLDS_InWeatherRepository(): Flow<List<Model_FavouriteCity>>
@@ -33,18 +17,46 @@ interface WeatherRepositoryInterface {
 
 
     suspend fun getAllStoredModelTime_FromLDS_InWeatherRepository(): Flow<List<Model_Time>>
-    suspend fun insertModelTime_FromLDS_InWeatherRepository(lat:String="",
-                                                            lon:String="",
-                                                            startDate: String ="",
-                                                            endDate: String ="",
-                                                            specificTime: String="",
-                                                            city: String="")
-    suspend fun deleteModelTime_FromLDS_InWeatherRepository(lat:String="",
-                                                            lon:String="",
-                                                            startDate: String ="",
-                                                            endDate: String ="",
-                                                            specificTime: String="",
-                                                            city: String="")
+    suspend fun insertModelTime_FromLDS_InWeatherRepository(modelTime: Model_Time)
+    suspend fun deleteModelTime_FromLDS_InWeatherRepository(modelTime: Model_Time)
+
+
+/*
+    suspend fun getAllStoredModelForecast_FromLDS_InWeatherRepository(): Flow<List<Model_Forecast>>
+    suspend fun insertModelForecast_FromLDS_InWeatherRepository(modelForecast: Model_Forecast)
+    suspend fun deleteModelForecast_FromLDS_InWeatherRepository(modelForecast: Model_Forecast)
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*
+suspend fun getAllProducts_FromRDS_InProductsRepository(): List<Products>
+suspend fun getAllStoredProducts_FromLDS_InProductsRepository(): Flow<List<Products>>
+suspend fun insertProduct_FromLDS_InProductsRepository(product: Products)
+suspend fun deleteProduct_FromLDS_InProductsRepository(product: Products)
+*/
+    /*
+        suspend fun getCod_FromRDS_InWeatherRepository(lat: String, lon: String, appid: String): String?
+        suspend fun getMessage_FromRDS_InWeatherRepository(lat: String, lon: String, appid: String): Int?
+        suspend fun getCnt_FromRDS_InWeatherRepository(lat: String, lon: String, appid: String): Int?
+        suspend fun getList_FromRDS_InWeatherRepository(lat: String, lon: String, appid: String): ArrayList<Model_WeatherArrayList>
+        suspend fun getCity_FromRDS_InWeatherRepository(city: String, appid:String): Model_City?
+
+    */
 
     /*
         suspend fun getCodOverNetwork_InRDS(lat: String, lon: String, appid: String): String?
