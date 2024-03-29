@@ -254,7 +254,7 @@ class AlarmReceiver : BroadcastReceiver() {
     private fun stopMediaPlayerMusic(context: Context?) {
         context?.let {
             MediaPlayerSingleton.getInstance(context).stop()
-            Toast.makeText(context, "Media player stopped", Toast.LENGTH_SHORT).show()
+          //  Toast.makeText(context, "Media player stopped", Toast.LENGTH_SHORT).show()
         }
     }
 

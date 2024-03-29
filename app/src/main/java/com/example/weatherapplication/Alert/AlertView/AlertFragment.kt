@@ -163,7 +163,7 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
             model_Time_Instance.shallCardAppear=true
             alarmIntent.putExtra(Utils.NOTIFICATION_KEY,"false")
         }
-
+ 
 
 
         val pendingIntent = PendingIntent.getBroadcast(
