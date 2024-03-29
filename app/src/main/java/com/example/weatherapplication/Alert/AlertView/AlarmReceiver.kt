@@ -64,7 +64,7 @@ class AlarmReceiver : BroadcastReceiver() {
             intent.removeExtra(Utils.NOTIFICATION_KEY)
         }else{
             Log.i("TAG", "onReceive: No true or false value on the intent")
-        }
+        }   
 
     }
     // Call this method where you initialize your app or set up your notification functionality
