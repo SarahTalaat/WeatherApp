@@ -1,4 +1,9 @@
-import android.app.*
+import android.app.Activity
+import android.app.AlarmManager
+import android.app.DatePickerDialog
+import android.app.Dialog
+import android.app.PendingIntent
+import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.location.Geocoder
@@ -7,37 +12,39 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.productsmvvm.Database.WeatherLocalDataSourceImplementation
 import com.example.productsmvvm.FavouriteProducts.FavouriteProductsView.OnAlertClickListenerInterface
-import com.example.weatherapplication.Repository.WeatherRepositoryImplementation
 import com.example.productsmvvm.Network.WeatherRemoteDataSourceImplementation
 import com.example.weatherapplication.Alert.AlertView.AlarmReceiver
 import com.example.weatherapplication.Alert.AlertView.AlertAdapter
-
 import com.example.weatherapplication.Alert.AlertViewModel.AlertViewModel
 import com.example.weatherapplication.Alert.AlertViewModel.AlertViewModelFactory_RDS
 import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.Constants.Utils.Companion.NOTIFICATION_ID
+import com.example.weatherapplication.Map.MapView.MapActivity
 import com.example.weatherapplication.Model.AlertModel.MyApplicationAlertModel.Model_Time
 import com.example.weatherapplication.Network.ApiState
 import com.example.weatherapplication.R
+import com.example.weatherapplication.Repository.WeatherRepositoryImplementation
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.util.*
-import kotlin.collections.ArrayList
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
+
 
 const val REQUEST_LOCATION_CODE = 2005
 
@@ -57,6 +64,9 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
     var isAppear = false
     var index = 0
     var shallCardAppear = false
+    private val REQUEST_CODE_MAP_ACTIVITY = 123
+    lateinit var choosenLat: String
+    lateinit var chooenLon: String
 
 
     companion object {
@@ -83,7 +93,14 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
         super.onViewCreated(view, savedInstanceState)
         fab_addAlert_InAlertFragment = view.findViewById(R.id.floatingActionButton_addAlert)
         fab_addAlert_InAlertFragment.setOnClickListener {
-            showDateTimePickerDialog()
+
+
+            val intent = Intent(activity, MapActivity::class.java)
+            startActivityForResult(intent, REQUEST_CODE_MAP_ACTIVITY)
+
+          //  showDateTimePickerDialog()
+
+
         }
 
 
@@ -163,7 +180,7 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
             model_Time_Instance.shallCardAppear=true
             alarmIntent.putExtra(Utils.NOTIFICATION_KEY,"false")
         }
- 
+
 
 
         val pendingIntent = PendingIntent.getBroadcast(
@@ -477,8 +494,16 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
                 scheduleNotificationOrAlarm(selectedDateTime!!)
             }
             notificationCreated = true
-        }else {
+        }else if(requestCode == REQUEST_CODE_MAP_ACTIVITY){
+            if (resultCode == Activity.RESULT_OK) {
+                showDateTimePickerDialog()
+                // Continue your code from where you left
+            } else {
+                // Handle if the activity was not finished successfully
+            }
+        }else{
             Toast.makeText(requireContext(), "Permission denied", Toast.LENGTH_SHORT).show()
+
         }
     }
 
@@ -502,6 +527,7 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
     override fun onClick_InserModelTimeToAlertFragment_InOnAlertClickListenerInterface(modelTime: Model_Time) {
         alertViewModel_Instance_InAlertFragmet.insertModelTime_InAlertViewModel(modelTime)
     }
+
 
 
 }
