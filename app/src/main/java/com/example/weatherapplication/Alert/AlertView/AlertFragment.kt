@@ -13,13 +13,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ProgressBar
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.productsmvvm.Database.WeatherLocalDataSourceImplementation
 import com.example.productsmvvm.FavouriteProducts.FavouriteProductsView.OnAlertClickListenerInterface
 import com.example.weatherapplication.Repository.WeatherRepositoryImplementation
@@ -31,18 +29,13 @@ import com.example.weatherapplication.Alert.AlertViewModel.AlertViewModel
 import com.example.weatherapplication.Alert.AlertViewModel.AlertViewModelFactory_RDS
 import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.Constants.Utils.Companion.NOTIFICATION_ID
-import com.example.weatherapplication.Model.AlertModel.APIModel.Alerts
-import com.example.weatherapplication.Model.AlertModel.APIModel.Model_Alert
 import com.example.weatherapplication.Model.AlertModel.MyApplicationAlertModel.Model_Time
-import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_WeatherArrayList
 import com.example.weatherapplication.Network.ApiState
 import com.example.weatherapplication.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -57,7 +50,7 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
     private lateinit var recyclerView_Instance_InAlertFragment: RecyclerView
     private lateinit var layoutManager_Instance_InAlertFragment: LinearLayoutManager
     private lateinit var adapter_Instance_InAlertFragment: AlertAdapter
-    lateinit var model_Time_Instance : Model_Time
+    var model_Time_Instance : Model_Time = Model_Time()
     var isAlertsNotEmpty: Boolean = false
     private var notificationCreated = false
     var isClicked = true
@@ -96,7 +89,7 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
 
 
 
-        model_Time_Instance= Model_Time()
+
 
         alertViewModelFactory_Instance_RDS_InAlertFragment = AlertViewModelFactory_RDS(
             WeatherRepositoryImplementation.getWeatherRepositoryImplementationInstance(
@@ -113,7 +106,7 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
 
         alertViewModel_Instance_InAlertFragmet.alertLiveDataList_ModelTime_InAlertViewModel.observe(viewLifecycleOwner){
             model ->
-                    adapter_Instance_InAlertFragment.setModelTimeList_InFavouriteCityAdapter(model as java.util.ArrayList<Model_Time>)
+                    adapter_Instance_InAlertFragment.setModelTimeList_InAlertAdapter(model as java.util.ArrayList<Model_Time>)
                     adapter_Instance_InAlertFragment.notifyDataSetChanged()
         }
 

@@ -1,7 +1,10 @@
 package com.example.weatherapplication.Model.CurrentWeatherModel.APIModel
 
+import androidx.room.Entity
 import com.google.gson.annotations.SerializedName
 
+//current_weather_table
+@Entity(tableName = "current_weather_table")
 data class Model_Forecast(
 
     @SerializedName("cod") var cod: String? = null,

@@ -14,7 +14,6 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.productsmvvm.FavouriteProducts.FavouriteProductsView.OnAlertClickListenerInterface
 import com.example.weatherapplication.Model.AlertModel.MyApplicationAlertModel.Model_Time
-import com.example.weatherapplication.Model.FavouriteCityModel.MyApplicationFavouriteCityModel.Model_FavouriteCity
 import com.example.weatherapplication.R
 
 class AlertAdapter: RecyclerView.Adapter<AlertAdapter.MyViewHolder_InAlertAdapter> {
@@ -83,7 +82,7 @@ class AlertAdapter: RecyclerView.Adapter<AlertAdapter.MyViewHolder_InAlertAdapte
 
 
     }
-    fun setModelTimeList_InFavouriteCityAdapter(modelTimeArrayList: java.util.ArrayList<Model_Time>){
+    fun setModelTimeList_InAlertAdapter(modelTimeArrayList: java.util.ArrayList<Model_Time>){
         Log.i("TAG", "setModelTimeList_InModelTimeAdapter: modelTimeArrayList :" + modelTimeArrayList)
 
         var model_Time = AlertFragment.getInstance().model_Time_Instance
