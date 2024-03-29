@@ -67,7 +67,7 @@ class AlertViewModel(private val weatherRepositoryInterface_Instance_Constructor
 
         Log.i("TAG", "getAlert_FromRetrofit_InAlertViewModel: (after the viewModelScope): lat: $lat , lon: $lon , appid: $appid")
     }
-
+/*
     fun getAlert_FromDatabase_InAlertViewModel(){
         viewModelScope.launch(Dispatchers.IO) {
             Log.i("TAG", "getAlert_FromDatabase_InAlertViewModel: (inside the viewModelScope): ")
@@ -83,7 +83,7 @@ class AlertViewModel(private val weatherRepositoryInterface_Instance_Constructor
                 }
         }
     }
-
+*/
     fun deleteModelTime_InAlertViewModel(modelTime: Model_Time){
         viewModelScope.launch(Dispatchers.IO){
             weatherRepositoryInterface_Instance_ConstructorParameter_InAlertViewModel.deleteModelTime_FromLDS_InWeatherRepository(modelTime)
@@ -100,7 +100,9 @@ class AlertViewModel(private val weatherRepositoryInterface_Instance_Constructor
 
     fun getAllLocalModelTime_StoredInDatabase_InAlertViewModel(){
         viewModelScope.launch(Dispatchers.IO){
-            weatherRepositoryInterface_Instance_ConstructorParameter_InAlertViewModel.getAllStoredModelTime_FromLDS_InWeatherRepository().collect{ modelTime -> alertMutableLiveData_ModelTime_InAlertViewModel.postValue(modelTime)}
+            weatherRepositoryInterface_Instance_ConstructorParameter_InAlertViewModel.
+            getAllStoredModelTime_FromLDS_InWeatherRepository()
+                .collect{ modelTime -> alertMutableLiveData_ModelTime_InAlertViewModel.postValue(modelTime)}
         }
     }
 }

@@ -65,8 +65,8 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
     var index = 0
     var shallCardAppear = false
     private val REQUEST_CODE_MAP_ACTIVITY = 123
-    lateinit var choosenLat: String
-    lateinit var chooenLon: String
+
+
 
 
     companion object {
@@ -123,10 +123,12 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
 
         alertViewModel_Instance_InAlertFragmet.alertLiveDataList_ModelTime_InAlertViewModel.observe(viewLifecycleOwner){
             model ->
-                    adapter_Instance_InAlertFragment.setModelTimeList_InAlertAdapter(model as java.util.ArrayList<Model_Time>)
+                    adapter_Instance_InAlertFragment.setMoelTimeArrayList_StoredInDatabase_InFavouriteCityAdapter(model as ArrayList<Model_Time>)
                     adapter_Instance_InAlertFragment.notifyDataSetChanged()
         }
 
+        alertViewModel_Instance_InAlertFragmet.getAllLocalModelTime_StoredInDatabase_InAlertViewModel()
+        saveInSharedPreferencesToAlarmReceiver()
         lifecycleScope.launch {
             alertViewModel_Instance_InAlertFragmet.alertStateFlow_InAlertViewModel.collectLatest { result ->
                 when(result){
@@ -155,20 +157,23 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
                         if(result.data?.lat!=null && result.data.lon != null){
                             var city = findCityName(result.data.lat!! , result.data.lon!!)
                             model_Time_Instance.city = city
+                            var lat = result.data.lat
+                            var lon = result.data.lon
+                            alertViewModel_Instance_InAlertFragmet.getAlert_FromRetrofit_InAlertViewModel(lat.toString(),lon.toString(), Utils.API_KEY)
+
                             Log.i("NULL", "onViewCreated: city: ${index+1}")
-                          //  alertViewModel_Instance_InAlertFragmet.insertModelTime_InAlertViewModel(model_Time_Instance)
+                            //  alertViewModel_Instance_InAlertFragmet.insertModelTime_InAlertViewModel(model_Time_Instance)
                         }
-                     //   adapter_Instance_InAlertFragment.receiveModelTimeInAlertAdapter(model_Time_Instance)
-                     //   adapter_Instance_InAlertFragment.notifyDataSetChanged()
+                        //   adapter_Instance_InAlertFragment.receiveModelTimeInAlertAdapter(model_Time_Instance)
+                        //   adapter_Instance_InAlertFragment.notifyDataSetChanged()
                     }
                 }
 
             }
 
         }
-        saveInSharedPreferencesToAlarmReceiver()
-        alertViewModel_Instance_InAlertFragmet.getAllLocalModelTime_StoredInDatabase_InAlertViewModel()
-        alertViewModel_Instance_InAlertFragmet.getAlert_FromRetrofit_InAlertViewModel(Utils.LAT_ALERT,Utils.lON_ALERT, Utils.API_KEY)
+
+
     }
 
 
@@ -496,6 +501,17 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
             notificationCreated = true
         }else if(requestCode == REQUEST_CODE_MAP_ACTIVITY){
             if (resultCode == Activity.RESULT_OK) {
+                if(getLatitudeFromSharedPreferences(requireContext()) != null && getLongitudeFromSharedPreferences(requireContext()) != null){
+                    var choosenLat = getLatitudeFromSharedPreferences(requireContext())!!
+                    Log.i("TAG", "onViewCreated: Alert Fragment : choosenLat: $choosenLat")
+
+                    var choosenLon = getLongitudeFromSharedPreferences(requireContext())!!
+                    Log.i("TAG", "onViewCreated: Alert Fragment : choosenLon: $choosenLon")
+
+                    alertViewModel_Instance_InAlertFragmet.getAlert_FromRetrofit_InAlertViewModel(choosenLat,choosenLon, Utils.API_KEY)
+                    adapter_Instance_InAlertFragment.setModelTimeArrayList_FromRetrofit_InAlertAdapter(model_Time_Instance)
+                    adapter_Instance_InAlertFragment.notifyDataSetChanged()
+                }
                 showDateTimePickerDialog()
                 // Continue your code from where you left
             } else {
@@ -528,6 +544,20 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
         alertViewModel_Instance_InAlertFragmet.insertModelTime_InAlertViewModel(modelTime)
     }
 
+    fun getLatitudeFromSharedPreferences(context: Context): String? {
+        // Get SharedPreferences instance
+        val sharedPreferences = context.getSharedPreferences(Utils.ALERT_MAP_SP_KEY, Context.MODE_PRIVATE)
+        // Retrieve latitude from SharedPreferences
+        return sharedPreferences.getString(Utils.ALERT_MAP_SP_LAT, "")
+    }
+
+    // Function to retrieve longitude from SharedPreferences
+    fun getLongitudeFromSharedPreferences(context: Context): String? {
+        // Get SharedPreferences instance
+        val sharedPreferences = context.getSharedPreferences(Utils.ALERT_MAP_SP_KEY, Context.MODE_PRIVATE)
+        // Retrieve longitude from SharedPreferences
+        return sharedPreferences.getString(Utils.ALERT_MAP_SP_LON, "")
+    }
 
 
 }

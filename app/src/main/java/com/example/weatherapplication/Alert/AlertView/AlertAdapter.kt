@@ -94,23 +94,28 @@ class AlertAdapter: RecyclerView.Adapter<AlertAdapter.MyViewHolder_InAlertAdapte
 
     }
     */
-    fun setModelTimeList_InAlertAdapter(modelTimeArrayList: java.util.ArrayList<Model_Time>){
-        Log.i("TAG", "setModelTimeList_InModelTimeAdapter: modelTimeArrayList :" + modelTimeArrayList)
-        Log.i("NULL", "setModelTimeList_InAlertAdapter: shallCardAppear adapter: ${AlertFragment.getInstance().shallCardAppear}")
 
-//        var model_Time = AlertFragment.getInstance().model_Time_Instance
-//        if(model_Time.city!= "nullValue" &&
-//           model_Time.specificTime != "nullValue" &&
-//           model_Time.endDate !="nullValue" &&
-//           model_Time.latitude !="nullValue" &&
-//           model_Time.startDate != "nullValue" &&
-//           model_Time.longitude != "nullValue"
-//           ){
+    fun setModelTimeArrayList_FromRetrofit_InAlertAdapter(modelTime:Model_Time) {
+        Log.i("TAG", "setModelTimeArrayList_InModelTimeAdapter: modelTime :" + modelTime)
 
-
-            this.modelTimeArrayList_InAlertAdapter =modelTimeArrayList
+        var model_Time = AlertFragment.getInstance().model_Time_Instance
+        if(model_Time.city!= "nullValue" &&
+           model_Time.specificTime != "nullValue" &&
+           model_Time.endDate !="nullValue" &&
+           model_Time.latitude !="nullValue" &&
+           model_Time.startDate != "nullValue" &&
+           model_Time.longitude != "nullValue"
+           ){
+            this.modelTimeArrayList_InAlertAdapter.add(modelTime)
             notifyDataSetChanged()
+          }
 
+    }
+
+    fun setMoelTimeArrayList_StoredInDatabase_InFavouriteCityAdapter(modelTimeArrayList: ArrayList<Model_Time>){
+        Log.i("TAG", "setProductList_InFavouriteProductsAdapter: productArrayList :" + modelTimeArrayList)
+        this.modelTimeArrayList_InAlertAdapter = modelTimeArrayList
+        notifyDataSetChanged()
     }
 
     class MyViewHolder_InAlertAdapter : RecyclerView.ViewHolder {

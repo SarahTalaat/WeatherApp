@@ -22,6 +22,9 @@ class Utils {
         var STOP_NOTIFICATION = "STOP_NOTIFICATION"
         var NOTIFICATION_KEY = "NOTIFICATION_KEY"
 
+        var ALERT_MAP_SP_KEY = "ALERT_MAP_SP_KEY"
+        var ALERT_MAP_SP_LAT = "ALERT_MAP_SP_LAT"
+        var ALERT_MAP_SP_LON = "ALERT_MAP_SP_LON"
         //lat=56.1304&lon=106.3468
 
         var REQUEST_OVERLAY_PERMISSION = 123
@@ -34,6 +37,7 @@ class Utils {
         const val STOP_NOTIFICATION_REQUEST_CODE = 2003
         const val NOTIFICATION_ID_EXTRA = "notification_id_extra"
         const val DISMISS_NOTIFICATION_REQUEST_CODE = 101
+
 
     }
 

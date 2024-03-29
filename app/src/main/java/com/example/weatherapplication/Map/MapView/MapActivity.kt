@@ -243,6 +243,8 @@ class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener ,
                 // Handle setting an alarm here
 
                 if (point.latitude != null && point.longitude != null){
+
+                    saveLocationToSharedPreferences(this,point.latitude.toString(),point.longitude.toString())
                     setResult(Activity.RESULT_OK);
                     finish();
                 }
@@ -256,6 +258,17 @@ class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener ,
 
             dialog.show()
 
+    }
+    fun saveLocationToSharedPreferences(context: Context, latitude: String, longitude: String) {
+        // Get SharedPreferences instance
+        val sharedPreferences = context.getSharedPreferences(Utils.ALERT_MAP_SP_KEY, Context.MODE_PRIVATE)
+        // Get SharedPreferences editor
+        val editor = sharedPreferences.edit()
+        // Put latitude and longitude into SharedPreferences
+        editor.putString(Utils.ALERT_MAP_SP_LAT, latitude)
+        editor.putString(Utils.ALERT_MAP_SP_LON, longitude)
+        // Commit changes
+        editor.apply()
     }
 
 
