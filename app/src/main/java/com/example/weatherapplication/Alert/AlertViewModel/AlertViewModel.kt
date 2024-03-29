@@ -48,7 +48,9 @@ class AlertViewModel(private val weatherRepositoryInterface_Instance_Constructor
     val alertLiveDataList_ModelTime_InAlertViewModel:LiveData<List<Model_Time>> = alertMutableLiveData_ModelTime_InAlertViewModel
 
 
-
+    init {
+        getAllLocalModelTime_StoredInDatabase_InAlertViewModel()
+    }
 
 
     fun getAlert_FromRetrofit_InAlertViewModel(lat: String, lon: String, appid: String){
@@ -102,7 +104,8 @@ class AlertViewModel(private val weatherRepositoryInterface_Instance_Constructor
         viewModelScope.launch(Dispatchers.IO){
             weatherRepositoryInterface_Instance_ConstructorParameter_InAlertViewModel.
             getAllStoredModelTime_FromLDS_InWeatherRepository()
-                .collect{ modelTime -> alertMutableLiveData_ModelTime_InAlertViewModel.postValue(modelTime)}
+                .collect{ modelTime ->
+                    alertMutableLiveData_ModelTime_InAlertViewModel.postValue(modelTime)}
         }
     }
 }

@@ -93,20 +93,10 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
         super.onViewCreated(view, savedInstanceState)
         fab_addAlert_InAlertFragment = view.findViewById(R.id.floatingActionButton_addAlert)
         fab_addAlert_InAlertFragment.setOnClickListener {
-
-
             val intent = Intent(activity, MapActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE_MAP_ACTIVITY)
-
           //  showDateTimePickerDialog()
-
-
         }
-
-
-
-
-
 
         alertViewModelFactory_Instance_RDS_InAlertFragment = AlertViewModelFactory_RDS(
             WeatherRepositoryImplementation.getWeatherRepositoryImplementationInstance(
@@ -123,17 +113,19 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
 
         alertViewModel_Instance_InAlertFragmet.alertLiveDataList_ModelTime_InAlertViewModel.observe(viewLifecycleOwner){
             model ->
-                    adapter_Instance_InAlertFragment.setMoelTimeArrayList_StoredInDatabase_InFavouriteCityAdapter(model as ArrayList<Model_Time>)
+                    Log.i("Size", "onViewCreated: alert db size = ${model.size}")
+                    adapter_Instance_InAlertFragment.setModelTimeArrayList_StoredInDatabase_InAlertAdapter(model as ArrayList<Model_Time>)
                     adapter_Instance_InAlertFragment.notifyDataSetChanged()
         }
-
         alertViewModel_Instance_InAlertFragmet.getAllLocalModelTime_StoredInDatabase_InAlertViewModel()
+
         saveInSharedPreferencesToAlarmReceiver()
+
         lifecycleScope.launch {
             alertViewModel_Instance_InAlertFragmet.alertStateFlow_InAlertViewModel.collectLatest { result ->
                 when(result){
                     is ApiState.Loading -> {
-                        recyclerView_Instance_InAlertFragment.visibility = View.GONE
+                        recyclerView_Instance_InAlertFragment.visibility = View.VISIBLE
                     }
                     is ApiState.Success_ModelForecast_InApiState -> {
                         Log.i("TAG", "onViewCreated: AlertFragment APIStateResult sucess modelforecast ")
@@ -159,7 +151,6 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
                             model_Time_Instance.city = city
                             var lat = result.data.lat
                             var lon = result.data.lon
-                            alertViewModel_Instance_InAlertFragmet.getAlert_FromRetrofit_InAlertViewModel(lat.toString(),lon.toString(), Utils.API_KEY)
 
                             Log.i("NULL", "onViewCreated: city: ${index+1}")
                             //  alertViewModel_Instance_InAlertFragmet.insertModelTime_InAlertViewModel(model_Time_Instance)

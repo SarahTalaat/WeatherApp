@@ -112,8 +112,8 @@ class AlertAdapter: RecyclerView.Adapter<AlertAdapter.MyViewHolder_InAlertAdapte
 
     }
 
-    fun setMoelTimeArrayList_StoredInDatabase_InFavouriteCityAdapter(modelTimeArrayList: ArrayList<Model_Time>){
-        Log.i("TAG", "setProductList_InFavouriteProductsAdapter: productArrayList :" + modelTimeArrayList)
+    fun setModelTimeArrayList_StoredInDatabase_InAlertAdapter(modelTimeArrayList: ArrayList<Model_Time>){
+        Log.i("Size", "setModelTimeArrayList_StoredInDatabase_InFavouriteCityAdapter: ${modelTimeArrayList.size}")
         this.modelTimeArrayList_InAlertAdapter = modelTimeArrayList
         notifyDataSetChanged()
     }
