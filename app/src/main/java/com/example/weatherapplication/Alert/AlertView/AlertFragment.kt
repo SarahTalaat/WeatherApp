@@ -141,7 +141,7 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
                             Log.i("NULL", "onViewCreated: city: ${index+1}")
                             alertViewModel_Instance_InAlertFragmet.insertModelTime_InAlertViewModel(model_Time_Instance)
                         }
-                        adapter_Instance_InAlertFragment.receiveodelTimeInAlertAdapter(model_Time_Instance)
+                        adapter_Instance_InAlertFragment.receiveModelTimeInAlertAdapter(model_Time_Instance)
                         adapter_Instance_InAlertFragment.notifyDataSetChanged()
                     }
                 }
@@ -159,7 +159,6 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
         val alarmIntent = Intent(requireContext(), AlarmReceiver::class.java)
         if (isClicked==true){
             isAppear=true
-            shallCardAppear = true
             alarmIntent.putExtra(Utils.NOTIFICATION_KEY,"false")
         }
 
@@ -298,12 +297,13 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
         model_Time_Instance.endDate=endDate.toString()
         Log.i("NULL", "processSelectedDateTime: endDate ${index+1}")
         model_Time_Instance.specificTime=selectedTime.toString()
+        alertViewModel_Instance_InAlertFragmet.insertModelTime_InAlertViewModel(model_Time_Instance)
         Log.i("NULL", "processSelectedDateTime: specificTime${index+1}")
 
 
 
 
-        adapter_Instance_InAlertFragment.receiveodelTimeInAlertAdapter(model_Time_Instance)
+
 
     }
 
@@ -345,7 +345,7 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
 
         if(isClicked==false){
             isAppear=true
-            shallCardAppear=true
+
             notificationIntent.putExtra(Utils.NOTIFICATION_KEY,"true")
         }
 
@@ -406,6 +406,8 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
             isClicked=false
             requestDrawOverAppsPermission(selectedDateTime)
             dialog.dismiss()
+            model_Time_Instance.shallCardAppear=true
+            adapter_Instance_InAlertFragment.notifyDataSetChanged()
         }
 
         val alarmButton = dialog.findViewById<Button>(R.id.alarmButton)
@@ -414,6 +416,8 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
             isClicked=true
             requestDrawOverAppsPermission(selectedDateTime)
             dialog.dismiss()
+            model_Time_Instance.shallCardAppear=true
+            adapter_Instance_InAlertFragment.notifyDataSetChanged()
         }
 
 

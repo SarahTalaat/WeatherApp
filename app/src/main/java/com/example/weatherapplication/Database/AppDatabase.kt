@@ -9,7 +9,7 @@ import com.example.weatherapplication.Model.AlertModel.MyApplicationAlertModel.M
 import com.example.weatherapplication.Model.FavouriteCityModel.MyApplicationFavouriteCityModel.Model_FavouriteCity
 
 
-@Database(entities = arrayOf(Model_FavouriteCity::class , Model_Time::class) , version = 2)
+@Database(entities = arrayOf(Model_FavouriteCity::class , Model_Time::class) , version = 3)
 abstract class AppDatabase: RoomDatabase() {
                 //productsDao
     abstract fun getAllFavouriteCity_FromDAO_InAppDatabase(): WeatherDAOInterface

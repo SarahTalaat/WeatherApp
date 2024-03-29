@@ -71,7 +71,7 @@ class AlertAdapter: RecyclerView.Adapter<AlertAdapter.MyViewHolder_InAlertAdapte
     */
 
 
-    fun receiveodelTimeInAlertAdapter(model_Time: Model_Time) {
+    fun receiveModelTimeInAlertAdapter(model_Time: Model_Time) {
 
         Log.i("TAG", "receiveodelTimeInAlertAdapter: StartDte: ${model_Time.startDate}")
         Log.i("TAG", "receiveodelTimeInAlertAdapter: StartDte: ${model_Time.endDate}")
@@ -80,23 +80,25 @@ class AlertAdapter: RecyclerView.Adapter<AlertAdapter.MyViewHolder_InAlertAdapte
         Log.i("TAG", "receiveodelTimeInAlertAdapter: StartDte: ${model_Time.latitude}")
         Log.i("TAG", "receiveodelTimeInAlertAdapter: StartDte: ${model_Time.longitude}")
 
+        if(model_Time.city!= "nullValue" &&
+            model_Time.specificTime != "nullValue" &&
+            model_Time.endDate !="nullValue" &&
+            model_Time.latitude !="nullValue" &&
+            model_Time.startDate != "nullValue" &&
+            model_Time.longitude != "nullValue" &&
+            model_Time.shallCardAppear == true){
+
+            this.modelTimeArrayList_InAlertAdapter.add(model_Time)
+            notifyDataSetChanged()
+        }
 
     }
     fun setModelTimeList_InAlertAdapter(modelTimeArrayList: java.util.ArrayList<Model_Time>){
         Log.i("TAG", "setModelTimeList_InModelTimeAdapter: modelTimeArrayList :" + modelTimeArrayList)
-
-        var model_Time = AlertFragment.getInstance().model_Time_Instance
-        if(model_Time.city!= "nullValue" &&
-           model_Time.specificTime != "nullValue" &&
-           model_Time.endDate !="nullValue" &&
-           model_Time.latitude !="nullValue" &&
-           model_Time.startDate != "nullValue" &&
-           model_Time.longitude != "nullValue" &&
-            AlertFragment.getInstance().shallCardAppear == true){
-
+        Log.i("NULL", "setModelTimeList_InAlertAdapter: shallCardAppear adapter: ${AlertFragment.getInstance().shallCardAppear}")
             this.modelTimeArrayList_InAlertAdapter = modelTimeArrayList
             notifyDataSetChanged()
-        }
+
     }
 
     class MyViewHolder_InAlertAdapter : RecyclerView.ViewHolder {

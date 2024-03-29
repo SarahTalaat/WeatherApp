@@ -12,6 +12,7 @@ class Model_Time (
     var endDate: String = "nullValue",
     var specificTime: String = "nullValue",
     var city: String = "nullValue",
+    var shallCardAppear: Boolean = false,
     @PrimaryKey(autoGenerate = true)
     @NonNull
     var id: Int = 0){
