@@ -10,6 +10,8 @@ import android.location.Geocoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
@@ -39,6 +41,8 @@ import com.example.weatherapplication.R
 import com.example.weatherapplication.Repository.WeatherRepositoryImplementation
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -168,55 +172,51 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
     }
 
 
-    private fun setAlarm(selectedDateTime: Date) {
-        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val alarmIntent = Intent(requireContext(), AlarmReceiver::class.java)
-        if (isClicked==true){
-            isAppear=true
-            model_Time_Instance.shallCardAppear=true
-            alarmIntent.putExtra(Utils.NOTIFICATION_KEY,"false")
-        }
-
-
-
-        val pendingIntent = PendingIntent.getBroadcast(
-            requireContext(),
-            Utils.ALARM_REQUEST_CODE,
-            alarmIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE // Add FLAG_IMMUTABLE
-        )
-
-        // Calculate the time difference between the current time and the selected time
-        val currentTimeMillis = System.currentTimeMillis()
-        val selectedTimeMillis = selectedDateTime.time
-        val delayInMillis = selectedTimeMillis - currentTimeMillis
-
-        // Ensure that the delay is positive
-        if (delayInMillis > 0) {
-            // Set the alarm to trigger at the specified selectedDateTime
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                alarmManager.setExactAndAllowWhileIdle(
-                    AlarmManager.RTC_WAKEUP,
-                    selectedTimeMillis,
-                    pendingIntent
-                )
-
-            } else {
-                alarmManager.setExact(
-                    AlarmManager.RTC_WAKEUP,
-                    selectedTimeMillis,
-                    pendingIntent
-                )
-
+    private fun setAlarmWithCoroutine(selectedDateTime: Date) {
+        CoroutineScope(Dispatchers.Main).launch {
+            val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val alarmIntent = Intent(requireContext(), AlarmReceiver::class.java)
+            if (isClicked) {
+                isAppear = true
+                model_Time_Instance.shallCardAppear = true
+                alarmIntent.putExtra(Utils.NOTIFICATION_KEY, "false")
             }
 
-            // Show a toast message indicating the successful setting of the alarm
-            Toast.makeText(requireContext(), "Alarm set successfully", Toast.LENGTH_SHORT).show()
-        } else {
-            // If the selected time is in the past, show an error message
-            Toast.makeText(requireContext(), "Invalid time selected", Toast.LENGTH_SHORT).show()
+            val pendingIntent = PendingIntent.getBroadcast(
+                requireContext(),
+                Utils.ALARM_REQUEST_CODE,
+                alarmIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+
+            val currentTimeMillis = System.currentTimeMillis()
+            val selectedTimeMillis = selectedDateTime.time
+            val delayInMillis = selectedTimeMillis - currentTimeMillis
+
+            if (delayInMillis > 0) {
+                // Set the alarm using a coroutine
+                Handler(Looper.getMainLooper()).postDelayed({
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        alarmManager.setExactAndAllowWhileIdle(
+                            AlarmManager.RTC_WAKEUP,
+                            selectedTimeMillis,
+                            pendingIntent
+                        )
+                    } else {
+                        alarmManager.setExact(
+                            AlarmManager.RTC_WAKEUP,
+                            selectedTimeMillis,
+                            pendingIntent
+                        )
+                    }
+                    Toast.makeText(requireContext(), "Alarm set successfully", Toast.LENGTH_SHORT).show()
+                }, delayInMillis)
+            } else {
+                Toast.makeText(requireContext(), "Invalid time selected", Toast.LENGTH_SHORT).show()
+            }
         }
     }
+
 
     @RequiresApi(Build.VERSION_CODES.S)
     private fun showDateTimePickerDialog() {
@@ -303,7 +303,7 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
             Log.i("NULL", "processSelectedDateTime: specificTime${index+1}")
 
             // Schedule notification or alarm for the current date and time
-            scheduleNotificationOrAlarm(scheduledTime)
+            setNotification(scheduledTime)
 
 
 
@@ -325,7 +325,7 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
-    private fun scheduleNotificationOrAlarm(scheduledTime: Date) {
+    private fun setNotification(scheduledTime: Date) {
         val currentTime = Calendar.getInstance().timeInMillis
         val delayInMillis = scheduledTime.time - currentTime
 
@@ -470,9 +470,9 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
         } else {
             // Permission already granted, create notification directly
             if (isClicked) {
-                setAlarm(selectedDateTime!!)
+                setAlarmWithCoroutine(selectedDateTime!!)
             } else {
-                scheduleNotificationOrAlarm(selectedDateTime!!)
+                setNotification(selectedDateTime!!)
             }
 
 
@@ -486,9 +486,9 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
         if (requestCode == Utils.REQUEST_DRAW_OVER_APPS_PERMISSION && resultCode == Activity.RESULT_OK && !notificationCreated) {
             // Permission granted and notification not yet created, create notification
             if (isClicked) {
-                setAlarm(selectedDateTime!!)
+                setAlarmWithCoroutine(selectedDateTime!!)
             } else {
-                scheduleNotificationOrAlarm(selectedDateTime!!)
+                setNotification(selectedDateTime!!)
             }
             notificationCreated = true
         }else if(requestCode == REQUEST_CODE_MAP_ACTIVITY){
