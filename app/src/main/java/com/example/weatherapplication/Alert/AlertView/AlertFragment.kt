@@ -358,7 +358,7 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
 
     private fun getPendingNotificationIntent(notificationId: Int): PendingIntent {
         val notificationIntent = Intent(requireContext(), AlarmReceiver::class.java)
-        notificationIntent.putExtra("notification_id", notificationId)
+       // notificationIntent.putExtra("notification_id", notificationId)
 
         if(isClicked==false){
             isAppear=true
