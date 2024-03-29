@@ -316,12 +316,6 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
         model_Time_Instance.endDate=endDate.toString()
         Log.i("NULL", "processSelectedDateTime: endDate ${index+1}")
 
-
-
-
-
-
-
     }
 
     @RequiresApi(Build.VERSION_CODES.S)

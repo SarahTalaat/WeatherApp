@@ -27,6 +27,9 @@ import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.Model.AlertModel.APIModel.Model_Alert
 import com.example.weatherapplication.R
 import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class AlarmReceiver : BroadcastReceiver() {
 
@@ -55,15 +58,16 @@ class AlarmReceiver : BroadcastReceiver() {
 
         Log.i("TAG", "onReceive: retrievedValue: $retrievedValue")
 
-
-        if(retrievedValue== "true"){
-            notificationLogic(context, intent)
-            intent.removeExtra(Utils.NOTIFICATION_KEY)
-        }else if(retrievedValue == "false"){
-            alarmLogic(context, intent)
-            intent.removeExtra(Utils.NOTIFICATION_KEY)
-        }else{
-            Log.i("TAG", "onReceive: No true or false value on the intent")
+        CoroutineScope(Dispatchers.Main).launch {
+            if (retrievedValue == "true") {
+                notificationLogic(context, intent)
+                intent.removeExtra(Utils.NOTIFICATION_KEY)
+            } else if (retrievedValue == "false") {
+                alarmLogic(context, intent)
+                intent.removeExtra(Utils.NOTIFICATION_KEY)
+            } else {
+                Log.i("TAG", "onReceive: No true or false value on the intent")
+            }
         }
 
     }
