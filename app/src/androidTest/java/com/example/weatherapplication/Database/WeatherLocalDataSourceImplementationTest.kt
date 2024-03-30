@@ -2,12 +2,15 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.MediumTest
 import com.example.productsmvvm.Database.AppDatabase
 import com.example.productsmvvm.Database.WeatherLocalDataSourceImplementation
 import com.example.weatherapplication.Model.AlertModel.MyApplicationAlertModel.Model_Time
 import com.example.weatherapplication.Model.FavouriteCityModel.MyApplicationFavouriteCityModel.Model_FavouriteCity
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -15,6 +18,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
+@MediumTest
 class WeatherLocalDataSourceTest {
 
     private lateinit var database: AppDatabase
@@ -32,37 +36,39 @@ class WeatherLocalDataSourceTest {
         database.close()
     }
 
+
     @Test
     fun testInsertAndRetrieveFavouriteCity() = runBlocking {
         val city = Model_FavouriteCity("latitude", "longitude", "CityName")
         weatherLocalDataSource.insertFavouriteCityIntoDatabase_InLDS(city)
 
         val retrievedCities = weatherLocalDataSource.getAllStoredFavouriteCityFromDatabase_InLDS().first()
-        assertEquals(1, retrievedCities.size)
+        assertThat(retrievedCities.size, `is`(1))
         val retrievedCity = retrievedCities[0]
-        assertEquals(city.latitude, retrievedCity.latitude)
-        assertEquals(city.longitude, retrievedCity.longitude)
-        assertEquals(city.cityName, retrievedCity.cityName)
+        assertThat(retrievedCity.latitude, `is`(city.latitude))
+        assertThat(retrievedCity.longitude, `is`(city.longitude))
+        assertThat(retrievedCity.cityName, `is`(city.cityName))
     }
-
 
     @Test
     fun testInsertAndRetrieveModelTime() = runBlocking {
         val modelTime = Model_Time("latitude", "longitude", "startDate", "endDate", "specificTime", "city", true)
+
         weatherLocalDataSource.insertModelTimeIntoDatabase_InLDS(modelTime)
 
         val retrievedModelTimes = weatherLocalDataSource.getAllStoredModelTimeFromDatabase_InLDS().first()
-        assertEquals(1, retrievedModelTimes.size)
+        assertThat(retrievedModelTimes.size, `is`(1))
 
         val retrievedModelTime = retrievedModelTimes[0]
-        assertEquals(modelTime.latitude, retrievedModelTime.latitude)
-        assertEquals(modelTime.longitude, retrievedModelTime.longitude)
-        assertEquals(modelTime.startDate, retrievedModelTime.startDate)
-        assertEquals(modelTime.endDate, retrievedModelTime.endDate)
-        assertEquals(modelTime.specificTime, retrievedModelTime.specificTime)
-        assertEquals(modelTime.city, retrievedModelTime.city)
-        assertEquals(modelTime.shallCardAppear, retrievedModelTime.shallCardAppear)
+        assertThat(retrievedModelTime.latitude, `is`(modelTime.latitude))
+        assertThat(retrievedModelTime.longitude, `is`(modelTime.longitude))
+        assertThat(retrievedModelTime.startDate, `is`(modelTime.startDate))
+        assertThat(retrievedModelTime.endDate, `is`(modelTime.endDate))
+        assertThat(retrievedModelTime.specificTime, `is`(modelTime.specificTime))
+        assertThat(retrievedModelTime.city, `is`(modelTime.city))
+        assertThat(retrievedModelTime.shallCardAppear, `is`(modelTime.shallCardAppear))
     }
+
 
 
     @Test
@@ -88,4 +94,17 @@ class WeatherLocalDataSourceTest {
         val retrievedModelTimes = database.getAllModelTime_FromDAO_InAppDatabase().getAllStoredModelTime_InDAOInterface().first()
         assertEquals(0, retrievedModelTimes.size)
     }
+
+    @Test
+    fun testRetrieveModelTime() = runBlocking {
+        val modelTime = Model_Time("latitude", "longitude", "startDate", "endDate", "specificTime", "city", true)
+
+        weatherLocalDataSource.insertModelTimeIntoDatabase_InLDS(modelTime)
+
+        // Retrieve model times after deletion
+        val retrievedModelTimes = weatherLocalDataSource.getAllStoredModelTimeFromDatabase_InLDS().first()
+        assertEquals(1, retrievedModelTimes.size)
+    }
+
+
 }
