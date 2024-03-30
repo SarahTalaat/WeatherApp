@@ -2,22 +2,22 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="WeatherDAOTest">
+        <State />
+      </entry>
+      <entry key="WeatherLocalDataSourceTest">
+        <State />
+      </entry>
       <entry key="app">
         <State />
       </entry>
-      <entry key="insertAndDeleteModelTime()">
+      <entry key="deleteFavouriteCity()">
         <State />
       </entry>
       <entry key="testDeleteFavouriteCity()">
         <State />
       </entry>
       <entry key="testDeleteModelTime()">
-        <State />
-      </entry>
-      <entry key="testInsertAndRetrieveFavouriteCity()">
-        <State />
-      </entry>
-      <entry key="testInsertAndRetrieveModelTime()">
         <State />
       </entry>
     </value>

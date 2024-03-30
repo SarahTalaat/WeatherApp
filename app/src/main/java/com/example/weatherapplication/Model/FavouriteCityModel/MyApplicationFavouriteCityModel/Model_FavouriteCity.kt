@@ -14,7 +14,6 @@ class Model_FavouriteCity (
     @NonNull
     var id: Int = 0){
 
-    /*
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -25,21 +24,6 @@ class Model_FavouriteCity (
         if (longitude != other.longitude) return false
         if (cityName != other.cityName) return false
         return id == other.id
-    }
-     */
-
-
-    // In Model_FavouriteCity.kt
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as Model_FavouriteCity
-
-        if (latitude != other.latitude) return false
-        if (longitude != other.longitude) return false
-        if (cityName != other.cityName) return false
-        return true
     }
 
     override fun hashCode(): Int {
