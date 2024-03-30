@@ -5,6 +5,21 @@
       <entry key="app">
         <State />
       </entry>
+      <entry key="insertAndDeleteModelTime()">
+        <State />
+      </entry>
+      <entry key="testDeleteFavouriteCity()">
+        <State />
+      </entry>
+      <entry key="testDeleteModelTime()">
+        <State />
+      </entry>
+      <entry key="testInsertAndRetrieveFavouriteCity()">
+        <State />
+      </entry>
+      <entry key="testInsertAndRetrieveModelTime()">
+        <State />
+      </entry>
     </value>
   </component>
 </project>
