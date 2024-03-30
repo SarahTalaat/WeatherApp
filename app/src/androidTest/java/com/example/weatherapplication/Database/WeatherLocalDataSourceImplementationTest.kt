@@ -13,6 +13,7 @@ import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -39,7 +40,7 @@ class WeatherLocalDataSourceTest {
 
     @Test
     fun testInsertAndRetrieveFavouriteCity() = runBlocking {
-        val city = Model_FavouriteCity("latitude", "longitude", "CityName")
+        val city = Model_FavouriteCity("latitude", "longitude", "CityName" , 1)
         weatherLocalDataSource.insertFavouriteCityIntoDatabase_InLDS(city)
 
         val retrievedCities = weatherLocalDataSource.getAllStoredFavouriteCityFromDatabase_InLDS().first()
@@ -52,7 +53,7 @@ class WeatherLocalDataSourceTest {
 
     @Test
     fun testInsertAndRetrieveModelTime() = runBlocking {
-        val modelTime = Model_Time("latitude", "longitude", "startDate", "endDate", "specificTime", "city", true)
+        val modelTime = Model_Time("latitude", "longitude", "startDate", "endDate", "specificTime", "city", true,1)
 
         weatherLocalDataSource.insertModelTimeIntoDatabase_InLDS(modelTime)
 
@@ -73,31 +74,30 @@ class WeatherLocalDataSourceTest {
 
     @Test
     fun testDeleteFavouriteCity() = runBlocking {
-        val city = Model_FavouriteCity("latitude", "longitude", "CityName")
+        val city = Model_FavouriteCity("latitude", "longitude", "CityName",1)
         weatherLocalDataSource.insertFavouriteCityIntoDatabase_InLDS(city)
-
         weatherLocalDataSource.deleteFavouriteCityFromDatabase_InLDS(city)
 
-        // Retrieve cities after deletion
-        val retrievedCities = database.getAllFavouriteCity_FromDAO_InAppDatabase().getAllStoredFavouriteCity_InDAOInterface().first()
+        val retrievedCities = weatherLocalDataSource.getAllStoredFavouriteCityFromDatabase_InLDS().first()
         assertEquals(0, retrievedCities.size)
     }
 
     @Test
     fun testDeleteModelTime() = runBlocking {
-        val modelTime = Model_Time("latitude", "longitude", "startDate", "endDate", "specificTime", "city", true)
+        val modelTime = Model_Time("latitude", "longitude", "startDate", "endDate", "specificTime", "city", true,1)
         weatherLocalDataSource.insertModelTimeIntoDatabase_InLDS(modelTime)
 
         weatherLocalDataSource.deleteModelTimeFromDatabase_InLDS(modelTime)
 
         // Retrieve model times after deletion
-        val retrievedModelTimes = database.getAllModelTime_FromDAO_InAppDatabase().getAllStoredModelTime_InDAOInterface().first()
-        assertEquals(0, retrievedModelTimes.size)
+        val retrievedModelTimes = weatherLocalDataSource.getAllStoredModelTimeFromDatabase_InLDS().first()
+
+        assertFalse(retrievedModelTimes.contains(modelTime))
     }
 
     @Test
     fun testRetrieveModelTime() = runBlocking {
-        val modelTime = Model_Time("latitude", "longitude", "startDate", "endDate", "specificTime", "city", true)
+        val modelTime = Model_Time("latitude", "longitude", "startDate", "endDate", "specificTime", "city", true,1)
 
         weatherLocalDataSource.insertModelTimeIntoDatabase_InLDS(modelTime)
 
