@@ -15,29 +15,51 @@ import kotlinx.coroutines.launch
 
 class CurrentWeatherViewModel(private val weatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel: WeatherRepositoryInterface):ViewModel() {
 
-/*
-    private var productsMutableLiveDataList_InAllProductsViewModel: MutableLiveData<List<Products>> = MutableLiveData<List<Products>>()
-    //products
-    val productsLiveDataList_InAllProductsViewModel: LiveData<List<Products>> = productsMutableLiveDataList_InAllProductsViewModel
 
-    init {
-        getAllRemoteProducts_FromRetrofit_InAllProductsViewModel()
+    private var forecastMutableStateFlow_InCurrentWeatherViewModel: MutableStateFlow<ApiState> = MutableStateFlow<ApiState>(ApiState.Loading)
+    val forecastStateFlow_InCurrentWeatherViewModel: StateFlow<ApiState> = forecastMutableStateFlow_InCurrentWeatherViewModel
+
+    fun getForecast_FromRetrofit_InCurrentWeatherViewModel(lat: String, lon: String, appid: String){
+
+        Log.i("TAG", "getForecast_FromRetrofit_InCurrentWeatherViewModel: (before the viewModelScope): lat: $lat , lon: $lon , appid: $appid")
+        viewModelScope.launch(Dispatchers.IO) {
+            weatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getForecast_FromRDS_InWeatherRepository(lat, lon, appid)
+                .catch { e ->
+                    forecastMutableStateFlow_InCurrentWeatherViewModel.value = ApiState.Failure(e)
+                }
+                .collect{data ->
+                    forecastMutableStateFlow_InCurrentWeatherViewModel.value= ApiState.Success_ModelForecast_InApiState(data)
+                }
+
+        }
+
+
+        Log.i("TAG", "getForecast_FromRetrofit_InCurrentWeatherViewModel: (after the viewModelScope): lat: $lat , lon: $lon , appid: $appid")
     }
 
-    fun insertProduct_InAllProductsViewModel(product: Products){
-        viewModelScope.launch(Dispatchers.IO){
-            productsRepositoryInterfaceInstance_ConstructorParameter_InAllWeatherViewModel.insertProduct_FromLDS_InProductsRepository(product)
+    /*
+        private var productsMutableLiveDataList_InAllProductsViewModel: MutableLiveData<List<Products>> = MutableLiveData<List<Products>>()
+        //products
+        val productsLiveDataList_InAllProductsViewModel: LiveData<List<Products>> = productsMutableLiveDataList_InAllProductsViewModel
+
+        init {
             getAllRemoteProducts_FromRetrofit_InAllProductsViewModel()
         }
-    }
 
-    fun getAllRemoteProducts_FromRetrofit_InAllProductsViewModel(){
-        viewModelScope.launch(Dispatchers.IO){
-            productsMutableLiveDataList_InAllProductsViewModel.postValue(productsRepositoryInterfaceInstance_ConstructorParameter_InAllWeatherViewModel.getCurrentWeather_FromRDS_InProductsRepository())
+        fun insertProduct_InAllProductsViewModel(product: Products){
+            viewModelScope.launch(Dispatchers.IO){
+                productsRepositoryInterfaceInstance_ConstructorParameter_InAllWeatherViewModel.insertProduct_FromLDS_InProductsRepository(product)
+                getAllRemoteProducts_FromRetrofit_InAllProductsViewModel()
+            }
         }
-    }
 
- */
+        fun getAllRemoteProducts_FromRetrofit_InAllProductsViewModel(){
+            viewModelScope.launch(Dispatchers.IO){
+                productsMutableLiveDataList_InAllProductsViewModel.postValue(productsRepositoryInterfaceInstance_ConstructorParameter_InAllWeatherViewModel.getCurrentWeather_FromRDS_InProductsRepository())
+            }
+        }
+
+     */
 
 /*
     private var stringMutableLiveData_InCurrentWeatherViewModel: MutableLiveData<String> = MutableLiveData<String>()
@@ -53,9 +75,6 @@ class CurrentWeatherViewModel(private val weatherRepositoryInterface_Instance_Co
     val cityLiveDataList_InCurrentWeatherViewModel: LiveData<Model_City> = cityMutableLiveData_InCurrentWeatherViewModel
 
    */
-    private var forecastMutableStateFlow_InCurrentWeatherViewModel: MutableStateFlow<ApiState> = MutableStateFlow<ApiState>(ApiState.Loading)
-    val forecastStateFlow_InCurrentWeatherViewModel: StateFlow<ApiState> = forecastMutableStateFlow_InCurrentWeatherViewModel
-
 
 
     /*
@@ -159,22 +178,6 @@ class CurrentWeatherViewModel(private val weatherRepositoryInterface_Instance_Co
 
     }
 */
-    fun getForecast_FromRetrofit_InCurrentWeatherViewModel(lat: String, lon: String, appid: String){
 
-        Log.i("TAG", "getForecast_FromRetrofit_InCurrentWeatherViewModel: (before the viewModelScope): lat: $lat , lon: $lon , appid: $appid")
-    viewModelScope.launch(Dispatchers.IO) {
-        weatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getForecast_FromRDS_InWeatherRepository(lat, lon, appid)
-            .catch { e ->
-                forecastMutableStateFlow_InCurrentWeatherViewModel.value = ApiState.Failure(e)
-            }
-            .collect{data ->
-                forecastMutableStateFlow_InCurrentWeatherViewModel.value= ApiState.Success_ModelForecast_InApiState(data)
-            }
-
-    }
-
-
-    Log.i("TAG", "getForecast_FromRetrofit_InCurrentWeatherViewModel: (after the viewModelScope): lat: $lat , lon: $lon , appid: $appid")
-    }
 
 }

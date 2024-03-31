@@ -14,45 +14,45 @@ import kotlinx.coroutines.launch
 
 class FavouriteCityWeatherViewModel(private val weatherRepositoryInterface_Instance_ConstructorParameter_InFavouriteCityWeatherViewModel: WeatherRepositoryInterface):ViewModel() {
 
-/*
-    private var productsMutableLiveDataList_InAllProductsViewModel: MutableLiveData<List<Products>> = MutableLiveData<List<Products>>()
-    //products
-    val productsLiveDataList_InAllProductsViewModel: LiveData<List<Products>> = productsMutableLiveDataList_InAllProductsViewModel
 
-    init {
-        getAllRemoteProducts_FromRetrofit_InAllProductsViewModel()
-    }
-
-    fun insertProduct_InAllProductsViewModel(product: Products){
-        viewModelScope.launch(Dispatchers.IO){
-            productsRepositoryInterfaceInstance_ConstructorParameter_InAllWeatherViewModel.insertProduct_FromLDS_InProductsRepository(product)
-            getAllRemoteProducts_FromRetrofit_InAllProductsViewModel()
-        }
-    }
-
-    fun getAllRemoteProducts_FromRetrofit_InAllProductsViewModel(){
-        viewModelScope.launch(Dispatchers.IO){
-            productsMutableLiveDataList_InAllProductsViewModel.postValue(productsRepositoryInterfaceInstance_ConstructorParameter_InAllWeatherViewModel.getCurrentWeather_FromRDS_InProductsRepository())
-        }
-    }
-
- */
-
-/*
-    private var stringMutableLiveData_InFavouriteCityWeatherViewModel: MutableLiveData<String> = MutableLiveData<String>()
-    val stringLiveDataList_InFavouriteCityWeatherViewModel: LiveData<String> = stringMutableLiveData_InFavouriteCityWeatherViewModel
-
-    private var intMutableLiveData_InFavouriteCityWeatherViewModel: MutableLiveData<Int> = MutableLiveData<Int>()
-    val intLiveDataList_InFavouriteCityWeatherViewModel: LiveData<Int> = intMutableLiveData_InFavouriteCityWeatherViewModel
-
-    private var weatherArrayListMutableLiveData_InFavouriteCityWeatherViewModel: MutableLiveData<ArrayList<Model_WeatherArrayList>> = MutableLiveData<ArrayList<Model_WeatherArrayList>>()
-    val weatherArrayListLiveDataList_InFavouriteCityWeatherViewModel: LiveData<ArrayList<Model_WeatherArrayList>> = weatherArrayListMutableLiveData_InFavouriteCityWeatherViewModel
-
-    private var cityMutableLiveData_InFavouriteCityWeatherViewModel: MutableLiveData<Model_City> = MutableLiveData<Model_City>()
-    val cityLiveDataList_InFavouriteCityWeatherViewModel: LiveData<Model_City> = cityMutableLiveData_InFavouriteCityWeatherViewModel
-*/
     private var forecastMutableStateFlow_InFavouriteCityWeatherViewModel: MutableStateFlow<ApiState> = MutableStateFlow<ApiState>(ApiState.Loading)
     val forecastStateFlow_InFavouriteCityWeatherViewModel: StateFlow<ApiState> = forecastMutableStateFlow_InFavouriteCityWeatherViewModel
+
+
+    fun getForecast_FromRetrofit_InFavouriteCityWeatherViewModel(lat: String, lon: String, appid: String){
+
+
+
+        viewModelScope.launch(Dispatchers.IO) {
+            weatherRepositoryInterface_Instance_ConstructorParameter_InFavouriteCityWeatherViewModel.getForecast_FromRDS_InWeatherRepository(lat, lon, appid)
+                .catch { e ->
+                    forecastMutableStateFlow_InFavouriteCityWeatherViewModel.value = ApiState.Failure(e)
+                }
+                .collect{data ->
+                    forecastMutableStateFlow_InFavouriteCityWeatherViewModel.value=ApiState.Success_ModelForecast_InApiState(data)
+                }
+
+        }
+
+
+
+        Log.i("TAG", "getForecast_FromRetrofit_InFavouriteCityWeatherViewModel: (before the viewModelScope): lat: $lat , lon: $lon , appid: $appid")
+        /*
+                viewModelScope.launch(Dispatchers.IO) {
+
+                    Log.i("TAG", "getForecast_FromRetrofit_InFavouriteCityWeatherViewModel: (inside the viewModelScope):  lat: $lat , lon: $lon , appid: $appid")
+                    Log.i("TAG", "getForecast_FromRetrofit_InFavouriteCityWeatherViewModel: (inside the viewModelScope) : "+
+                            weatherRepositoryInterface_Instance_ConstructorParameter_InFavouriteCityWeatherViewModel.getForecast_FromRDS_InWeatherRepository(lat, lon, appid))
+
+
+                    forecastMutableStateFlow_InFavouriteCityWeatherViewModel.postValue(
+                        weatherRepositoryInterface_Instance_ConstructorParameter_InFavouriteCityWeatherViewModel.getForecast_FromRDS_InWeatherRepository(lat, lon, appid)
+                    )
+                }
+            */
+
+        Log.i("TAG", "getForecast_FromRetrofit_InFavouriteCityWeatherViewModel: (after the viewModelScope): lat: $lat , lon: $lon , appid: $appid")
+    }
 
 /*
 
@@ -156,39 +156,43 @@ class FavouriteCityWeatherViewModel(private val weatherRepositoryInterface_Insta
 
     }
 */
-    fun getForecast_FromRetrofit_InFavouriteCityWeatherViewModel(lat: String, lon: String, appid: String){
+    /*
+    private var productsMutableLiveDataList_InAllProductsViewModel: MutableLiveData<List<Products>> = MutableLiveData<List<Products>>()
+    //products
+    val productsLiveDataList_InAllProductsViewModel: LiveData<List<Products>> = productsMutableLiveDataList_InAllProductsViewModel
 
-        Log.i("TAG", "getForecast_FromRetrofit_InFavouriteCityWeatherViewModel: (before the viewModelScope): lat: $lat , lon: $lon , appid: $appid")
-/*
-        viewModelScope.launch(Dispatchers.IO) {
+    init {
+        getAllRemoteProducts_FromRetrofit_InAllProductsViewModel()
+    }
 
-            Log.i("TAG", "getForecast_FromRetrofit_InFavouriteCityWeatherViewModel: (inside the viewModelScope):  lat: $lat , lon: $lon , appid: $appid")
-            Log.i("TAG", "getForecast_FromRetrofit_InFavouriteCityWeatherViewModel: (inside the viewModelScope) : "+
-                    weatherRepositoryInterface_Instance_ConstructorParameter_InFavouriteCityWeatherViewModel.getForecast_FromRDS_InWeatherRepository(lat, lon, appid))
-
-
-            forecastMutableStateFlow_InFavouriteCityWeatherViewModel.postValue(
-                weatherRepositoryInterface_Instance_ConstructorParameter_InFavouriteCityWeatherViewModel.getForecast_FromRDS_InWeatherRepository(lat, lon, appid)
-            )
+    fun insertProduct_InAllProductsViewModel(product: Products){
+        viewModelScope.launch(Dispatchers.IO){
+            productsRepositoryInterfaceInstance_ConstructorParameter_InAllWeatherViewModel.insertProduct_FromLDS_InProductsRepository(product)
+            getAllRemoteProducts_FromRetrofit_InAllProductsViewModel()
         }
+    }
+
+    fun getAllRemoteProducts_FromRetrofit_InAllProductsViewModel(){
+        viewModelScope.launch(Dispatchers.IO){
+            productsMutableLiveDataList_InAllProductsViewModel.postValue(productsRepositoryInterfaceInstance_ConstructorParameter_InAllWeatherViewModel.getCurrentWeather_FromRDS_InProductsRepository())
+        }
+    }
+
+ */
+
+    /*
+        private var stringMutableLiveData_InFavouriteCityWeatherViewModel: MutableLiveData<String> = MutableLiveData<String>()
+        val stringLiveDataList_InFavouriteCityWeatherViewModel: LiveData<String> = stringMutableLiveData_InFavouriteCityWeatherViewModel
+
+        private var intMutableLiveData_InFavouriteCityWeatherViewModel: MutableLiveData<Int> = MutableLiveData<Int>()
+        val intLiveDataList_InFavouriteCityWeatherViewModel: LiveData<Int> = intMutableLiveData_InFavouriteCityWeatherViewModel
+
+        private var weatherArrayListMutableLiveData_InFavouriteCityWeatherViewModel: MutableLiveData<ArrayList<Model_WeatherArrayList>> = MutableLiveData<ArrayList<Model_WeatherArrayList>>()
+        val weatherArrayListLiveDataList_InFavouriteCityWeatherViewModel: LiveData<ArrayList<Model_WeatherArrayList>> = weatherArrayListMutableLiveData_InFavouriteCityWeatherViewModel
+
+        private var cityMutableLiveData_InFavouriteCityWeatherViewModel: MutableLiveData<Model_City> = MutableLiveData<Model_City>()
+        val cityLiveDataList_InFavouriteCityWeatherViewModel: LiveData<Model_City> = cityMutableLiveData_InFavouriteCityWeatherViewModel
     */
 
-    viewModelScope.launch(Dispatchers.IO) {
-        weatherRepositoryInterface_Instance_ConstructorParameter_InFavouriteCityWeatherViewModel.getForecast_FromRDS_InWeatherRepository(lat, lon, appid)
-            .catch { e ->
-                forecastMutableStateFlow_InFavouriteCityWeatherViewModel.value = ApiState.Failure(e)
-            }
-            .collect{data ->
-                forecastMutableStateFlow_InFavouriteCityWeatherViewModel.value=ApiState.Success_ModelForecast_InApiState(data)
-            }
-
-    }
-
-
-
-
-
-        Log.i("TAG", "getForecast_FromRetrofit_InFavouriteCityWeatherViewModel: (after the viewModelScope): lat: $lat , lon: $lon , appid: $appid")
-    }
 
 }
