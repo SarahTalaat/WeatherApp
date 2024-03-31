@@ -5,6 +5,8 @@ import com.example.weatherapplication.Model.AlertModel.APIModel.Model_Alert
 import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_Forecast
 
 class FakeWeatherRemoteDataSourceImplementation: WeatherRemoteDataSourceInterface {
+    private var forecast: Model_Forecast? = null
+    private var alert: Model_Alert? = null
     override suspend fun getForecast_OverNetwork_InRDS(
         lat: String,
         lon: String,
@@ -20,4 +22,6 @@ class FakeWeatherRemoteDataSourceImplementation: WeatherRemoteDataSourceInterfac
     ): Model_Alert? {
         TODO("Not yet implemented")
     }
+
+
 }
