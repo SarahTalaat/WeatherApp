@@ -17,30 +17,6 @@ import kotlinx.coroutines.launch
 
 class AlertViewModel(private val weatherRepositoryInterface_Instance_ConstructorParameter_InAlertViewModel: WeatherRepositoryInterface):ViewModel() {
 
-/*
-    private var productsMutableLiveDataList_InAllProductsViewModel: MutableLiveData<List<Products>> = MutableLiveData<List<Products>>()
-    //products
-    val productsLiveDataList_InAllProductsViewModel: LiveData<List<Products>> = productsMutableLiveDataList_InAllProductsViewModel
-
-    init {
-        getAllRemoteProducts_FromRetrofit_InAllProductsViewModel()
-    }
-
-    fun insertProduct_InAllProductsViewModel(product: Products){
-        viewModelScope.launch(Dispatchers.IO){
-            productsRepositoryInterfaceInstance_ConstructorParameter_InAllWeatherViewModel.insertProduct_FromLDS_InProductsRepository(product)
-            getAllRemoteProducts_FromRetrofit_InAllProductsViewModel()
-        }
-    }
-
-    fun getAllRemoteProducts_FromRetrofit_InAllProductsViewModel(){
-        viewModelScope.launch(Dispatchers.IO){
-            productsMutableLiveDataList_InAllProductsViewModel.postValue(productsRepositoryInterfaceInstance_ConstructorParameter_InAllWeatherViewModel.getCurrentWeather_FromRDS_InProductsRepository())
-        }
-    }
-
- */
-
     private var alertMutableStateFlow_InAlertViewModel: MutableStateFlow<ApiState> = MutableStateFlow<ApiState>(ApiState.Loading)
     val alertStateFlow_InAlertViewModel: MutableStateFlow<ApiState> = alertMutableStateFlow_InAlertViewModel
 
@@ -69,23 +45,7 @@ class AlertViewModel(private val weatherRepositoryInterface_Instance_Constructor
 
         Log.i("TAG", "getAlert_FromRetrofit_InAlertViewModel: (after the viewModelScope): lat: $lat , lon: $lon , appid: $appid")
     }
-/*
-    fun getAlert_FromDatabase_InAlertViewModel(){
-        viewModelScope.launch(Dispatchers.IO) {
-            Log.i("TAG", "getAlert_FromDatabase_InAlertViewModel: (inside the viewModelScope): ")
-            Log.i("TAG", "getAlert_FromDatabase_InAlertViewModel: (inside the viewModelScope) : "+
-                    weatherRepositoryInterface_Instance_ConstructorParameter_InAlertViewModel.getAllStoredModelTime_FromLDS_InWeatherRepository())
 
-            // Collect the flow
-            weatherRepositoryInterface_Instance_ConstructorParameter_InAlertViewModel
-                .getAllStoredModelTime_FromLDS_InWeatherRepository()
-                .collect { modelTimeList ->
-                    // Post the value to LiveData
-                    alertMutableLiveData_ModelTime_InAlertViewModel.postValue(modelTimeList)
-                }
-        }
-    }
-*/
     fun deleteModelTime_InAlertViewModel(modelTime: Model_Time){
         viewModelScope.launch(Dispatchers.IO){
             weatherRepositoryInterface_Instance_ConstructorParameter_InAlertViewModel.deleteModelTime_FromLDS_InWeatherRepository(modelTime)
@@ -108,4 +68,45 @@ class AlertViewModel(private val weatherRepositoryInterface_Instance_Constructor
                     alertMutableLiveData_ModelTime_InAlertViewModel.postValue(modelTime)}
         }
     }
+
+    /*
+    private var productsMutableLiveDataList_InAllProductsViewModel: MutableLiveData<List<Products>> = MutableLiveData<List<Products>>()
+    //products
+    val productsLiveDataList_InAllProductsViewModel: LiveData<List<Products>> = productsMutableLiveDataList_InAllProductsViewModel
+
+    init {
+        getAllRemoteProducts_FromRetrofit_InAllProductsViewModel()
+    }
+
+    fun insertProduct_InAllProductsViewModel(product: Products){
+        viewModelScope.launch(Dispatchers.IO){
+            productsRepositoryInterfaceInstance_ConstructorParameter_InAllWeatherViewModel.insertProduct_FromLDS_InProductsRepository(product)
+            getAllRemoteProducts_FromRetrofit_InAllProductsViewModel()
+        }
+    }
+
+    fun getAllRemoteProducts_FromRetrofit_InAllProductsViewModel(){
+        viewModelScope.launch(Dispatchers.IO){
+            productsMutableLiveDataList_InAllProductsViewModel.postValue(productsRepositoryInterfaceInstance_ConstructorParameter_InAllWeatherViewModel.getCurrentWeather_FromRDS_InProductsRepository())
+        }
+    }
+
+ */
+    /*
+    fun getAlert_FromDatabase_InAlertViewModel(){
+        viewModelScope.launch(Dispatchers.IO) {
+            Log.i("TAG", "getAlert_FromDatabase_InAlertViewModel: (inside the viewModelScope): ")
+            Log.i("TAG", "getAlert_FromDatabase_InAlertViewModel: (inside the viewModelScope) : "+
+                    weatherRepositoryInterface_Instance_ConstructorParameter_InAlertViewModel.getAllStoredModelTime_FromLDS_InWeatherRepository())
+
+            // Collect the flow
+            weatherRepositoryInterface_Instance_ConstructorParameter_InAlertViewModel
+                .getAllStoredModelTime_FromLDS_InWeatherRepository()
+                .collect { modelTimeList ->
+                    // Post the value to LiveData
+                    alertMutableLiveData_ModelTime_InAlertViewModel.postValue(modelTimeList)
+                }
+        }
+    }
+*/
 }
