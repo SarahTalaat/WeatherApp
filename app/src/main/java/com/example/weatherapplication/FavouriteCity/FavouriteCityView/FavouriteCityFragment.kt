@@ -2,17 +2,20 @@ package com.example.weatherapplication.FavouriteCity.FavouriteCityView
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.favouriteCitymvvm.FavouriteCity.FavouriteCityViewModel.FavouriteCityViewModel
 import com.example.productsmvvm.Database.WeatherLocalDataSourceImplementation
 import com.example.productsmvvm.FavouriteProducts.FavouriteProductsView.FavouriteProductsAdapter
-import com.example.productsmvvm.FavouriteProducts.FavouriteProductsView.OnAlertClickListenerInterface
 import com.example.productsmvvm.FavouriteProducts.FavouriteProductsView.OnFavouriteCityClickListenerInterface
 import com.example.productsmvvm.FavouriteProducts.FavouriteProductsViewModel.FavouriteCityViewModelFactory_LDS
 import com.example.weatherapplication.Repository.WeatherRepositoryImplementation
@@ -21,15 +24,18 @@ import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.FavouriteCityWeather.FavouriteCityWeatherView.FavouriteCityWeatherActivity
 import com.example.weatherapplication.Map.MapView.MapActivity
 import com.example.weatherapplication.Model.FavouriteCityModel.MyApplicationFavouriteCityModel.Model_FavouriteCity
+import com.example.weatherapplication.Network.ApiState
 import com.example.weatherapplication.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
 class FavouriteCityFragment : Fragment(), OnFavouriteCityClickListenerInterface {
 
 
     lateinit var floatingActionButton_map: FloatingActionButton
-
+    lateinit var progressBar: ProgressBar
 
     private lateinit var favouriteCityViewModelFactory_Instance_LDS_InFavouriteCityFragment: FavouriteCityViewModelFactory_LDS
     private lateinit var favouriteCityViewModel_Instance_InFavouriteCityActivity: FavouriteCityViewModel
@@ -51,7 +57,7 @@ class FavouriteCityFragment : Fragment(), OnFavouriteCityClickListenerInterface 
         var view = inflater.inflate(R.layout.fragment_favourite, container, false)
 
         floatingActionButton_map = view.findViewById(R.id.floatingActionButton_map)
-
+        progressBar= view.findViewById(R.id.progressBar_favouriteCity)
         floatingActionButton_map.setOnClickListener(){
             var intent = Intent(context , MapActivity::class.java)
             startActivity(intent)
@@ -86,10 +92,39 @@ class FavouriteCityFragment : Fragment(), OnFavouriteCityClickListenerInterface 
         initUI_InFavouriteProductsActivity(view)
         setUpRecyclerView_InFavouriteProductsActivity()
 
-        favouriteCityViewModel_Instance_InFavouriteCityActivity.favouriteCityLiveDataList_InFavouriteCityViewModel .observe(viewLifecycleOwner){
-                products ->
-            adapter_Instance_InFavouriteCityFragment.setFavouriteCityList_InFavouriteCityAdapter(products as ArrayList<Model_FavouriteCity>)
-            adapter_Instance_InFavouriteCityFragment.notifyDataSetChanged()
+
+        lifecycleScope.launch {
+            favouriteCityViewModel_Instance_InFavouriteCityActivity.favouriteCityStateFlowList_InFavouriteCityViewModel.collectLatest { result ->
+                when(result){
+                    is ApiState.Loading -> {
+                        progressBar.visibility = View.VISIBLE
+                        recyclerView_Instance_InFavouriteCityActivity.visibility = View.GONE
+                    }
+                    is ApiState.Success_ModelTime_Local_InApiState -> {
+                        Log.i("TAG", "onViewCreated: favourite city fragment: ApiState.Success_ModelTime_Local_InApiState ")
+                    }
+                    is ApiState.Success_ModelFavouriteCity_Local_InApiState -> {
+                        progressBar.visibility = View.GONE
+                        recyclerView_Instance_InFavouriteCityActivity.visibility = View.VISIBLE
+
+                        if(result.data != null){
+                            adapter_Instance_InFavouriteCityFragment.setFavouriteCityList_InFavouriteCityAdapter(result.data as ArrayList<Model_FavouriteCity>)
+                            adapter_Instance_InFavouriteCityFragment.notifyDataSetChanged()
+
+                        }
+                    }
+                    is ApiState.Success_ModelForecast_Remote_InApiState -> {
+                        Log.i("TAG", "onViewCreated: favourite city fragment : ApiState.Success_ModelForecast_Remote_InApiState")
+                    }
+                    is ApiState.Success_ModelAlert_Remote_InApiState -> {
+                        Log.i("TAG", "onViewCreated: favourite city fragment : ApiState.Success_ModelAlert_Remote_InApiState ")
+                    }
+                    is ApiState.Failure -> {
+                        progressBar.visibility = View.GONE
+                        Toast.makeText(context,"There is problem in fetching data from database", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
         }
 
 

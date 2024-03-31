@@ -22,7 +22,8 @@ class CurrentWeatherViewModel(private val weatherRepositoryInterface_Instance_Co
 
         Log.i("TAG", "getForecast_FromRetrofit_InCurrentWeatherViewModel: (before the viewModelScope): lat: $lat , lon: $lon , appid: $appid")
         viewModelScope.launch(Dispatchers.IO) {
-            weatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getForecast_FromRDS_InWeatherRepository(lat, lon, appid)
+            weatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.
+            getForecast_FromRDS_InWeatherRepository(lat, lon, appid)
                 .catch { e ->
                     forecastMutableStateFlow_InCurrentWeatherViewModel.value = ApiState.Failure(e)
                 }

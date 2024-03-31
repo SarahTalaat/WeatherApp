@@ -18,6 +18,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
@@ -69,6 +70,7 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
     var index = 0
     var shallCardAppear = false
     private val REQUEST_CODE_MAP_ACTIVITY = 123
+    lateinit var progressBar: ProgressBar
 
 
 
@@ -102,6 +104,8 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
           //  showDateTimePickerDialog()
         }
 
+        progressBar=view.findViewById(R.id.progressBar_alert)
+
         alertViewModelFactory_Instance_RDS_InAlertFragment = AlertViewModelFactory_RDS(
             WeatherRepositoryImplementation.getWeatherRepositoryImplementationInstance(
                 WeatherRemoteDataSourceImplementation.getWeatherRemoteDataSourceImplementation_Instance() ,
@@ -115,27 +119,67 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
         initUI_InAlertFragment(view)
         setUpRecyclerView_InAlertFragment()
 
-        alertViewModel_Instance_InAlertFragmet.alertLiveDataList_ModelTime_InAlertViewModel.observe(viewLifecycleOwner){
-            model ->
-                    Log.i("Size", "onViewCreated: alert db size = ${model.size}")
-                    adapter_Instance_InAlertFragment.setModelTimeArrayList_StoredInDatabase_InAlertAdapter(model as ArrayList<Model_Time>)
-                    adapter_Instance_InAlertFragment.notifyDataSetChanged()
-        }
         alertViewModel_Instance_InAlertFragmet.getAllLocalModelTime_StoredInDatabase_InAlertViewModel()
 
         saveInSharedPreferencesToAlarmReceiver()
 
         lifecycleScope.launch {
-            alertViewModel_Instance_InAlertFragmet.alertStateFlow_InAlertViewModel.collectLatest { result ->
-                when(result){
-                    is ApiState.Loading -> {
-                        recyclerView_Instance_InAlertFragment.visibility = View.VISIBLE
+            alertViewModel_Instance_InAlertFragmet.alertStateFlowList_ModelTime_InAlertViewModel.collectLatest { result ->
+                when(result) {
+                    is ApiState.Loading ->{
+                        progressBar.visibility = View.VISIBLE
+                        recyclerView_Instance_InAlertFragment.visibility = View.GONE
+                    }
+                    is ApiState.Failure ->{
+                        progressBar.visibility = View.GONE
+                        Toast.makeText(context,"There is problem in the server or fetching data from database!!!!!!!!!!!!", Toast.LENGTH_LONG).show()
                     }
                     is ApiState.Success_ModelForecast_Remote_InApiState -> {
                         Log.i("TAG", "onViewCreated: AlertFragment APIStateResult sucess modelforecast ")
+
+                    }
+                    is ApiState.Success_ModelAlert_Remote_InApiState -> {
+                        Log.i("TAG", "onViewCreated: AlertFragment ApiState.Success_ModelAlert_Remote_InApiState ")
+                    }
+                    is ApiState.Success_ModelTime_Local_InApiState -> {
+                        progressBar.visibility = View.GONE
+                        recyclerView_Instance_InAlertFragment.visibility = View.VISIBLE
+
+                        if (result.data !=null){
+                            adapter_Instance_InAlertFragment.setModelTimeArrayList_StoredInDatabase_InAlertAdapter( result.data as ArrayList<Model_Time>)
+                            adapter_Instance_InAlertFragment.notifyDataSetChanged()
+                        }
+                    }
+                    is ApiState.Success_ModelFavouriteCity_Local_InApiState -> {
+                        Log.i("TAG", "onViewCreated: AlertFragment APIStateResult sucess model favourite city ")
+
+                    }
+                }
+            }
+        }
+
+
+        lifecycleScope.launch {
+            alertViewModel_Instance_InAlertFragmet.alertStateFlow_InAlertViewModel.collectLatest { result ->
+                when(result){
+                    is ApiState.Loading -> {
+                        Log.i("TAG", "onViewCreated: Alert Fragment ApiState.Loading 2")
+
+                    }
+                    is ApiState.Success_ModelForecast_Remote_InApiState -> {
+                        Log.i("TAG", "onViewCreated: AlertFragment APIStateResult sucess modelforecast 2")
+                    }
+                    is ApiState.Success_ModelTime_Local_InApiState -> {
+                        Log.i("TAG", "onViewCreated: Alert Fragment : ApiState.Success_ModelTime_Local_InApiState 2")
+
+                    }
+                    is ApiState.Success_ModelFavouriteCity_Local_InApiState -> {
+                        Log.i("TAG", "onViewCreated: AlertFragment APIStateResult sucess model favourite city 2")
+
                     }
                     is ApiState.Failure -> {
-                        Toast.makeText(context,"There is problem in the server", Toast.LENGTH_LONG).show()
+                        progressBar.visibility = View.GONE
+                        Toast.makeText(context,"There is problem in the server or fetching data from database!!!!!!!!!!!!", Toast.LENGTH_LONG).show()
                     }
                     is ApiState.Success_ModelAlert_Remote_InApiState ->{
                         recyclerView_Instance_InAlertFragment.visibility = View.VISIBLE
@@ -162,6 +206,7 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
                         //   adapter_Instance_InAlertFragment.receiveModelTimeInAlertAdapter(model_Time_Instance)
                         //   adapter_Instance_InAlertFragment.notifyDataSetChanged()
                     }
+
                 }
 
             }

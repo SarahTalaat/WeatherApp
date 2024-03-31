@@ -1,8 +1,6 @@
 package com.example.weatherapplication.Alert.AlertViewModel
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 //import com.example.productsmvvm.Model.Products
@@ -19,8 +17,8 @@ class AlertViewModel(private val weatherRepositoryInterface_Instance_Constructor
     private var alertMutableStateFlow_InAlertViewModel: MutableStateFlow<ApiState> = MutableStateFlow<ApiState>(ApiState.Loading)
     val alertStateFlow_InAlertViewModel: MutableStateFlow<ApiState> = alertMutableStateFlow_InAlertViewModel
 
-    private var alertMutableLiveData_ModelTime_InAlertViewModel: MutableLiveData<List<Model_Time>> = MutableLiveData<List<Model_Time>>()
-    val alertLiveDataList_ModelTime_InAlertViewModel:LiveData<List<Model_Time>> = alertMutableLiveData_ModelTime_InAlertViewModel
+    private var alertMutableStateFlow_ModelTime_InAlertViewModel: MutableStateFlow<ApiState> = MutableStateFlow<ApiState>(ApiState.Loading)
+    val alertStateFlowList_ModelTime_InAlertViewModel:MutableStateFlow<ApiState> = alertMutableStateFlow_ModelTime_InAlertViewModel
 
 
     init {
@@ -44,6 +42,19 @@ class AlertViewModel(private val weatherRepositoryInterface_Instance_Constructor
 
         Log.i("TAG", "getAlert_FromRetrofit_InAlertViewModel: (after the viewModelScope): lat: $lat , lon: $lon , appid: $appid")
     }
+    fun getAllLocalModelTime_StoredInDatabase_InAlertViewModel(){
+        viewModelScope.launch(Dispatchers.IO){
+            weatherRepositoryInterface_Instance_ConstructorParameter_InAlertViewModel.
+            getAllStoredModelTime_FromLDS_InWeatherRepository()
+                .catch { e ->
+                    alertMutableStateFlow_ModelTime_InAlertViewModel.value = ApiState.Failure(e)
+                }
+                .collect{data ->
+                    alertMutableStateFlow_ModelTime_InAlertViewModel.value=ApiState.Success_ModelTime_Local_InApiState(data)
+                }
+        }
+
+    }
 
     fun deleteModelTime_InAlertViewModel(modelTime: Model_Time){
         viewModelScope.launch(Dispatchers.IO){
@@ -59,14 +70,7 @@ class AlertViewModel(private val weatherRepositoryInterface_Instance_Constructor
         }
     }
 
-    fun getAllLocalModelTime_StoredInDatabase_InAlertViewModel(){
-        viewModelScope.launch(Dispatchers.IO){
-            weatherRepositoryInterface_Instance_ConstructorParameter_InAlertViewModel.
-            getAllStoredModelTime_FromLDS_InWeatherRepository()
-                .collect{ modelTime ->
-                    alertMutableLiveData_ModelTime_InAlertViewModel.postValue(modelTime)}
-        }
-    }
+
 
     /*
     private var productsMutableLiveDataList_InAllProductsViewModel: MutableLiveData<List<Products>> = MutableLiveData<List<Products>>()
