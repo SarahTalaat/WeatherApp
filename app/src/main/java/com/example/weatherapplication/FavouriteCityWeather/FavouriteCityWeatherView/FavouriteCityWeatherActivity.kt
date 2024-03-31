@@ -121,6 +121,12 @@ class FavouriteCityWeatherActivity : AppCompatActivity() {
                         recyclerView_Instance_Day_InFavouriteCityWeatherActivity.visibility = View.GONE
                         recyclerView_Instance_Hour_InFavouriteCityWeatherActivity.visibility =View.GONE
                     }
+                    is ApiState.Success_ModelTime_Local_InApiState -> {
+                        Log.i("TAG", "onCreate: favouritecityweather fragment : ApiState.Success_ModelTime_Local_InApiState")
+                    }
+                    is ApiState.Success_ModelFavouriteCity_Local_InApiState -> {
+                        Log.i("TAG", "onCreate: favouritecityweather fragment : ApiState.Success_ModelFavouriteCity_Local_InApiState")
+                    }
                     is ApiState.Success_ModelForecast_Remote_InApiState -> {
                         progressBar.visibility = View.GONE
                         btn_back_InFavouriteCityWeatherActivity.visibility=View.VISIBLE

@@ -151,6 +151,12 @@ class CurrentWeatherFragment : Fragment() {
                         recyclerView_Instance_Day_InCurrentWeatherFragment.visibility = View.GONE
                         recyclerView_Instance_Hour_InCurrentWeatherFragment.visibility =View.GONE
                     }
+                    is ApiState.Success_ModelTime_Local_InApiState -> {
+                        Log.i("TAG", "onViewCreated: Current Weather Fragment : ApiState.Success_ModelTime_Local_InApiState")
+                    }
+                    is ApiState.Success_ModelFavouriteCity_Local_InApiState -> {
+                        Log.i("TAG", "onViewCreated: Current Weather Fragment :ApiState.Success_ModelFavouriteCity_Local_InApiState")
+                    }
                     is ApiState.Success_ModelForecast_Remote_InApiState -> {
                         progressBar.visibility = View.GONE
                         recyclerView_Instance_Day_InCurrentWeatherFragment.visibility = View.VISIBLE
