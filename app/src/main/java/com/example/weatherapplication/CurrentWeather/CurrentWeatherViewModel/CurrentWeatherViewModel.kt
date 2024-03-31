@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 //import com.example.productsmvvm.Model.Products
 import com.example.weatherapplication.Repository.WeatherRepositoryInterface
-import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_Forecast
 import com.example.weatherapplication.Network.ApiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,7 +27,7 @@ class CurrentWeatherViewModel(private val weatherRepositoryInterface_Instance_Co
                     forecastMutableStateFlow_InCurrentWeatherViewModel.value = ApiState.Failure(e)
                 }
                 .collect{data ->
-                    forecastMutableStateFlow_InCurrentWeatherViewModel.value= ApiState.Success_ModelForecast_InApiState(data)
+                    forecastMutableStateFlow_InCurrentWeatherViewModel.value= ApiState.Success_ModelForecast_Remote_InApiState(data)
                 }
 
         }

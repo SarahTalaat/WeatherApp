@@ -28,18 +28,14 @@ import com.example.weatherapplication.CurrentWeather.CurrentWeatherView.CurrentW
 import com.example.weatherapplication.FavouriteCityWeather.FavouriteCityWeatherViewModel.FavouriteCityWeatherViewModel
 import com.example.weatherapplication.FavouriteCityWeather.FavouriteCityWeatherViewModel.FavouriteCityWeatherViewModelFactory_RDS
 import com.example.weatherapplication.MainActivity
-import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_Forecast
-import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_WeatherArrayList
 import com.example.weatherapplication.Network.ApiState
 import com.example.weatherapplication.R
 import com.google.android.gms.location.FusedLocationProviderClient
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
-import javax.security.auth.login.LoginException
 
 class FavouriteCityWeatherActivity : AppCompatActivity() {
 
@@ -125,7 +121,7 @@ class FavouriteCityWeatherActivity : AppCompatActivity() {
                         recyclerView_Instance_Day_InFavouriteCityWeatherActivity.visibility = View.GONE
                         recyclerView_Instance_Hour_InFavouriteCityWeatherActivity.visibility =View.GONE
                     }
-                    is ApiState.Success_ModelForecast_InApiState -> {
+                    is ApiState.Success_ModelForecast_Remote_InApiState -> {
                         progressBar.visibility = View.GONE
                         btn_back_InFavouriteCityWeatherActivity.visibility=View.VISIBLE
                         recyclerView_Instance_Day_InFavouriteCityWeatherActivity.visibility = View.VISIBLE
@@ -192,7 +188,7 @@ class FavouriteCityWeatherActivity : AppCompatActivity() {
                         progressBar.visibility = View.GONE
                         Toast.makeText(this@FavouriteCityWeatherActivity,"There is problem in the server", Toast.LENGTH_LONG).show()
                     }
-                    is ApiState.Success_ModelAlert_InApiState ->{
+                    is ApiState.Success_ModelAlert_Remote_InApiState ->{
                         Log.i("TAG", "onCreate: FavouriteCityWeatherFragment ")
                     }
                 }
