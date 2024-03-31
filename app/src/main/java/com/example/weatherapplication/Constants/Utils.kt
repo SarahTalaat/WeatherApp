@@ -20,7 +20,7 @@ class Utils {
         var MODEL_ALERT_GSON ="modelAlert"
         var DISMISS_NOTIFICATION = "DISMISS_NOTIFICATION"
         var STOP_NOTIFICATION = "STOP_NOTIFICATION"
-        var NOTIFICATION_KEY = "NOTIFICATION_KEY"
+        var NOTIFICATION_ALERT_KEY = "NOTIFICATION_KEY"
 
         var ALERT_MAP_SP_KEY = "ALERT_MAP_SP_KEY"
         var ALERT_MAP_SP_LAT = "ALERT_MAP_SP_LAT"
@@ -37,6 +37,24 @@ class Utils {
         const val STOP_NOTIFICATION_REQUEST_CODE = 2003
         const val NOTIFICATION_ID_EXTRA = "notification_id_extra"
         const val DISMISS_NOTIFICATION_REQUEST_CODE = 101
+
+        var LOCATION_KEY = "LOCATION_KEY"
+        var LANGUAGE_KEY = "LANGUAGE_KEY"
+        var TEMPRATURE_KEY = "TEMPRATURE_KEY"
+        var WINDSPEED_KEY = "WINDSPEED_KEY"
+        var NOTIFICATION_KEY = "NOTIFICATION_KEY"
+        var GPS = "GPS"
+        var MAP = "Map"
+        var ENGLISH = "English"
+        var ARABIC = "Arabic"
+        var CELSIUS = "Celsius"
+        var KELVIN = "Kelvin"
+        var FAHRENHEIT = "Fahrenheit"
+        var METER_SEC = "Meter/Sec"
+        var MILE_HOUR = "Mile/Hour"
+        var NOTIFICATION_ENABLED = "Enable"
+        var NOTIFICATION_DISABLED = "Disable"
+
 
 
     }

@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentTransaction
 import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.CurrentWeather.CurrentWeatherView.CurrentWeatherFragment
 import com.example.weatherapplication.FavouriteCity.FavouriteCityView.FavouriteCityFragment
+import com.example.weatherapplication.Settings.SettingsFragment
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
