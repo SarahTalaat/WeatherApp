@@ -7,20 +7,12 @@ import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_F
 class FakeWeatherRemoteDataSourceImplementation: WeatherRemoteDataSourceInterface {
     private var forecast: Model_Forecast? = null
     private var alert: Model_Alert? = null
-
-    fun setAlert(forecast: Model_Forecast) {
-        this.forecast = forecast
-    }
-    fun setAlert(alert: Model_Alert) {
-        this.alert = alert
-    }
-
     override suspend fun getForecast_OverNetwork_InRDS(
         lat: String,
         lon: String,
         appid: String
     ): Model_Forecast? {
-        return forecast
+        TODO("Not yet implemented")
     }
 
     override suspend fun getAlert_OverNetwork_InRDS(
@@ -28,6 +20,8 @@ class FakeWeatherRemoteDataSourceImplementation: WeatherRemoteDataSourceInterfac
         lon: String,
         appid: String
     ): Model_Alert? {
-        return  alert
+        TODO("Not yet implemented")
     }
+
+
 }

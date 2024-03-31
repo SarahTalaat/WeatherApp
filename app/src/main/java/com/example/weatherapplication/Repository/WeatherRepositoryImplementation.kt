@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 //Singleton
-class WeatherRepositoryImplementation private constructor(
+class WeatherRepositoryImplementation  constructor(
     private var weatherRemoteDataSourceInterface_Instance: WeatherRemoteDataSourceInterface,
     private var weatherLocalDataSourceInterface_Instance: WeatherLocalDataSourceInterface
 ) : WeatherRepositoryInterface
