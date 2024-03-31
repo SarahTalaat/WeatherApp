@@ -15,15 +15,7 @@ class WeatherRemoteDataSourceImplementation private constructor() : WeatherRemot
         RetrofitHelper.getRetrofit_Instance_1Call_InRetrofitHelper().create(WeatherServiceInterface::class.java)
     }
 
-    /*
-    override suspend fun getAllProductsOverNetwork_InRDS(): List<Products> {
 
-        val response = productsService.getWeatherByCity_FromApiEndPoint_InWeatherService().products
-        r
-        eturn response
-
-    }
-    */
 
     companion object{
         private var instance: WeatherRemoteDataSourceImplementation?=null
@@ -62,7 +54,14 @@ class WeatherRemoteDataSourceImplementation private constructor() : WeatherRemot
 
 
 
+    /*
+    override suspend fun getAllProductsOverNetwork_InRDS(): List<Products> {
 
+        val response = productsService.getWeatherByCity_FromApiEndPoint_InWeatherService().products
+        return response
+
+    }
+    */
 
 /*
     override suspend fun getCod_OverNetwork_InRDS(lat: String, lon: String, appid: String): String? {
