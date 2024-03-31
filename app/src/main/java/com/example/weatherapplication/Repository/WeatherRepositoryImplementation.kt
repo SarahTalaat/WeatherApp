@@ -51,51 +51,6 @@ class WeatherRepositoryImplementation private constructor(
 
     }
 
-    /*
-        override suspend fun getCod_FromRDS_InWeatherRepository(
-            lat: String,
-            lon: String,
-            appid: String
-        ): String? {
-            Log.i("TAG", "getCod_FromRDS_InProductsRepository: "+weatherRemoteDataSourceInterface_Instance.getCod_OverNetwork_InRDS(lat, lon, appid))
-            return weatherRemoteDataSourceInterface_Instance.getCod_OverNetwork_InRDS(lat, lon, appid)
-        }
-
-        override suspend fun getMessage_FromRDS_InWeatherRepository(
-            lat: String,
-            lon: String,
-            appid: String
-        ): Int? {
-            Log.i("TAG", "getMessage_FromRDS_InProductsRepository: "+ weatherRemoteDataSourceInterface_Instance.getMessage_OverNetwork_InRDS(lat, lon, appid))
-            return weatherRemoteDataSourceInterface_Instance.getMessage_OverNetwork_InRDS(lat, lon, appid)
-        }
-
-        override suspend fun getCnt_FromRDS_InWeatherRepository(
-            lat: String,
-            lon: String,
-            appid: String
-        ): Int? {
-            Log.i("TAG", "getCnt_FromRDS_InProductsRepository: "+ weatherRemoteDataSourceInterface_Instance.getCnt_OverNetwork_InRDS(lat, lon, appid))
-            return  weatherRemoteDataSourceInterface_Instance.getCnt_OverNetwork_InRDS(lat, lon, appid)
-        }
-
-        override suspend fun getList_FromRDS_InWeatherRepository(
-            lat: String,
-            lon: String,
-            appid: String
-        ): ArrayList<Model_WeatherArrayList> {
-            Log.i("TAG", "getList_FromRDS_InProductsRepository: "+ weatherRemoteDataSourceInterface_Instance.getList_OverNetwork_InRDS(lat, lon, appid))
-            return  weatherRemoteDataSourceInterface_Instance.getList_OverNetwork_InRDS(lat, lon, appid)
-        }
-
-        override suspend fun getCity_FromRDS_InWeatherRepository(
-            city: String,
-            appid: String
-        ): Model_City? {
-            Log.i("TAG", "getCity_FromRDS_InProductsRepository: " + weatherRemoteDataSourceInterface_Instance.getCity_OverNetwork_InRDS(city, appid))
-            return weatherRemoteDataSourceInterface_Instance.getCity_OverNetwork_InRDS(city, appid)
-        }
-    */
     override suspend fun getForecast_FromRDS_InWeatherRepository(
         lat: String,
         lon: String,
@@ -123,7 +78,6 @@ class WeatherRepositoryImplementation private constructor(
 
     }
 
-
     override suspend fun getAllStoredModelTime_FromLDS_InWeatherRepository(): Flow<List<Model_Time>> {
         return weatherLocalDataSourceInterface_Instance.getAllStoredModelTimeFromDatabase_InLDS()
     }
@@ -136,24 +90,5 @@ class WeatherRepositoryImplementation private constructor(
         return weatherLocalDataSourceInterface_Instance.deleteModelTimeFromDatabase_InLDS(modelTime)
 
     }
-
-
-    /*
-        override suspend fun getAllProducts_FromRDS_InProductsRepository(): List<Products> {
-            return weatherRemoteDataSourceInterface_Instance.getAllProductsOverNetwork_InRDS()
-        }
-
-        override suspend fun getAllStoredProducts_FromLDS_InProductsRepository(): Flow<List<Products>> {
-            return productsLocalDataSourceInterface_Instance.getAllStoredProductsFromDatabase_InLDS()
-        }
-
-        override suspend fun insertProduct_FromLDS_InProductsRepository(product: Products) {
-            return productsLocalDataSourceInterface_Instance.insertProductIntoDatabase_InLDS(product)
-        }
-
-        override suspend fun deleteProduct_FromLDS_InProductsRepository(product: Products) {
-            return productsLocalDataSourceInterface_Instance.deleteProductFromDatabase_InLDS(product)
-        }
-    */
 
 }
