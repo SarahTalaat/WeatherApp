@@ -131,13 +131,13 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
                     is ApiState.Loading -> {
                         recyclerView_Instance_InAlertFragment.visibility = View.VISIBLE
                     }
-                    is ApiState.Success_ModelForecast_InApiState -> {
+                    is ApiState.Success_ModelForecast_Remote_InApiState -> {
                         Log.i("TAG", "onViewCreated: AlertFragment APIStateResult sucess modelforecast ")
                     }
                     is ApiState.Failure -> {
                         Toast.makeText(context,"There is problem in the server", Toast.LENGTH_LONG).show()
                     }
-                    is ApiState.Success_ModelAlert_InApiState ->{
+                    is ApiState.Success_ModelAlert_Remote_InApiState ->{
                         recyclerView_Instance_InAlertFragment.visibility = View.VISIBLE
 
                         if (result.data?.alerts?.isNotEmpty() == true) {

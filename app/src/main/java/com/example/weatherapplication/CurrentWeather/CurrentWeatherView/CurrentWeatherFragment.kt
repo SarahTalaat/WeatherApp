@@ -151,7 +151,7 @@ class CurrentWeatherFragment : Fragment() {
                         recyclerView_Instance_Day_InCurrentWeatherFragment.visibility = View.GONE
                         recyclerView_Instance_Hour_InCurrentWeatherFragment.visibility =View.GONE
                     }
-                    is ApiState.Success_ModelForecast_InApiState -> {
+                    is ApiState.Success_ModelForecast_Remote_InApiState -> {
                         progressBar.visibility = View.GONE
                         recyclerView_Instance_Day_InCurrentWeatherFragment.visibility = View.VISIBLE
                         recyclerView_Instance_Hour_InCurrentWeatherFragment.visibility =View.VISIBLE
@@ -215,7 +215,7 @@ class CurrentWeatherFragment : Fragment() {
                         progressBar.visibility = View.GONE
                         Toast.makeText(context,"There is problem in the server", Toast.LENGTH_LONG).show()
                     }
-                    is ApiState.Success_ModelAlert_InApiState ->{
+                    is ApiState.Success_ModelAlert_Remote_InApiState ->{
                         Log.i("TAG", "onCreate: FavouriteCityWeatherFragment ")
                     }
                 }

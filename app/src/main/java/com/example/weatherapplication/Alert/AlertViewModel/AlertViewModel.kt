@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 //import com.example.productsmvvm.Model.Products
 import com.example.weatherapplication.Repository.WeatherRepositoryInterface
 import com.example.weatherapplication.Model.AlertModel.MyApplicationAlertModel.Model_Time
-import com.example.weatherapplication.Model.FavouriteCityModel.MyApplicationFavouriteCityModel.Model_FavouriteCity
 import com.example.weatherapplication.Network.ApiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,7 +37,7 @@ class AlertViewModel(private val weatherRepositoryInterface_Instance_Constructor
                     alertMutableStateFlow_InAlertViewModel.value = ApiState.Failure(e)
                 }
                 .collect{data ->
-                    alertMutableStateFlow_InAlertViewModel.value=ApiState.Success_ModelAlert_InApiState(data)
+                    alertMutableStateFlow_InAlertViewModel.value=ApiState.Success_ModelAlert_Remote_InApiState(data)
                 }
 
         }

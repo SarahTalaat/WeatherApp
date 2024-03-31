@@ -5,7 +5,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.FakeWeatherRepositoryImplementation
 import com.example.weatherapplication.MainCoroutineRule
-import com.example.weatherapplication.Model.AlertModel.MyApplicationAlertModel.Model_Time
 import com.example.weatherapplication.Network.ApiState
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -54,10 +53,10 @@ class AlertViewModelTest {
 
             // Assert the state of the alertStateFlow
             val currentState = viewModel.alertStateFlow_InAlertViewModel.first()
-            assertThat(currentState, `is`(instanceOf(ApiState.Success_ModelAlert_InApiState::class.java)))
+            assertThat(currentState, `is`(instanceOf(ApiState.Success_ModelAlert_Remote_InApiState::class.java)))
         }
     }
 
-    
+
     // Add more test methods for other functionalities if needed
 }

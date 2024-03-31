@@ -54,7 +54,7 @@ class CurrentWeatherViewModelTest {
 
             // Assert the state of the forecastStateFlow
             val currentState = viewModel.forecastStateFlow_InCurrentWeatherViewModel.first()
-            assertThat(currentState, `is`(instanceOf(ApiState.Success_ModelForecast_InApiState::class.java)))
+            assertThat(currentState, `is`(instanceOf(ApiState.Success_ModelForecast_Remote_InApiState::class.java)))
         }
     }
 

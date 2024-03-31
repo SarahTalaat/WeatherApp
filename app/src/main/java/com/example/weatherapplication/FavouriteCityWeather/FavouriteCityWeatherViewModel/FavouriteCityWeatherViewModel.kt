@@ -29,7 +29,7 @@ class FavouriteCityWeatherViewModel(private val weatherRepositoryInterface_Insta
                     forecastMutableStateFlow_InFavouriteCityWeatherViewModel.value = ApiState.Failure(e)
                 }
                 .collect{data ->
-                    forecastMutableStateFlow_InFavouriteCityWeatherViewModel.value=ApiState.Success_ModelForecast_InApiState(data)
+                    forecastMutableStateFlow_InFavouriteCityWeatherViewModel.value=ApiState.Success_ModelForecast_Remote_InApiState(data)
                 }
 
         }
