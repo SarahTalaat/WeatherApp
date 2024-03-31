@@ -1,21 +1,19 @@
+package com.example.weatherapplication.Alert.AlertViewModel
+
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.Observer
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.weatherapplication.Alert.AlertViewModel.AlertViewModel
 import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.FakeWeatherRepositoryImplementation
 import com.example.weatherapplication.MainCoroutineRule
 import com.example.weatherapplication.Model.AlertModel.MyApplicationAlertModel.Model_Time
-import com.example.weatherapplication.Model.FavouriteCityModel.MyApplicationFavouriteCityModel.Model_FavouriteCity
 import com.example.weatherapplication.Network.ApiState
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import kotlinx.coroutines.test.runTest
+import org.hamcrest.CoreMatchers.instanceOf
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -31,65 +29,35 @@ class AlertViewModelTest {
     val myRule = InstantTaskExecutorRule()
 
     @Before
-    fun setUp() {
+    fun setup() {
         fakeRepository = FakeWeatherRepositoryImplementation()
         viewModel = AlertViewModel(fakeRepository)
-
-/*
-        var modelTime1 = Model_Time(
-            id = 1,
-            latitude = "40.7128",
-            longitude = "-74.0060",
-            startDate = "2024-04-01",
-            endDate = "2024-04-30",
-            specificTime = "12:00 PM",
-            city = "New York",
-            shallCardAppear = true
-        )
-        var modelTime2 = Model_Time(
-            id = 2,
-            latitude = "34.0522",
-            longitude = "-118.2437",
-            startDate = "2024-04-01",
-            endDate = "2024-04-30",
-            specificTime = "12:00 PM",
-            city = "Los Angeles",
-            shallCardAppear = true
-        )
-        var modelTime3 = Model_Time(
-            id = 3,
-            latitude = "41.8781",
-            longitude = "-87.6298",
-            startDate = "2024-04-01",
-            endDate = "2024-04-30",
-            specificTime = "12:00 PM",
-            city = "Chicago",
-            shallCardAppear = true
-        )
-        */
-
     }
 
     @get:Rule
     val mainCoroutineRule = MainCoroutineRule()
-/*
+
     @Test
-    fun testGetAllLocalModelTimeStoredInDatabase() {
-        // Prepare fake data
-        val fakeModelTimes = fakeRepository.createFakeModelTimes()
+    fun testGetAlert_FromRetrofit_InAlertViewModel() = mainCoroutineRule.runBlockingTest {
+        // Set up test data
+        val lat = Utils.LAT_ALERT
+        val lon = Utils.lON_ALERT
+        val appid = Utils.API_KEY
 
-        // Set up observer
-        val observer = Observer<List<Model_Time>> { modelTimes ->
-            // Verify that LiveData contains the expected data
-            assertEquals(fakeModelTimes, modelTimes)
+        // Call the method under test
+        viewModel.getAlert_FromRetrofit_InAlertViewModel(lat, lon, appid)
+
+        // Run the test
+        mainCoroutineRule.runTest {
+            // Advance until idle to ensure all coroutines complete
+            mainCoroutineRule.advanceUntilIdle()
+
+            // Assert the state of the alertStateFlow
+            val currentState = viewModel.alertStateFlow_InAlertViewModel.first()
+            assertThat(currentState, `is`(instanceOf(ApiState.Success_ModelAlert_InApiState::class.java)))
         }
-        viewModel.alertLiveDataList_ModelTime_InAlertViewModel.observeForever(observer)
-
-        // Call the method to get local model times
-        viewModel.getAllLocalModelTime_StoredInDatabase_InAlertViewModel()
-
-        // Clean up observer
-        viewModel.alertLiveDataList_ModelTime_InAlertViewModel.removeObserver(observer)
     }
-*/
+
+    
+    // Add more test methods for other functionalities if needed
 }

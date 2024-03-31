@@ -1,8 +1,10 @@
 package com.example.weatherapplication
 
 import com.example.weatherapplication.Database.FakeWeatherLocalDataSourceImplementation
+import com.example.weatherapplication.Model.AlertModel.APIModel.Current
 import com.example.weatherapplication.Model.AlertModel.APIModel.Model_Alert
 import com.example.weatherapplication.Model.AlertModel.APIModel.Model_Wind
+import com.example.weatherapplication.Model.AlertModel.APIModel.Weather
 import com.example.weatherapplication.Model.AlertModel.MyApplicationAlertModel.Model_Time
 import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_City
 import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_Clouds
@@ -41,8 +43,50 @@ class FakeWeatherRepositoryImplementation: WeatherRepositoryInterface {
         lon: String,
         appid: String
     ): Flow<Model_Alert?> {
-        TODO("Not yet implemented")
+        return flow {
+            // Create fake data for the Model_Current object
+            val fakeCurrent = Current(
+                dt = 1617286800,
+                sunrise = 1617241418,
+                sunset = 1617284895,
+                temp = 25.6,
+                feelsLike = 26.8,
+                pressure = 1014,
+                humidity = 45,
+                dewPoint = 14.2,
+                uvi = 7.26,
+                clouds = 0,
+                visibility = 10000,
+                windSpeed = 3.89,
+                windDeg = 233,
+                weather = arrayListOf(
+                    Weather(
+                        id = 800,
+                        main = "Clear",
+                        description = "clear sky",
+                        icon = "01d"
+                    )
+                )
+            )
+
+            // Create fake data for the Model_Alert object
+            val fakeAlert = Model_Alert(
+                lat = 12.345,
+                lon = 67.89,
+                timezone = "Timezone",
+                timezoneOffset = 3600,
+                current = fakeCurrent,
+                minutely = arrayListOf(),
+                hourly = arrayListOf(),
+                daily = arrayListOf(),
+                alerts = arrayListOf()
+            )
+
+            // Emit the fake alert data
+            emit(fakeAlert)
+        }
     }
+
 
     override suspend fun getForecast_FromRDS_InWeatherRepository(lat: String, lon: String, appid: String): Flow<Model_Forecast?> {
         // Return a fake Model_Forecast object for testing purposes
