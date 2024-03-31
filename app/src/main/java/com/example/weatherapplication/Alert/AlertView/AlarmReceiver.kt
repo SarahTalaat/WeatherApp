@@ -54,17 +54,17 @@ class AlarmReceiver : BroadcastReceiver() {
             }
         }
 
-        val retrievedValue = intent?.getStringExtra(Utils.NOTIFICATION_KEY)
+        val retrievedValue = intent?.getStringExtra(Utils.NOTIFICATION_ALERT_KEY)
 
         Log.i("TAG", "onReceive: retrievedValue: $retrievedValue")
 
         CoroutineScope(Dispatchers.Main).launch {
             if (retrievedValue == "true") {
                 notificationLogic(context, intent)
-                intent.removeExtra(Utils.NOTIFICATION_KEY)
+                intent.removeExtra(Utils.NOTIFICATION_ALERT_KEY)
             } else if (retrievedValue == "false") {
                 alarmLogic(context, intent)
-                intent.removeExtra(Utils.NOTIFICATION_KEY)
+                intent.removeExtra(Utils.NOTIFICATION_ALERT_KEY)
             } else {
                 Log.i("TAG", "onReceive: No true or false value on the intent")
             }

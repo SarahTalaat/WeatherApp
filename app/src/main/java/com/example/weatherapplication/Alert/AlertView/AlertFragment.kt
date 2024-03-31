@@ -224,7 +224,7 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
             if (isClicked) {
                 isAppear = true
                 model_Time_Instance.shallCardAppear = true
-                alarmIntent.putExtra(Utils.NOTIFICATION_KEY, "false")
+                alarmIntent.putExtra(Utils.NOTIFICATION_ALERT_KEY, "false")
             }
 
             val pendingIntent = PendingIntent.getBroadcast(
@@ -402,7 +402,7 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
         if(isClicked==false){
             isAppear=true
             model_Time_Instance.shallCardAppear=true
-            notificationIntent.putExtra(Utils.NOTIFICATION_KEY,"true")
+            notificationIntent.putExtra(Utils.NOTIFICATION_ALERT_KEY,"true")
         }
 
 

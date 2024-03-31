@@ -31,6 +31,46 @@ class SharedPrefrences internal constructor(private val context: Context){
     fun getValue(key: String): String?{
         return prefs.getString(key,null)
     }
+    //--------------------
+    fun setLocationValue(key: String, value: String){
+        prefs.edit().putString(key,value)
+    }
+    fun getLocationValue(key: String): String?{
+        return prefs.getString(key,null)
+    }
+
+    //--------------
+    fun setLanguageValue(key: String, value: String){
+        prefs.edit().putString(key,value)
+    }
+    fun getLanguageValue(key: String): String?{
+        return prefs.getString(key,null)
+    }
+
+
+    //--------------------
+    fun setTempratureValue(key: String, value: String){
+        prefs.edit().putString(key,value)
+    }
+    fun getTempratureValue(key: String): String?{
+        return prefs.getString(key,null)
+    }
+    //--------------------
+    fun setWindSpeedValue(key: String, value: String){
+        prefs.edit().putString(key,value)
+    }
+    fun getWindSpeedValue(key: String): String?{
+        return prefs.getString(key,null)
+    }
+    //--------------------
+    fun setNotificationValue(key: String, value: String){
+        prefs.edit().putString(key,value)
+    }
+    fun getNotificationValue(key: String): String?{
+        return prefs.getString(key,null)
+    }
+    //--------------------
+
 
     fun setValueOrNull(key: String? , value: String?){
         if(key!=null && value!=null){
