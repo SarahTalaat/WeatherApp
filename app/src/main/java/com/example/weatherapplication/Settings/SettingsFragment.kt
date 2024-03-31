@@ -37,6 +37,13 @@ class SettingsFragment : Fragment() {
             val radioButton: RadioButton = view.findViewById(checkedId)
             val selectedLocation = radioButton.text.toString()
             // Do something with the selected location
+
+            if (selectedLocation=="GPS"){
+
+            }else if(selectedLocation == "Map"){
+
+            }
+            
             Log.i("Settings", "onViewCreated: Location: $selectedLocation")
         }
 
@@ -44,6 +51,12 @@ class SettingsFragment : Fragment() {
             val radioButton: RadioButton = view.findViewById(checkedId)
             val selectedLanguage = radioButton.text.toString()
             // Do something with the selected language
+
+            if(selectedLanguage == "English"){
+
+            }else if(selectedLanguage == "Arabic"){
+
+            }
             Log.i("Settings", "onViewCreated: Language: $selectedLanguage")
         }
 
@@ -51,6 +64,15 @@ class SettingsFragment : Fragment() {
             val radioButton: RadioButton = view.findViewById(checkedId)
             val selectedTemperature = radioButton.text.toString()
             // Do something with the selected temperature
+
+            if(selectedTemperature == "Celsius"){
+
+            }else if (selectedTemperature == "Kelvin"){
+
+            }else if(selectedTemperature == "Fahrenheit"){
+
+            }
+
             Log.i("Settings", "onViewCreated: Temprature: $selectedTemperature")
         }
 
@@ -58,6 +80,13 @@ class SettingsFragment : Fragment() {
             val radioButton: RadioButton = view.findViewById(checkedId)
             val selectedWindSpeed = radioButton.text.toString()
             // Do something with the selected wind speed
+
+            if(selectedWindSpeed == "Meter/Sec"){
+
+            }else if(selectedWindSpeed == "Mile/Hour"){
+
+            }
+
             Log.i("Settings", "onViewCreated: Wind Speed: $selectedWindSpeed")
         }
 
@@ -65,6 +94,12 @@ class SettingsFragment : Fragment() {
             val radioButton: RadioButton = view.findViewById(checkedId)
             val selectedNotification = radioButton.text.toString()
             // Do something with the selected notification
+            if(selectedNotification == "Enable"){
+
+            }else if(selectedNotification == "Disable"){
+
+            }
+
             Log.i("Settings", "onViewCreated: Notification: $selectedNotification ")
         }
     }
