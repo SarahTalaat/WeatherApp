@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
@@ -114,6 +115,7 @@ class CurrentWeatherFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setLocale()
 
         tv_date_InCurrentWeatherFagment = view.findViewById(R.id.tv_Date)
         tv_country_InCurrentWeatherFagment = view.findViewById(R.id.tv_Country)
@@ -506,6 +508,15 @@ class CurrentWeatherFragment : Fragment() {
             }
         }
         return "en"
+    }
+
+    private fun setLocale() {
+        val lang = getLang()
+        val locale = Locale(lang)
+        Locale.setDefault(locale)
+        val config = Configuration(resources.configuration)
+        config.setLocale(locale)
+        requireContext().resources.updateConfiguration(config, requireContext().resources.displayMetrics)
     }
 
 
