@@ -22,6 +22,7 @@ import com.example.productsmvvm.Network.WeatherRemoteDataSourceImplementation
 import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.FavouriteCity.FavouriteCityView.FavouriteCityFragment
 import com.example.weatherapplication.FavouriteCityWeather.FavouriteCityWeatherView.FavouriteCityWeatherActivity
+import com.example.weatherapplication.MainActivity
 import com.example.weatherapplication.Map.MapViewModel.MapViewModel
 import com.example.weatherapplication.Map.MapViewModel.MapViewModelFactory_LDS
 import com.example.weatherapplication.Model.FavouriteCityModel.MyApplicationFavouriteCityModel.Model_FavouriteCity
@@ -270,8 +271,11 @@ class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener ,
                     editor?.putString(Utils.Settings_MAP_SP_LON_KEY,longitude)
                     editor?.apply()
 
-
                 }
+
+                val intent = Intent(this, MainActivity::class.java)
+                intent.putExtra(Utils.SETTINGS_FRAGMENT_KEY, Utils.SETTINGS_FRAGMENT_VALUE)
+                startActivity(intent)
 
 
                 dialog.dismiss()

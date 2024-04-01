@@ -353,13 +353,23 @@ class CurrentWeatherFragment : Fragment() {
                        // currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getList_FromRetrofit_InCurrentWeatherViewModel(location.latitude.toString(),location.longitude.toString(),Utils.API_KEY)
                        // currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getForecast_FromRetrofit_InCurrentWeatherViewModel(location.latitude.toString(),location.longitude.toString(),Utils.API_KEY)
 
-                       /*
-                        val sharedPreferences = context?.getSharedPreferences(Utils.SETTINGS_MAP_SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
-                        var sp_lat_value =sharedPreferences?.getString(Utils.Settings_MAP_SP_LAT_KEY,null)
-                        var sp_lon_value =sharedPreferences?.getString(Utils.Settings_MAP_SP_LON_KEY,null)
-                        */
+                        val sharedPreferences = context?.getSharedPreferences(Utils.SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+                        var sp_location_value =sharedPreferences?.getString(Utils.LOCATION_KEY,null)
 
-                        currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getForecast_FromRetrofit_InCurrentWeatherViewModel(location.latitude.toString(),location.longitude.toString(),Utils.API_KEY)
+                        if(sp_location_value == Utils.MAP ){
+
+                            val sharedPreferences = context?.getSharedPreferences(Utils.SETTINGS_MAP_SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
+                            var sp_lat_value =sharedPreferences?.getString(Utils.Settings_MAP_SP_LAT_KEY,null)
+                            var sp_lon_value =sharedPreferences?.getString(Utils.Settings_MAP_SP_LON_KEY,null)
+
+                            if(sp_lat_value != null && sp_lon_value != null){
+                                currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getForecast_FromRetrofit_InCurrentWeatherViewModel(sp_lat_value,sp_lon_value,Utils.API_KEY)
+                            }
+
+                        }else{
+                            currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getForecast_FromRetrofit_InCurrentWeatherViewModel(location.latitude.toString(),location.longitude.toString(),Utils.API_KEY)
+                        }
+
 
 
                         //     tvTextLocation.text = address

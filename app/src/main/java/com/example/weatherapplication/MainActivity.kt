@@ -56,10 +56,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         // Check if there is data in the intent extras
         val bundleMessage = intent.getStringExtra(Utils.FAVOURITE_CITY_KEY)
+        val bundleMessage2 = intent.getStringExtra(Utils.SETTINGS_FRAGMENT_KEY)
         Log.i("TAG", "onCreate: Main Activity: Favourite city value from key: " + bundleMessage)
         if (bundleMessage == Utils.FAVOURITE_CITY_VALUE) {
             replaceFragment(FavouriteCityFragment())
             navigationView.setCheckedItem(R.id.nav_favourites)
+        } else if(bundleMessage2 == Utils.SETTINGS_FRAGMENT_VALUE){
+            replaceFragment(SettingsFragment())
+            navigationView.setCheckedItem(R.id.nav_settings)
         } else {
             replaceFragment(CurrentWeatherFragment())
             navigationView.setCheckedItem(R.id.nav_home)
