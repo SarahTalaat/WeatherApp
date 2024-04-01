@@ -29,7 +29,7 @@ class WeatherRepositoryImplementation  constructor(
                     weatherLocalDataSourceInterface
                 )
                 instance = temp
-                Log.i("TAG", "getProductsRepositoryImplementationInstance: " + instance)
+               // Log.i("TAG", "getProductsRepositoryImplementationInstance: " + instance)
                 temp
             }
         }
