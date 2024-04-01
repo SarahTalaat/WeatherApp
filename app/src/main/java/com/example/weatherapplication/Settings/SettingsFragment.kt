@@ -2,6 +2,7 @@ package com.example.weatherapplication.Settings
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -14,10 +15,16 @@ import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.Map.MapView.MapActivity
 import com.example.weatherapplication.R
 import com.example.weatherapplication.SharedPreferences.SharedPrefrences
+import java.util.Locale
 
 
 class SettingsFragment : Fragment() {
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setLocale()
+        super.onCreate(savedInstanceState)
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -92,6 +99,33 @@ class SettingsFragment : Fragment() {
             Log.i("Settings", "onViewCreated: Wind Speed: $selectedWindSpeed")
         }
 
+
+    }
+
+    fun getLang(): String{
+        val sharedPreferences = context?.getSharedPreferences(Utils.SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+        var sp_lang_value =sharedPreferences?.getString(Utils.LANGUAGE_KEY,null)
+
+        if(sp_lang_value != null){
+            if(sp_lang_value == Utils.ARABIC){
+                return "ar"
+            }
+        }
+        return "en"
+    }
+
+    private fun setLocale() {
+        // Retrieve language preference
+        val lang = getLang()
+        val locale = Locale(lang)
+        Locale.setDefault(locale)
+        val config = Configuration(resources.configuration)
+        config.setLocale(locale)
+        requireContext().resources.updateConfiguration(config, requireContext().resources.displayMetrics)
+
+        // Set layout direction based on the locale
+        val layoutDirection = if (lang == "ar") View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
+        requireActivity().window.decorView.layoutDirection = layoutDirection
 
     }
 }

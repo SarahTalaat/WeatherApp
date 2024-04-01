@@ -49,5 +49,10 @@
     <string name="clouds_value">Clouds value</string>
     <string name="minimum_temprature_value">Minimum temprature value</string>
     <string name="maximum_temprature_value">Maximum Temprature Value</string>
+    <string name="weather">Weather</string>
+    <string name="home">Home</string>
+    <string name="favourites">Favourites</string>
+    <string name="alert">Alert</string>
+    <string name="settings">Settings</string>
 
 </resources>

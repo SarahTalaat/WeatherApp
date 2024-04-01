@@ -10,6 +10,8 @@ class FakeWeatherRemoteDataSourceImplementation: WeatherRemoteDataSourceInterfac
     override suspend fun getForecast_OverNetwork_InRDS(
         lat: String,
         lon: String,
+        unit: String,
+        lang: String,
         appid: String
     ): Model_Forecast? {
         TODO("Not yet implemented")

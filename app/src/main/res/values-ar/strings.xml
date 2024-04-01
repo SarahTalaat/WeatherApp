@@ -42,4 +42,9 @@
     <string name="clouds_value">قيمة السحب</string>
     <string name="minimum_temprature_value">قيمة الحرارة الدنيا</string>
     <string name="maximum_temprature_value">قيمة الحرارة العليا</string>
+    <string name="weather">الطقس</string>
+    <string name="home">حالة الطقس اليوم</string>
+    <string name="favourites">المفضلات</string>
+    <string name="alert">المنبة</string>
+    <string name="settings">الاعدادات</string>
 </resources>
