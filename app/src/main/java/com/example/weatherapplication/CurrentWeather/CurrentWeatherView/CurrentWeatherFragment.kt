@@ -387,6 +387,59 @@ class CurrentWeatherFragment : Fragment() {
             }
         }
     }
+    fun convertTemperature(
+        temperature: Double,
+        currentUnit: TemperatureUnit,
+        targetUnit: TemperatureUnit
+    ): Double {
+        return when (currentUnit) {
+            targetUnit -> temperature // No conversion needed
+            TemperatureUnit.CELSIUS -> {
+                when (targetUnit) {
+                    TemperatureUnit.KELVIN -> temperature + 273.15
+                    TemperatureUnit.FAHRENHEIT -> temperature * 9 / 5 + 32
+                    else -> temperature
+                }
+            }
+            TemperatureUnit.KELVIN -> {
+                when (targetUnit) {
+                    TemperatureUnit.CELSIUS -> temperature - 273.15
+                    TemperatureUnit.FAHRENHEIT -> temperature * 9 / 5 - 459.67
+                    else -> temperature
+                }
+            }
+            TemperatureUnit.FAHRENHEIT -> {
+                when (targetUnit) {
+                    TemperatureUnit.CELSIUS -> (temperature - 32) * 5 / 9
+                    TemperatureUnit.KELVIN -> (temperature + 459.67) * 5 / 9
+                    else -> temperature
+                }
+            }
+        }
+    }
+
+    fun temprature(){
+        val sharedPreferences = context?.getSharedPreferences(Utils.SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+        var sp_windSpeed_value =sharedPreferences?.getString(Utils.TEMPRATURE_KEY,null)
+
+        if(sp_windSpeed_value == null){
+
+        }else if(sp_windSpeed_value == Utils.KELVIN){
+
+        }else if(sp_windSpeed_value == Utils.CELSIUS){
+
+        }else if(sp_windSpeed_value == Utils.FAHRENHEIT){
+            
+        }
+
+    }
+
+    enum class TemperatureUnit {
+        CELSIUS,
+        KELVIN,
+        FAHRENHEIT
+    }
+
 
 
 }
