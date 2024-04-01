@@ -184,7 +184,11 @@ class FavouriteCityWeatherActivity : AppCompatActivity() {
                         var clouds = result.data?.modelWeatherArrayList?.get(0)?.modelClouds?.all
                         var visibility = result.data?.modelWeatherArrayList?.get(0)?.visibility
 
-                        var sp_windSpeed_value = SharedPrefrences.getInstance(this@FavouriteCityWeatherActivity).getWindSpeedValue(Utils.WINDSPEED_KEY)
+
+
+                   //     var sp_windSpeed_value = SharedPrefrences.getInstance(this@FavouriteCityWeatherActivity).getWindSpeedValue(Utils.WINDSPEED_KEY)
+                        val sharedPreferences = this@FavouriteCityWeatherActivity.getSharedPreferences(Utils.SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+                        var sp_windSpeed_value =sharedPreferences?.getString(Utils.WINDSPEED_KEY,null)
 
                         if (sp_windSpeed_value == Utils.MILE_HOUR){
                             if(wind != null){

@@ -1,5 +1,6 @@
 package com.example.weatherapplication.Settings
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -87,7 +88,14 @@ class SettingsFragment : Fragment() {
             val radioButton: RadioButton = view.findViewById(checkedId)
             val selectedWindSpeed = radioButton.text.toString()
             // Do something with the selected wind speed
-            SharedPrefrences.getInstance(requireContext()).setWindSpeedValue(Utils.WINDSPEED_KEY,selectedWindSpeed)
+
+            val sharedPreferences = context?.getSharedPreferences(Utils.SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+            val editor = sharedPreferences?.edit()
+            editor?.putString(Utils.WINDSPEED_KEY, selectedWindSpeed)
+            editor?.apply()
+
+           // SharedPrefrences.getInstance(requireContext()).setWindSpeedValue(Utils.WINDSPEED_KEY,selectedWindSpeed)
+
 
 //            if(selectedWindSpeed == "Meter/Sec"){
 //

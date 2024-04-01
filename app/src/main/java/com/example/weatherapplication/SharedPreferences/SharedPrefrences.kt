@@ -57,14 +57,8 @@ class SharedPrefrences internal constructor(private val context: Context){
         return prefs.getString(key,null)
     }
     //--------------------
-    fun setWindSpeedValue(key: String, value: String){
-        val editor = prefs.edit()
-        prefs.edit().putString(key,value)
-        editor.apply()
-    }
-    fun getWindSpeedValue(key: String): String?{
-        return prefs.getString(key,null)
-    }
+
+
     //--------------------
     fun setNotificationValue(key: String, value: String){
         prefs.edit().putString(key,value)

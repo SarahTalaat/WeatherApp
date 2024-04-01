@@ -214,16 +214,20 @@ class CurrentWeatherFragment : Fragment() {
                         tv_pressure_InCurrentWeatherFagment.setText(pressure.toString() +" hpa")
                         tv_humidity_InCurrentWeatherFagment.setText(humidity.toString()+ " %")
 
-                        var sp_windSpeed_value = SharedPrefrences.getInstance(requireContext()).getWindSpeedValue(Utils.WINDSPEED_KEY)
+                    //    var sp_windSpeed_value = SharedPrefrences.getInstance(requireContext()).getWindSpeedValue(Utils.WINDSPEED_KEY)
 
-                        Log.i("W", "onViewCreated:sp_windspeed_value: $sp_windSpeed_value ")
+
+                        val sharedPreferences = context?.getSharedPreferences(Utils.SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+                        var sp_windSpeed_value =sharedPreferences?.getString(Utils.WINDSPEED_KEY,null)
+
+                        Log.i("WindSpeed", "onViewCreated:sp_windspeed_value: $sp_windSpeed_value ")
 
                         if (sp_windSpeed_value == Utils.MILE_HOUR){
                             if(wind != null){
-                                Log.i("W", "onViewCreated: wind :$wind")
+                                Log.i("WindSpeed", "onViewCreated: wind :$wind")
 
                                 var windSpeed_milePerHour = convertMeterPerSec_To_MilePerHour(wind!!)
-                                Log.i("W", "onViewCreated: windspeedmile per hour :$windSpeed_milePerHour")
+                                Log.i("WindSpeed", "onViewCreated: windspeedmile per hour :$windSpeed_milePerHour")
                                 tv_wind_InCurrentWeatherFagment.setText(windSpeed_milePerHour.toString()+ " mile/hr")
                             }
                         }else{
