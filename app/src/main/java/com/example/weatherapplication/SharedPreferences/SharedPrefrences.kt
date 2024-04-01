@@ -2,6 +2,7 @@ package com.example.weatherapplication.SharedPreferences
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.example.weatherapplication.Constants.Utils
 
 //to load the current weather not the city weather
 class SharedPrefrences internal constructor(private val context: Context){
@@ -18,9 +19,6 @@ class SharedPrefrences internal constructor(private val context: Context){
             return instance!!
         }
     }
-
-
-
 
 
     private  val prefs: SharedPreferences by lazy{
@@ -60,7 +58,9 @@ class SharedPrefrences internal constructor(private val context: Context){
     }
     //--------------------
     fun setWindSpeedValue(key: String, value: String){
+        val editor = prefs.edit()
         prefs.edit().putString(key,value)
+        editor.apply()
     }
     fun getWindSpeedValue(key: String): String?{
         return prefs.getString(key,null)

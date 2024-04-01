@@ -53,7 +53,7 @@ class SettingsFragment : Fragment() {
         radioGroupLanguage.setOnCheckedChangeListener { group, checkedId ->
             val radioButton: RadioButton = view.findViewById(checkedId)
             val selectedLanguage = radioButton.text.toString()
-            SharedPrefrences.getInstance(requireContext()).setLocationValue(Utils.LANGUAGE_KEY,selectedLanguage)
+            SharedPrefrences.getInstance(requireContext()).setLanguageValue(Utils.LANGUAGE_KEY,selectedLanguage)
 
             // Do something with the selected language
 
@@ -68,7 +68,7 @@ class SettingsFragment : Fragment() {
         radioGroupTemperature.setOnCheckedChangeListener { group, checkedId ->
             val radioButton: RadioButton = view.findViewById(checkedId)
             val selectedTemperature = radioButton.text.toString()
-            SharedPrefrences.getInstance(requireContext()).setLocationValue(Utils.TEMPRATURE_KEY,selectedTemperature)
+            SharedPrefrences.getInstance(requireContext()).setTempratureValue(Utils.TEMPRATURE_KEY,selectedTemperature)
 
             // Do something with the selected temperature
 
@@ -87,7 +87,7 @@ class SettingsFragment : Fragment() {
             val radioButton: RadioButton = view.findViewById(checkedId)
             val selectedWindSpeed = radioButton.text.toString()
             // Do something with the selected wind speed
-            SharedPrefrences.getInstance(requireContext()).setLocationValue(Utils.WINDSPEED_KEY,selectedWindSpeed)
+            SharedPrefrences.getInstance(requireContext()).setWindSpeedValue(Utils.WINDSPEED_KEY,selectedWindSpeed)
 
 //            if(selectedWindSpeed == "Meter/Sec"){
 //
@@ -102,7 +102,7 @@ class SettingsFragment : Fragment() {
             val radioButton: RadioButton = view.findViewById(checkedId)
             val selectedNotification = radioButton.text.toString()
             // Do something with the selected notification
-            SharedPrefrences.getInstance(requireContext()).setLocationValue(Utils.NOTIFICATION_KEY,selectedNotification)
+            SharedPrefrences.getInstance(requireContext()).setNotificationValue(Utils.NOTIFICATION_KEY,selectedNotification)
 
 //            if(selectedNotification == "Enable"){
 //
