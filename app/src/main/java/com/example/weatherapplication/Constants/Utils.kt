@@ -55,6 +55,9 @@ class Utils {
         var NOTIFICATION_ENABLED = "Enable"
         var NOTIFICATION_DISABLED = "Disable"
         var SHARED_PREFS_NAME = "my_prefs"
+        var Settings_MAP_SP_LAT_KEY = "SP_LAT"
+        var Settings_MAP_SP_LON_KEY = "SP_LON"
+        var SETTINGS_MAP_SHARED_PREFERENCE_NAME = "SETTINGS_MAP_SHARED_PREFERENCE_NAME"
 
 
     }

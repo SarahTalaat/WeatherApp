@@ -255,6 +255,30 @@ class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener ,
 
             }
 
+            val settingsButton = dialog.findViewById<Button>(R.id.settingsButton)
+            settingsButton.setOnClickListener {
+                // Handle setting an alarm here
+
+                if (point.latitude != null && point.longitude != null){
+
+                    var latitude = point.latitude.toString()
+                    var longitude = point.longitude.toString()
+
+                    val sharedPreferences = context?.getSharedPreferences(Utils.SETTINGS_MAP_SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
+                    val editor = sharedPreferences?.edit()
+                    editor?.putString(Utils.Settings_MAP_SP_LAT_KEY,latitude )
+                    editor?.putString(Utils.Settings_MAP_SP_LON_KEY,longitude)
+                    editor?.apply()
+
+
+                }
+
+
+                dialog.dismiss()
+
+
+            }
+
 
             dialog.show()
 

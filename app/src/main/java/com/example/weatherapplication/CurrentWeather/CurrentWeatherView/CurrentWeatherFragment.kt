@@ -352,6 +352,13 @@ class CurrentWeatherFragment : Fragment() {
 
                        // currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getList_FromRetrofit_InCurrentWeatherViewModel(location.latitude.toString(),location.longitude.toString(),Utils.API_KEY)
                        // currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getForecast_FromRetrofit_InCurrentWeatherViewModel(location.latitude.toString(),location.longitude.toString(),Utils.API_KEY)
+
+                       /*
+                        val sharedPreferences = context?.getSharedPreferences(Utils.SETTINGS_MAP_SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
+                        var sp_lat_value =sharedPreferences?.getString(Utils.Settings_MAP_SP_LAT_KEY,null)
+                        var sp_lon_value =sharedPreferences?.getString(Utils.Settings_MAP_SP_LON_KEY,null)
+                        */
+
                         currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getForecast_FromRetrofit_InCurrentWeatherViewModel(location.latitude.toString(),location.longitude.toString(),Utils.API_KEY)
 
 
@@ -429,7 +436,7 @@ class CurrentWeatherFragment : Fragment() {
         }else if(sp_windSpeed_value == Utils.CELSIUS){
 
         }else if(sp_windSpeed_value == Utils.FAHRENHEIT){
-            
+
         }
 
     }
