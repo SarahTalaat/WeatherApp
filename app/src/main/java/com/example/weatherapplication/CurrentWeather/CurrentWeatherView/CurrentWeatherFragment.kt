@@ -45,6 +45,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.productsmvvm.Database.WeatherLocalDataSourceImplementation
 import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_WeatherArrayList
 import com.example.weatherapplication.Network.ApiState
+import com.example.weatherapplication.SharedPreferences.SharedPrefrences
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -212,7 +213,27 @@ class CurrentWeatherFragment : Fragment() {
 
                         tv_pressure_InCurrentWeatherFagment.setText(pressure.toString() +" hpa")
                         tv_humidity_InCurrentWeatherFagment.setText(humidity.toString()+ " %")
-                        tv_wind_InCurrentWeatherFagment.setText(wind.toString()+ " m/s")
+
+                    //    var sp_windSpeed_value = SharedPrefrences.getInstance(requireContext()).getWindSpeedValue(Utils.WINDSPEED_KEY)
+
+
+                        val sharedPreferences = context?.getSharedPreferences(Utils.SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+                        var sp_windSpeed_value =sharedPreferences?.getString(Utils.WINDSPEED_KEY,null)
+
+                        Log.i("WindSpeed", "onViewCreated:sp_windspeed_value: $sp_windSpeed_value ")
+
+                        if (sp_windSpeed_value == Utils.MILE_HOUR){
+                            if(wind != null){
+                                Log.i("WindSpeed", "onViewCreated: wind :$wind")
+
+                                var windSpeed_milePerHour = convertMeterPerSec_To_MilePerHour(wind!!)
+                                Log.i("WindSpeed", "onViewCreated: windspeedmile per hour :$windSpeed_milePerHour")
+                                tv_wind_InCurrentWeatherFagment.setText(windSpeed_milePerHour.toString()+ " mile/hr")
+                            }
+                        }else{
+                            tv_wind_InCurrentWeatherFagment.setText(wind.toString()+ " meter/sec")
+                        }
+
                         tv_cloud_InCurrentWeatherFagment.setText(clouds.toString()+ " %")
                         tv_visibiliy_InCurrentWeatherFagment.setText(visibility.toString()+ " m")
 
@@ -280,6 +301,9 @@ class CurrentWeatherFragment : Fragment() {
         }
     }
 
+    fun convertMeterPerSec_To_MilePerHour(meterPerSec: Double):Double{
+        return  meterPerSec*2.23694
+    }
 
     fun checkPermissions(): Boolean{
         return ContextCompat.checkSelfPermission(requireContext(),android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||

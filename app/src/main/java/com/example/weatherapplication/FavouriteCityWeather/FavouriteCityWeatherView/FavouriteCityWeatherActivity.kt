@@ -30,6 +30,7 @@ import com.example.weatherapplication.FavouriteCityWeather.FavouriteCityWeatherV
 import com.example.weatherapplication.MainActivity
 import com.example.weatherapplication.Network.ApiState
 import com.example.weatherapplication.R
+import com.example.weatherapplication.SharedPreferences.SharedPrefrences
 import com.google.android.gms.location.FusedLocationProviderClient
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -183,9 +184,25 @@ class FavouriteCityWeatherActivity : AppCompatActivity() {
                         var clouds = result.data?.modelWeatherArrayList?.get(0)?.modelClouds?.all
                         var visibility = result.data?.modelWeatherArrayList?.get(0)?.visibility
 
+
+
+                   //     var sp_windSpeed_value = SharedPrefrences.getInstance(this@FavouriteCityWeatherActivity).getWindSpeedValue(Utils.WINDSPEED_KEY)
+                        val sharedPreferences = this@FavouriteCityWeatherActivity.getSharedPreferences(Utils.SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+                        var sp_windSpeed_value =sharedPreferences?.getString(Utils.WINDSPEED_KEY,null)
+
+                        if (sp_windSpeed_value == Utils.MILE_HOUR){
+                            if(wind != null){
+                                var windSpeed_milePerHour = convertMeterPerSec_To_MilePerHour(wind!!)
+                                tv_wind_InFavouriteCityWeatherActivity.setText(windSpeed_milePerHour.toString()+ " mile/hr")
+                            }
+                        }else{
+                            tv_wind_InFavouriteCityWeatherActivity.setText(wind.toString()+ " meter/sec")
+                        }
+
+
                         tv_pressure_InFavouriteCityWeatherActivity.setText(pressure.toString() +" hpa")
                         tv_humidity_InFavouriteCityWeatherActivity.setText(humidity.toString()+ " %")
-                        tv_wind_InFavouriteCityWeatherActivity.setText(wind.toString()+ " m/s")
+                        //tv_wind_InFavouriteCityWeatherActivity.setText(wind.toString()+ " m/s")
                         tv_cloud_InFavouriteCityWeatherActivity.setText(clouds.toString()+ " %")
                         tv_visibiliy_InFavouriteCityWeatherActivity.setText(visibility.toString()+ " m")
 
@@ -221,7 +238,9 @@ class FavouriteCityWeatherActivity : AppCompatActivity() {
 
     }
 
-
+    fun convertMeterPerSec_To_MilePerHour(meterPerSec: Double):Double{
+        return  meterPerSec*2.23694
+    }
 
     private fun initUI_InFavouriteCityWeatherActivity(){
         recyclerView_Instance_Hour_InFavouriteCityWeatherActivity = findViewById(R.id.rv_hours_city)

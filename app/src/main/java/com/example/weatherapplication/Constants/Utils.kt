@@ -54,7 +54,7 @@ class Utils {
         var MILE_HOUR = "Mile/Hour"
         var NOTIFICATION_ENABLED = "Enable"
         var NOTIFICATION_DISABLED = "Disable"
-
+        var SHARED_PREFS_NAME = "my_prefs"
 
 
     }
