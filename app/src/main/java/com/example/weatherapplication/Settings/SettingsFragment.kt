@@ -39,14 +39,12 @@ class SettingsFragment : Fragment() {
         radioGroupLocation.setOnCheckedChangeListener { group, checkedId ->
             val radioButton: RadioButton = view.findViewById(checkedId)
             val selectedLocation = radioButton.text.toString()
-            // Do something with the selected location
-            SharedPrefrences.getInstance(requireContext()).setLocationValue(Utils.LOCATION_KEY,selectedLocation)
 
-//            if (selectedLocation=="GPS"){
-//
-//            }else if(selectedLocation == "Map"){
-//
-//            }
+
+            val sharedPreferences = context?.getSharedPreferences(Utils.SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+            val editor = sharedPreferences?.edit()
+            editor?.putString(Utils.LOCATION_KEY, selectedLocation)
+            editor?.apply()
 
             Log.i("Settings", "onViewCreated: Location: $selectedLocation")
         }
@@ -54,32 +52,22 @@ class SettingsFragment : Fragment() {
         radioGroupLanguage.setOnCheckedChangeListener { group, checkedId ->
             val radioButton: RadioButton = view.findViewById(checkedId)
             val selectedLanguage = radioButton.text.toString()
-            SharedPrefrences.getInstance(requireContext()).setLanguageValue(Utils.LANGUAGE_KEY,selectedLanguage)
 
-            // Do something with the selected language
-
-//            if(selectedLanguage == "English"){
-//
-//            }else if(selectedLanguage == "Arabic"){
-//
-//            }
+            val sharedPreferences = context?.getSharedPreferences(Utils.SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+            val editor = sharedPreferences?.edit()
+            editor?.putString(Utils.LANGUAGE_KEY, selectedLanguage)
+            editor?.apply()
             Log.i("Settings", "onViewCreated: Language: $selectedLanguage")
         }
 
         radioGroupTemperature.setOnCheckedChangeListener { group, checkedId ->
             val radioButton: RadioButton = view.findViewById(checkedId)
             val selectedTemperature = radioButton.text.toString()
-            SharedPrefrences.getInstance(requireContext()).setTempratureValue(Utils.TEMPRATURE_KEY,selectedTemperature)
 
-            // Do something with the selected temperature
-
-//            if(selectedTemperature == "Celsius"){
-//
-//            }else if (selectedTemperature == "Kelvin"){
-//
-//            }else if(selectedTemperature == "Fahrenheit"){
-//
-//            }
+            val sharedPreferences = context?.getSharedPreferences(Utils.SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+            val editor = sharedPreferences?.edit()
+            editor?.putString(Utils.TEMPRATURE_KEY, selectedTemperature)
+            editor?.apply()
 
             Log.i("Settings", "onViewCreated: Temprature: $selectedTemperature")
         }
@@ -87,21 +75,12 @@ class SettingsFragment : Fragment() {
         radioGroupWindSpeed.setOnCheckedChangeListener { group, checkedId ->
             val radioButton: RadioButton = view.findViewById(checkedId)
             val selectedWindSpeed = radioButton.text.toString()
-            // Do something with the selected wind speed
+
 
             val sharedPreferences = context?.getSharedPreferences(Utils.SHARED_PREFS_NAME, Context.MODE_PRIVATE)
             val editor = sharedPreferences?.edit()
             editor?.putString(Utils.WINDSPEED_KEY, selectedWindSpeed)
             editor?.apply()
-
-           // SharedPrefrences.getInstance(requireContext()).setWindSpeedValue(Utils.WINDSPEED_KEY,selectedWindSpeed)
-
-
-//            if(selectedWindSpeed == "Meter/Sec"){
-//
-//            }else if(selectedWindSpeed == "Mile/Hour"){
-//
-//            }
 
             Log.i("Settings", "onViewCreated: Wind Speed: $selectedWindSpeed")
         }
@@ -109,14 +88,11 @@ class SettingsFragment : Fragment() {
         radioGroupNotification.setOnCheckedChangeListener { group, checkedId ->
             val radioButton: RadioButton = view.findViewById(checkedId)
             val selectedNotification = radioButton.text.toString()
-            // Do something with the selected notification
-            SharedPrefrences.getInstance(requireContext()).setNotificationValue(Utils.NOTIFICATION_KEY,selectedNotification)
 
-//            if(selectedNotification == "Enable"){
-//
-//            }else if(selectedNotification == "Disable"){
-//
-//            }
+            val sharedPreferences = context?.getSharedPreferences(Utils.SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+            val editor = sharedPreferences?.edit()
+            editor?.putString(Utils.NOTIFICATION_KEY, selectedNotification)
+            editor?.apply()
 
             Log.i("Settings", "onViewCreated: Notification: $selectedNotification ")
         }
