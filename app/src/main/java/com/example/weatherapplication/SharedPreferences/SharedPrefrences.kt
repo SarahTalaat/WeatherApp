@@ -9,16 +9,19 @@ class SharedPrefrences internal constructor(private val context: Context){
     companion object{
         private const val SHARED_PREFS_NAME = "my_prefs"
         private const val KEY_CITY = "city"
-    }
 
-    private var instance: SharedPrefrences? = null
-
-    fun getInstance(context:Context): SharedPrefrences {
-        if(instance==null){
-            instance = SharedPrefrences(context.applicationContext)
+        private var instance: SharedPrefrences? = null
+        fun getInstance(context:Context): SharedPrefrences {
+            if(instance==null){
+                instance = SharedPrefrences(context.applicationContext)
+            }
+            return instance!!
         }
-        return instance!!
     }
+
+
+
+
 
     private  val prefs: SharedPreferences by lazy{
         context.getSharedPreferences(SHARED_PREFS_NAME,Context.MODE_PRIVATE)
