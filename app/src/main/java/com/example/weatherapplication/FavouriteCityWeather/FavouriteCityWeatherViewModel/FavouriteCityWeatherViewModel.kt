@@ -19,12 +19,12 @@ class FavouriteCityWeatherViewModel(private val weatherRepositoryInterface_Insta
     val forecastStateFlow_InFavouriteCityWeatherViewModel: StateFlow<ApiState> = forecastMutableStateFlow_InFavouriteCityWeatherViewModel
 
 
-    fun getForecast_FromRetrofit_InFavouriteCityWeatherViewModel(lat: String, lon: String, appid: String){
+    fun getForecast_FromRetrofit_InFavouriteCityWeatherViewModel(lat: String, lon: String,units: String, lang: String, appid: String){
 
 
 
         viewModelScope.launch(Dispatchers.IO) {
-            weatherRepositoryInterface_Instance_ConstructorParameter_InFavouriteCityWeatherViewModel.getForecast_FromRDS_InWeatherRepository(lat, lon, appid)
+            weatherRepositoryInterface_Instance_ConstructorParameter_InFavouriteCityWeatherViewModel.getForecast_FromRDS_InWeatherRepository(lat, lon, units, lang, appid)
                 .catch { e ->
                     forecastMutableStateFlow_InFavouriteCityWeatherViewModel.value = ApiState.Failure(e)
                 }

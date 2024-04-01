@@ -54,13 +54,15 @@ class WeatherRepositoryImplementation  constructor(
     override suspend fun getForecast_FromRDS_InWeatherRepository(
         lat: String,
         lon: String,
+        units: String,
+        lang: String,
         appid: String
     ): Flow<Model_Forecast?> {
-        Log.i("TAG", "getForecast_FromRDS_InProductsRepository: "+  weatherRemoteDataSourceInterface_Instance.getForecast_OverNetwork_InRDS(lat, lon, appid))
+        Log.i("TAG", "getForecast_FromRDS_InProductsRepository: "+  weatherRemoteDataSourceInterface_Instance.getForecast_OverNetwork_InRDS(lat, lon, units, lang, appid))
        // return  weatherRemoteDataSourceInterface_Instance.getForecast_OverNetwork_InRDS(lat, lon, appid)
-        val respons = weatherRemoteDataSourceInterface_Instance.getForecast_OverNetwork_InRDS(lat, lon, appid)
+        val response = weatherRemoteDataSourceInterface_Instance.getForecast_OverNetwork_InRDS(lat, lon, units, lang, appid)
         return flow {
-            emit(respons)
+            emit(response)
         }
     }
 

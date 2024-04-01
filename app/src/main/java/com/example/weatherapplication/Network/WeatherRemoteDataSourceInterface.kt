@@ -11,7 +11,7 @@ interface WeatherRemoteDataSourceInterface {
 
    // suspend fun getCurrentWeatherOverNetwork_InRDS(): Model_Forecast
 
-    suspend fun getForecast_OverNetwork_InRDS(lat: String, lon: String, appid: String): Model_Forecast?
+    suspend fun getForecast_OverNetwork_InRDS(lat: String, lon: String,units: String , lang: String , appid: String): Model_Forecast?
 
     suspend fun getAlert_OverNetwork_InRDS(lat: String, lon: String, appid: String): Model_Alert?
 

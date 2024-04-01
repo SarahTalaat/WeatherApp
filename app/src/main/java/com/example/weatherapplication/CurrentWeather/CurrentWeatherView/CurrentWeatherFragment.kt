@@ -45,7 +45,6 @@ import androidx.lifecycle.lifecycleScope
 import com.example.productsmvvm.Database.WeatherLocalDataSourceImplementation
 import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_WeatherArrayList
 import com.example.weatherapplication.Network.ApiState
-import com.example.weatherapplication.SharedPreferences.SharedPrefrences
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -186,10 +185,26 @@ class CurrentWeatherFragment : Fragment() {
 
                         tv_weatherStatus_InCurrentWeatherFagment.setText(result.data?.modelWeatherArrayList?.get(2)?.modelWeather?.get(0)?.description)
 
-                        var tempratureFehrenheit = result.data?.modelWeatherArrayList?.get(0)?.modelMain?.feelsLike
-                        var tempratureCelsius = tempratureFehrenheit?.minus(273.15)
+                        var temprature = result.data?.modelWeatherArrayList?.get(0)?.modelMain?.feelsLike
+                       /*
+                        var tempratureCelsius = temprature?.minus(273.15)
                         val tempFormated = String.format("%.2f", tempratureCelsius)
                         tv_degreeOfTemprature_InCurrentWeatherFagment.setText(tempFormated+"°C")
+                        */
+
+                        val sharedPreferencesName = context?.getSharedPreferences(Utils.SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+                        var sp_unit_value =sharedPreferencesName?.getString(Utils.TEMPRATURE_KEY,null)
+
+
+
+                            if(sp_unit_value == Utils.CELSIUS){
+                                tv_degreeOfTemprature_InCurrentWeatherFagment.setText("$temprature°C")
+                            }else if(sp_unit_value == Utils.FAHRENHEIT){
+                                tv_degreeOfTemprature_InCurrentWeatherFagment.setText("$temprature°F")
+                            }else{
+                                tv_degreeOfTemprature_InCurrentWeatherFagment.setText("$temprature°K")
+                            }
+
 
                         var imageIconCode = result.data?.modelWeatherArrayList?.get(0)?.modelWeather?.get(0)?.icon
                         var imageIcon = "https://openweathermap.org/img/wn/$imageIconCode@2x.png"
@@ -363,11 +378,11 @@ class CurrentWeatherFragment : Fragment() {
                             var sp_lon_value =sharedPreferences?.getString(Utils.Settings_MAP_SP_LON_KEY,null)
 
                             if(sp_lat_value != null && sp_lon_value != null){
-                                currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getForecast_FromRetrofit_InCurrentWeatherViewModel(sp_lat_value,sp_lon_value,Utils.API_KEY)
+                                currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getForecast_FromRetrofit_InCurrentWeatherViewModel(sp_lat_value,sp_lon_value,getUnit(),getLang(),Utils.API_KEY)
                             }
 
                         }else{
-                            currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getForecast_FromRetrofit_InCurrentWeatherViewModel(location.latitude.toString(),location.longitude.toString(),Utils.API_KEY)
+                            currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getForecast_FromRetrofit_InCurrentWeatherViewModel(location.latitude.toString(),location.longitude.toString(),getUnit(),getLang(),Utils.API_KEY)
                         }
 
 
@@ -441,12 +456,13 @@ class CurrentWeatherFragment : Fragment() {
 
         if(sp_windSpeed_value == null){
 
-        }else if(sp_windSpeed_value == Utils.KELVIN){
+             if(sp_windSpeed_value == Utils.CELSIUS){
 
-        }else if(sp_windSpeed_value == Utils.CELSIUS){
+            }else if(sp_windSpeed_value == Utils.FAHRENHEIT){
 
-        }else if(sp_windSpeed_value == Utils.FAHRENHEIT){
+            }else{
 
+            }
         }
 
     }
@@ -457,6 +473,40 @@ class CurrentWeatherFragment : Fragment() {
         FAHRENHEIT
     }
 
+    /*
+        CELSIUS
+        FAHRENHEIT
+     */
+
+
+    fun getUnit(): String{
+        val sharedPreferences = context?.getSharedPreferences(Utils.SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+        var sp_unit_value =sharedPreferences?.getString(Utils.TEMPRATURE_KEY,null)
+
+        if (sp_unit_value != null){
+
+            if(sp_unit_value == Utils.CELSIUS){
+                return "metric"
+            }else if(sp_unit_value == Utils.FAHRENHEIT) {
+                return "imperial"
+            }
+        }
+
+        return ""
+
+    }
+
+    fun getLang(): String{
+        val sharedPreferences = context?.getSharedPreferences(Utils.SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+        var sp_lang_value =sharedPreferences?.getString(Utils.LANGUAGE_KEY,null)
+
+        if(sp_lang_value != null){
+            if(sp_lang_value == Utils.ARABIC){
+                return "ar"
+            }
+        }
+        return "en"
+    }
 
 
 }

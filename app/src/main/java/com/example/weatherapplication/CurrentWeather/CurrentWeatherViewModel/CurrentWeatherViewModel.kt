@@ -18,12 +18,12 @@ class CurrentWeatherViewModel(private val weatherRepositoryInterface_Instance_Co
     private var forecastMutableStateFlow_InCurrentWeatherViewModel: MutableStateFlow<ApiState> = MutableStateFlow<ApiState>(ApiState.Loading)
     val forecastStateFlow_InCurrentWeatherViewModel: StateFlow<ApiState> = forecastMutableStateFlow_InCurrentWeatherViewModel
 
-    fun getForecast_FromRetrofit_InCurrentWeatherViewModel(lat: String, lon: String, appid: String){
+    fun getForecast_FromRetrofit_InCurrentWeatherViewModel(lat: String, lon: String,units: String , lang: String, appid: String){
 
         Log.i("TAG", "getForecast_FromRetrofit_InCurrentWeatherViewModel: (before the viewModelScope): lat: $lat , lon: $lon , appid: $appid")
         viewModelScope.launch(Dispatchers.IO) {
             weatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.
-            getForecast_FromRDS_InWeatherRepository(lat, lon, appid)
+            getForecast_FromRDS_InWeatherRepository(lat, lon, units, lang, appid)
                 .catch { e ->
                     forecastMutableStateFlow_InCurrentWeatherViewModel.value = ApiState.Failure(e)
                 }

@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_WeatherArrayList
 import com.example.weatherapplication.R
 //import com.example.productsmvvm.Model.Products
@@ -186,13 +187,24 @@ class CurrentWeatherAdapter_Hour: RecyclerView.Adapter<CurrentWeatherAdapter_Hou
                 }
             }
 
-            var tempratureFehrenheit = weatherArrayList_InCurrentWeatherAdapter.get(0).modelMain?.temp
-            var tempratureCelsius = tempratureFehrenheit?.minus(273.15)
+            var temprature = weatherArrayList_InCurrentWeatherAdapter.get(0).modelMain?.temp
+        /*
+        var tempratureCelsius = temprature?.minus(273.15)
             val tempFormated = String.format("%.2f", tempratureCelsius)
+*/
 
-            holder.tv_WeatherTempratureDegree.setText(tempFormated + "°C")
+        val sharedPreferences = context_Instance_InCurrentWeatherAdapter?.getSharedPreferences(
+            Utils.SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+        var sp_unit_value =sharedPreferences?.getString(Utils.TEMPRATURE_KEY,null)
 
-
+        if(sp_unit_value == Utils.CELSIUS){
+                holder.tv_WeatherTempratureDegree.setText("$temprature°C")
+            }else if(sp_unit_value == Utils.FAHRENHEIT){
+                holder.tv_WeatherTempratureDegree.setText("$temprature°F")
+            }else{
+                holder.tv_WeatherTempratureDegree.setText("$temprature°K")
+            }
+        }
 
 /*
         holder.btn_addToFavourite_CurrentWeather.setOnClickListener(){
@@ -202,4 +214,5 @@ class CurrentWeatherAdapter_Hour: RecyclerView.Adapter<CurrentWeatherAdapter_Hou
  */
 
     }
-}
+
+
