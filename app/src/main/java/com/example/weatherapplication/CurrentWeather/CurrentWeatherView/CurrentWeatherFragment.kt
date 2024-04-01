@@ -45,7 +45,6 @@ import androidx.lifecycle.lifecycleScope
 import com.example.productsmvvm.Database.WeatherLocalDataSourceImplementation
 import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_WeatherArrayList
 import com.example.weatherapplication.Network.ApiState
-import com.example.weatherapplication.SharedPreferences.SharedPrefrences
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -363,11 +362,11 @@ class CurrentWeatherFragment : Fragment() {
                             var sp_lon_value =sharedPreferences?.getString(Utils.Settings_MAP_SP_LON_KEY,null)
 
                             if(sp_lat_value != null && sp_lon_value != null){
-                                currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getForecast_FromRetrofit_InCurrentWeatherViewModel(sp_lat_value,sp_lon_value,Utils.API_KEY)
+                                currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getForecast_FromRetrofit_InCurrentWeatherViewModel(sp_lat_value,sp_lon_value,getUnit(),getLang(),Utils.API_KEY)
                             }
 
                         }else{
-                            currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getForecast_FromRetrofit_InCurrentWeatherViewModel(location.latitude.toString(),location.longitude.toString(),Utils.API_KEY)
+                            currentWeatherViewModel_Instance_InCurrentWeatherFragmet.getForecast_FromRetrofit_InCurrentWeatherViewModel(location.latitude.toString(),location.longitude.toString(),getUnit(),getLang(),Utils.API_KEY)
                         }
 
 
@@ -457,6 +456,40 @@ class CurrentWeatherFragment : Fragment() {
         FAHRENHEIT
     }
 
+    /*
+        CELSIUS
+        FAHRENHEIT
+     */
+
+
+    fun getUnit(): String{
+        val sharedPreferences = context?.getSharedPreferences(Utils.SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+        var sp_unit_value =sharedPreferences?.getString(Utils.TEMPRATURE_KEY,null)
+
+        if (sp_unit_value != null){
+
+            if(sp_unit_value == Utils.CELSIUS){
+                return "metric"
+            }else if(sp_unit_value == Utils.FAHRENHEIT) {
+                return "imperial"
+            }
+        }
+
+        return ""
+
+    }
+
+    fun getLang(): String{
+        val sharedPreferences = context?.getSharedPreferences(Utils.SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+        var sp_lang_value =sharedPreferences?.getString(Utils.LANGUAGE_KEY,null)
+
+        if(sp_lang_value != null){
+            if(sp_lang_value == Utils.ARABIC){
+                return "ar"
+            }
+        }
+        return "en"
+    }
 
 
 }

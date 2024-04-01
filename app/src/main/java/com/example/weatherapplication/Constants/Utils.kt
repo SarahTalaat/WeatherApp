@@ -64,6 +64,7 @@ class Utils {
         var SETTINGS_FRAGMENT_VALUE = "SETTINGS_FRAGMENT_VALUE"
 
 
+
     }
 
 }

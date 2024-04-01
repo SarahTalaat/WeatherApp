@@ -32,9 +32,11 @@ class WeatherRemoteDataSourceImplementation private constructor() : WeatherRemot
     override suspend fun getForecast_OverNetwork_InRDS(
         lat: String,
         lon: String,
+        units:String,
+        lang: String,
         appid: String
     ): Model_Forecast? {
-        val response = weatherService.getCurrentWeather_FromApiEndPoint_InWeatherService(lat,lon,appid)
+        val response = weatherService.getCurrentWeather_FromApiEndPoint_InWeatherService(lat,lon,units,lang,appid)
         Log.i("TAG", "getForecast_OverNetwork_InRDS: response: " + response)
         return response
     }

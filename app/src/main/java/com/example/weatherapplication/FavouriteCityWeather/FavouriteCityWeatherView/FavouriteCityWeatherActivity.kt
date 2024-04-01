@@ -227,7 +227,7 @@ class FavouriteCityWeatherActivity : AppCompatActivity() {
 
 
         if(latitude_OnBundle_InFavouriteCityWeatherActivity!= null && longitude_OnBundle_InFavouriteCityWeatherActivity != null){
-            favouriteCityWeatherViewModel_Instance_InFavouriteCityWeatherActivity.getForecast_FromRetrofit_InFavouriteCityWeatherViewModel(latitude_OnBundle_InFavouriteCityWeatherActivity,longitude_OnBundle_InFavouriteCityWeatherActivity, Utils.API_KEY)
+            favouriteCityWeatherViewModel_Instance_InFavouriteCityWeatherActivity.getForecast_FromRetrofit_InFavouriteCityWeatherViewModel(latitude_OnBundle_InFavouriteCityWeatherActivity,longitude_OnBundle_InFavouriteCityWeatherActivity, getUnit(),getLang(),Utils.API_KEY)
         }
 
         btn_back_InFavouriteCityWeatherActivity.setOnClickListener(){
@@ -263,4 +263,34 @@ class FavouriteCityWeatherActivity : AppCompatActivity() {
         recyclerView_Instance_Day_InFavouriteCityWeatherActivity.adapter = adapter_Instance_Day_InFavouriteCityWeatherActivity
         recyclerView_Instance_Day_InFavouriteCityWeatherActivity.layoutManager = layoutManager_Instance_Day_InFavouriteCityWeatherActivity
     }
+
+
+    fun getUnit(): String{
+        val sharedPreferences = this.getSharedPreferences(Utils.SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+        var sp_unit_value =sharedPreferences?.getString(Utils.TEMPRATURE_KEY,null)
+
+        if (sp_unit_value != null){
+
+            if(sp_unit_value == Utils.CELSIUS){
+                return "metric"
+            }else if(sp_unit_value == Utils.FAHRENHEIT) {
+                return "imperial"
+            }
+        }
+
+        return ""
+    }
+
+    fun getLang(): String{
+        val sharedPreferences = this.getSharedPreferences(Utils.SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+        var sp_lang_value =sharedPreferences?.getString(Utils.LANGUAGE_KEY,null)
+
+        if(sp_lang_value != null){
+            if(sp_lang_value == Utils.ARABIC){
+                return "ar"
+            }
+        }
+        return "en"
+    }
 }
+

@@ -11,6 +11,8 @@ interface WeatherServiceInterface {
     suspend fun getCurrentWeather_FromApiEndPoint_InWeatherService(
         @Query("lat") lat: String,
         @Query("lon") lon: String,
+        @Query("units") units: String,
+        @Query("lang") lang: String,
         @Query("appid") appid: String = Utils.API_KEY
     ): Model_Forecast
 
