@@ -88,7 +88,7 @@ class FakeWeatherRepositoryImplementation: WeatherRepositoryInterface {
     }
 
 
-    override suspend fun getForecast_FromRDS_InWeatherRepository(lat: String, lon: String, appid: String): Flow<Model_Forecast?> {
+    override suspend fun getForecast_FromRDS_InWeatherRepository(lat: String, lon: String,unit:String,lang: String, appid: String): Flow<Model_Forecast?> {
         // Return a fake Model_Forecast object for testing purposes
         return flow {
             // Create fake data for the Model_City object

@@ -41,10 +41,12 @@ class FavouriteCityWeatherViewModelTest {
         // Set up test data
         val lat = Utils.LAT_ALERT
         val lon = Utils.LON_EGYPT
+        val unit =""
+        val lang = "en"
         val appid = Utils.API_KEY
 
         // Call the method under test
-        viewModel.getForecast_FromRetrofit_InFavouriteCityWeatherViewModel(lat, lon, appid)
+        viewModel.getForecast_FromRetrofit_InFavouriteCityWeatherViewModel(lat, lon, unit,lang,appid)
 
         // Run the test
         mainCoroutineRule.runTest {

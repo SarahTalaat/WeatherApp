@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
@@ -37,7 +38,6 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
-import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import androidx.core.content.ContextCompat
@@ -47,6 +47,7 @@ import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_W
 import com.example.weatherapplication.Network.ApiState
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 
 
 const val REQUEST_LOCATION_CODE = 2005
@@ -58,7 +59,7 @@ class CurrentWeatherFragment : Fragment() {
     private lateinit var recyclerView_Instance_Hour_InCurrentWeatherFragment: RecyclerView
     private lateinit var adapter_Instance_Hour_InCurrentWeatherFragment: CurrentWeatherAdapter_Hour
     private lateinit var layoutManager_Instance_Hour_InCurrentWeatherFragment: LinearLayoutManager
-
+    private var activityRecreated = false
     private lateinit var recyclerView_Instance_Day_InCurrentWeatherFragment: RecyclerView
     private lateinit var adapter_Instance_Day_InCurrentWeatherFragment: CurrentWeatherAdapter_Day
     private lateinit var layoutManager_Instance_Day_InCurrentWeatherFragment: LinearLayoutManager
@@ -80,6 +81,7 @@ class CurrentWeatherFragment : Fragment() {
     private var context_InCurrentWeatherFragment: Context? = null
     lateinit var progressBar: ProgressBar
 
+    val sharedPreferences = context?.getSharedPreferences(Utils.SHARED_PREFS_NAME, Context.MODE_PRIVATE)
 
 
     override fun onAttach(context: Context) {
@@ -92,7 +94,9 @@ class CurrentWeatherFragment : Fragment() {
         context_InCurrentWeatherFragment = null
     }
     override fun onCreate(savedInstanceState: Bundle?) {
+        setLocale()
         super.onCreate(savedInstanceState)
+
 
 
 
@@ -113,6 +117,7 @@ class CurrentWeatherFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
 
         tv_date_InCurrentWeatherFagment = view.findViewById(R.id.tv_Date)
@@ -176,13 +181,16 @@ class CurrentWeatherFragment : Fragment() {
                         Log.i("TAG", "onCreateView: weatherStatus: "+ result.data?.modelWeatherArrayList?.get(2)?.modelWeather?.get(0)?.description)
 
 
-                        var dtTxt_value = result.data?.modelWeatherArrayList?.get(0)?.dtTxt
-                        Log.i("TAG", "onCreateView: Current Weather Fragment: dtTxtValue : " + dtTxt_value)
+                        val dtTxtValue = result.data?.modelWeatherArrayList?.get(0)?.dtTxt
+                        Log.i("TAG", "onCreateView: Current Weather Fragment: dtTxtValue : " + dtTxtValue)
+
                         val firstApiFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-                        val date = LocalDate.parse(dtTxt_value , firstApiFormat)
+                        val date = LocalDateTime.parse(dtTxtValue, firstApiFormat)
+                        val lang = getLang()
+                        val dateFormatter = DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy", Locale(lang))
+                        val formattedDate = dateFormatter.format(date)
 
-                        tv_date_InCurrentWeatherFagment.setText(date.dayOfWeek.toString() + System.getProperty("line.separator") +"${dateAndTimeFromWeatherArrayList?.get(0)}")
-
+                        tv_date_InCurrentWeatherFagment.text = formattedDate
                         tv_weatherStatus_InCurrentWeatherFagment.setText(result.data?.modelWeatherArrayList?.get(2)?.modelWeather?.get(0)?.description)
 
                         var temprature = result.data?.modelWeatherArrayList?.get(0)?.modelMain?.feelsLike
@@ -226,31 +234,88 @@ class CurrentWeatherFragment : Fragment() {
                         var clouds = result.data?.modelWeatherArrayList?.get(0)?.modelClouds?.all
                         var visibility = result.data?.modelWeatherArrayList?.get(0)?.visibility
 
-                        tv_pressure_InCurrentWeatherFagment.setText(pressure.toString() +" hpa")
-                        tv_humidity_InCurrentWeatherFagment.setText(humidity.toString()+ " %")
+                        var sp_lang_value =sharedPreferences?.getString(Utils.LANGUAGE_KEY,null)
+                        if(sp_lang_value==Utils.ARABIC){
+                            var englishNumberString_pressure = pressure.toString()
+                            val arabicNumberString_pressure = convertNumbersToArabic(englishNumberString_pressure)
+
+                            tv_pressure_InCurrentWeatherFagment.setText(arabicNumberString_pressure +" وحده")
+
+
+                            var englishNumberString_humidity = humidity.toString()
+                            val arabicNumberString_humidity = convertNumbersToArabic(englishNumberString_humidity)
+
+                            tv_humidity_InCurrentWeatherFagment.setText(arabicNumberString_humidity+ " %")
+
+                            var englishNumberString_clouds = clouds.toString()
+                            val arabicNumberString_clouds = convertNumbersToArabic(englishNumberString_clouds)
+
+                            tv_cloud_InCurrentWeatherFagment.setText(arabicNumberString_clouds+ " %")
+
+                            var englishNumberString_visibility = visibility.toString()
+                            val arabicNumberString_visibility = convertNumbersToArabic(englishNumberString_visibility)
+
+                            tv_visibiliy_InCurrentWeatherFagment.setText(arabicNumberString_visibility+ " م")
+
+
+                          //
+
+
+
+                            val sharedPreferences = context?.getSharedPreferences(Utils.SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+                            var sp_windSpeed_value =sharedPreferences?.getString(Utils.WINDSPEED_KEY,null)
+
+                            Log.i("WindSpeed", "onViewCreated:sp_windspeed_value: $sp_windSpeed_value ")
+
+                            if (sp_windSpeed_value == Utils.MILE_HOUR){
+                                if(wind != null){
+                                    Log.i("WindSpeed", "onViewCreated: wind :$wind")
+
+                                    var windSpeed_milePerHour = convertMeterPerSec_To_MilePerHour(wind!!).toString()
+                                    val arabicNumberString_wind = convertNumbersToArabic(windSpeed_milePerHour)
+
+                                    Log.i("WindSpeed", "onViewCreated: windspeedmile per hour :$arabicNumberString_wind")
+                                    tv_wind_InCurrentWeatherFagment.setText(arabicNumberString_wind+ " ميل/ساعة")
+                                }
+                            }else{
+                                var englishNumberString_wind = wind.toString()
+                                val arabicNumberString_wind = convertNumbersToArabic(englishNumberString_wind)
+                                tv_wind_InCurrentWeatherFagment.setText(arabicNumberString_wind+ " متر/ثانية")
+                            }
+
+
+                        }else{
+                            tv_pressure_InCurrentWeatherFagment.setText(pressure.toString() +" hpa")
+                            tv_humidity_InCurrentWeatherFagment.setText(humidity.toString()+ " %")
+
+                            val sharedPreferences = context?.getSharedPreferences(Utils.SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+                            var sp_windSpeed_value =sharedPreferences?.getString(Utils.WINDSPEED_KEY,null)
+
+                            Log.i("WindSpeed", "onViewCreated:sp_windspeed_value: $sp_windSpeed_value ")
+
+                            if (sp_windSpeed_value == Utils.MILE_HOUR){
+                                if(wind != null){
+                                    Log.i("WindSpeed", "onViewCreated: wind :$wind")
+
+                                    var windSpeed_milePerHour = convertMeterPerSec_To_MilePerHour(wind!!)
+                                    Log.i("WindSpeed", "onViewCreated: windspeedmile per hour :$windSpeed_milePerHour")
+                                    tv_wind_InCurrentWeatherFagment.setText(windSpeed_milePerHour.toString()+ " mile/hr")
+                                }
+                            }else{
+                                tv_wind_InCurrentWeatherFagment.setText(wind.toString()+ " meter/sec")
+                            }
+
+                            tv_cloud_InCurrentWeatherFagment.setText(clouds.toString()+ " %")
+                            tv_visibiliy_InCurrentWeatherFagment.setText(visibility.toString()+ " m")
+
+
+                        }
+
 
                     //    var sp_windSpeed_value = SharedPrefrences.getInstance(requireContext()).getWindSpeedValue(Utils.WINDSPEED_KEY)
 
 
-                        val sharedPreferences = context?.getSharedPreferences(Utils.SHARED_PREFS_NAME, Context.MODE_PRIVATE)
-                        var sp_windSpeed_value =sharedPreferences?.getString(Utils.WINDSPEED_KEY,null)
 
-                        Log.i("WindSpeed", "onViewCreated:sp_windspeed_value: $sp_windSpeed_value ")
-
-                        if (sp_windSpeed_value == Utils.MILE_HOUR){
-                            if(wind != null){
-                                Log.i("WindSpeed", "onViewCreated: wind :$wind")
-
-                                var windSpeed_milePerHour = convertMeterPerSec_To_MilePerHour(wind!!)
-                                Log.i("WindSpeed", "onViewCreated: windspeedmile per hour :$windSpeed_milePerHour")
-                                tv_wind_InCurrentWeatherFagment.setText(windSpeed_milePerHour.toString()+ " mile/hr")
-                            }
-                        }else{
-                            tv_wind_InCurrentWeatherFagment.setText(wind.toString()+ " meter/sec")
-                        }
-
-                        tv_cloud_InCurrentWeatherFagment.setText(clouds.toString()+ " %")
-                        tv_visibiliy_InCurrentWeatherFagment.setText(visibility.toString()+ " m")
 
                     }
                     is ApiState.Failure -> {
@@ -413,39 +478,9 @@ class CurrentWeatherFragment : Fragment() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         Log.i("TAG", "request code: " + requestCode)
-        if(requestCode == REQUEST_LOCATION_CODE){
-            if(grantResults.size > 1 && grantResults.get(0) == PackageManager.PERMISSION_GRANTED){
+        if (requestCode == REQUEST_LOCATION_CODE) {
+            if (grantResults.size > 1 && grantResults.get(0) == PackageManager.PERMISSION_GRANTED) {
                 getFreshLocation()
-            }
-        }
-    }
-    fun convertTemperature(
-        temperature: Double,
-        currentUnit: TemperatureUnit,
-        targetUnit: TemperatureUnit
-    ): Double {
-        return when (currentUnit) {
-            targetUnit -> temperature // No conversion needed
-            TemperatureUnit.CELSIUS -> {
-                when (targetUnit) {
-                    TemperatureUnit.KELVIN -> temperature + 273.15
-                    TemperatureUnit.FAHRENHEIT -> temperature * 9 / 5 + 32
-                    else -> temperature
-                }
-            }
-            TemperatureUnit.KELVIN -> {
-                when (targetUnit) {
-                    TemperatureUnit.CELSIUS -> temperature - 273.15
-                    TemperatureUnit.FAHRENHEIT -> temperature * 9 / 5 - 459.67
-                    else -> temperature
-                }
-            }
-            TemperatureUnit.FAHRENHEIT -> {
-                when (targetUnit) {
-                    TemperatureUnit.CELSIUS -> (temperature - 32) * 5 / 9
-                    TemperatureUnit.KELVIN -> (temperature + 459.67) * 5 / 9
-                    else -> temperature
-                }
             }
         }
     }
@@ -467,16 +502,6 @@ class CurrentWeatherFragment : Fragment() {
 
     }
 
-    enum class TemperatureUnit {
-        CELSIUS,
-        KELVIN,
-        FAHRENHEIT
-    }
-
-    /*
-        CELSIUS
-        FAHRENHEIT
-     */
 
 
     fun getUnit(): String{
@@ -507,6 +532,37 @@ class CurrentWeatherFragment : Fragment() {
         }
         return "en"
     }
+
+    private fun setLocale() {
+        // Retrieve language preference
+        val lang = getLang()
+        val locale = Locale(lang)
+        Locale.setDefault(locale)
+        val config = Configuration(resources.configuration)
+        config.setLocale(locale)
+        requireContext().resources.updateConfiguration(config, requireContext().resources.displayMetrics)
+
+        // Set layout direction based on the locale
+        val layoutDirection = if (lang == "ar") View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
+        requireActivity().window.decorView.layoutDirection = layoutDirection
+
+    }
+
+    fun convertNumbersToArabic(input: String): String {
+        val englishNumbers = arrayOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9")
+        val arabicNumbers = arrayOf("٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩")
+
+        var output = input
+        englishNumbers.forEachIndexed { index, englishNumber ->
+            output = output.replace(englishNumber, arabicNumbers[index])
+        }
+        return output
+    }
+
+
+
+
+
 
 
 }

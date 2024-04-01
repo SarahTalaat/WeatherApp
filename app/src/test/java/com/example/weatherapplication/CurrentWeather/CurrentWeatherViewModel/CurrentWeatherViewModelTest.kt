@@ -42,10 +42,12 @@ class CurrentWeatherViewModelTest {
         // Set up test data
         val lat = Utils.LAT_ALERT
         val lon = Utils.LON_EGYPT
+        val units = ""
+        val lang = "en"
         val appid = Utils.API_KEY
 
         // Call the method under test
-        viewModel.getForecast_FromRetrofit_InCurrentWeatherViewModel(lat, lon, appid)
+        viewModel.getForecast_FromRetrofit_InCurrentWeatherViewModel(lat, lon,units,lang, appid)
 
         // Run the test
         mainCoroutineRule.runTest {

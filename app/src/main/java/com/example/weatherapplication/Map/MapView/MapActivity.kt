@@ -299,5 +299,4 @@ class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener ,
         editor.apply()
     }
 
-
 }
