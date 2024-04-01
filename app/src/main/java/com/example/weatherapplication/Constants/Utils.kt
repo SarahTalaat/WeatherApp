@@ -43,6 +43,8 @@ class Utils {
         var TEMPRATURE_KEY = "TEMPRATURE_KEY"
         var WINDSPEED_KEY = "WINDSPEED_KEY"
         var NOTIFICATION_KEY = "NOTIFICATION_KEY"
+
+
         var GPS = "GPS"
         var MAP = "Map"
         var ENGLISH = "English"
@@ -58,6 +60,8 @@ class Utils {
         var Settings_MAP_SP_LAT_KEY = "SP_LAT"
         var Settings_MAP_SP_LON_KEY = "SP_LON"
         var SETTINGS_MAP_SHARED_PREFERENCE_NAME = "SETTINGS_MAP_SHARED_PREFERENCE_NAME"
+        var SETTINGS_FRAGMENT_KEY = "SETTINGS_FRAGMENT_KEY"
+        var SETTINGS_FRAGMENT_VALUE = "SETTINGS_FRAGMENT_VALUE"
 
 
     }

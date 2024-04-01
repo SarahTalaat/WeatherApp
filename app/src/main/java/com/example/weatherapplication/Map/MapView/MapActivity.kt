@@ -270,8 +270,11 @@ class MapActivity : AppCompatActivity(), MapListener, GpsStatus.Listener ,
                     editor?.putString(Utils.Settings_MAP_SP_LON_KEY,longitude)
                     editor?.apply()
 
-
                 }
+
+                val intent = Intent(this, MapActivity::class.java)
+                intent.putExtra(Utils.SETTINGS_FRAGMENT_KEY, Utils.SETTINGS_FRAGMENT_VALUE)
+                startActivity(intent)
 
 
                 dialog.dismiss()
