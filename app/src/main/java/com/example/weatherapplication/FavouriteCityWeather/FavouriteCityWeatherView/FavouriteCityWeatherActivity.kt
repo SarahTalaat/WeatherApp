@@ -159,10 +159,28 @@ class FavouriteCityWeatherActivity : AppCompatActivity() {
 
                         tv_weatherStatus_InFavouriteCityWeatherActivity.setText(result.data?.modelWeatherArrayList?.get(2)?.modelWeather?.get(0)?.description)
 
-                        var tempratureFehrenheit = result.data?.modelWeatherArrayList?.get(0)?.modelMain?.feelsLike
+                        var temprature = result.data?.modelWeatherArrayList?.get(0)?.modelMain?.feelsLike
+                      /*
                         var tempratureCelsius = tempratureFehrenheit?.minus(273.15)
                         val tempFormated = String.format("%.2f", tempratureCelsius)
                         tv_degreeOfTemprature_InFavouriteCityWeatherActivity.setText(tempFormated+"°C")
+
+
+                       */
+
+                        val sharedPreferencesName = this@FavouriteCityWeatherActivity.getSharedPreferences(Utils.SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+                        var sp_unit_value =sharedPreferencesName?.getString(Utils.TEMPRATURE_KEY,null)
+
+                        if(sp_unit_value == null){
+
+                            if(sp_unit_value == Utils.CELSIUS){
+                                tv_degreeOfTemprature_InFavouriteCityWeatherActivity.setText("$temprature°C")
+                            }else if(sp_unit_value == Utils.FAHRENHEIT){
+                                tv_degreeOfTemprature_InFavouriteCityWeatherActivity.setText("$temprature°F")
+                            }else{
+                                tv_degreeOfTemprature_InFavouriteCityWeatherActivity.setText("$temprature°K")
+                            }
+                        }
 
                         var imageIconCode = result.data?.modelWeatherArrayList?.get(0)?.modelWeather?.get(0)?.icon
                         var imageIcon = "https://openweathermap.org/img/wn/$imageIconCode@2x.png"

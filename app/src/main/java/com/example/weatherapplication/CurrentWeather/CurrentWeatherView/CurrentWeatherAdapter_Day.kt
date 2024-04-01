@@ -12,6 +12,7 @@ import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_WeatherArrayList
 import com.example.weatherapplication.R
 import java.time.LocalDate
@@ -157,6 +158,7 @@ class CurrentWeatherAdapter_Day: RecyclerView.Adapter<CurrentWeatherAdapter_Day.
             var maxTemp =
                 weatherArrayList_InCurrentWeatherAdapter_Day.get(position).modelMain?.tempMax.toString()
 
+        /*
         var tempratureFehrenheit_minTemp = weatherArrayList_InCurrentWeatherAdapter_Day.get(position).modelMain?.tempMin
         var tempratureCelsius_minTemp = tempratureFehrenheit_minTemp?.minus(273.15)
         var tempFormated_minTemp = String.format("%.2f", tempratureCelsius_minTemp)
@@ -164,14 +166,25 @@ class CurrentWeatherAdapter_Day: RecyclerView.Adapter<CurrentWeatherAdapter_Day.
         var tempratureFehrenheit_maxTemp = weatherArrayList_InCurrentWeatherAdapter_Day.get(position).modelMain?.tempMax
         var tempratureCelsius_maxTemp = tempratureFehrenheit_maxTemp?.minus(273.15)
         var tempFormated_maxTemp = String.format("%.2f", tempratureCelsius_maxTemp)
+*/
+
+        val sharedPreferences = context_Instance_InCurrentWeatherAdapter_Day?.getSharedPreferences(Utils.SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+        var sp_unit_value =sharedPreferences?.getString(Utils.TEMPRATURE_KEY,null)
 
 
-
-            holder.tv_minTemp.setText("$tempFormated_minTemp°C")
-            holder.tv_maxTemp.setText("$tempFormated_maxTemp°C")
-
-
+            if(sp_unit_value == Utils.CELSIUS){
+                holder.tv_minTemp.setText("$minTemp°C")
+                holder.tv_maxTemp.setText("$maxTemp°C")
+            }else if(sp_unit_value == Utils.FAHRENHEIT){
+                holder.tv_minTemp.setText("$minTemp°F")
+                holder.tv_maxTemp.setText("$maxTemp°F")
+            }else{
+                holder.tv_minTemp.setText("$minTemp°K")
+                holder.tv_maxTemp.setText("$maxTemp°K")
+            }
 
 
     }
+
+
 }

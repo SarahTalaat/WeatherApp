@@ -185,10 +185,26 @@ class CurrentWeatherFragment : Fragment() {
 
                         tv_weatherStatus_InCurrentWeatherFagment.setText(result.data?.modelWeatherArrayList?.get(2)?.modelWeather?.get(0)?.description)
 
-                        var tempratureFehrenheit = result.data?.modelWeatherArrayList?.get(0)?.modelMain?.feelsLike
-                        var tempratureCelsius = tempratureFehrenheit?.minus(273.15)
+                        var temprature = result.data?.modelWeatherArrayList?.get(0)?.modelMain?.feelsLike
+                       /*
+                        var tempratureCelsius = temprature?.minus(273.15)
                         val tempFormated = String.format("%.2f", tempratureCelsius)
                         tv_degreeOfTemprature_InCurrentWeatherFagment.setText(tempFormated+"°C")
+                        */
+
+                        val sharedPreferencesName = context?.getSharedPreferences(Utils.SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+                        var sp_unit_value =sharedPreferencesName?.getString(Utils.TEMPRATURE_KEY,null)
+
+
+
+                            if(sp_unit_value == Utils.CELSIUS){
+                                tv_degreeOfTemprature_InCurrentWeatherFagment.setText("$temprature°C")
+                            }else if(sp_unit_value == Utils.FAHRENHEIT){
+                                tv_degreeOfTemprature_InCurrentWeatherFagment.setText("$temprature°F")
+                            }else{
+                                tv_degreeOfTemprature_InCurrentWeatherFagment.setText("$temprature°K")
+                            }
+
 
                         var imageIconCode = result.data?.modelWeatherArrayList?.get(0)?.modelWeather?.get(0)?.icon
                         var imageIcon = "https://openweathermap.org/img/wn/$imageIconCode@2x.png"
@@ -440,12 +456,13 @@ class CurrentWeatherFragment : Fragment() {
 
         if(sp_windSpeed_value == null){
 
-        }else if(sp_windSpeed_value == Utils.KELVIN){
+             if(sp_windSpeed_value == Utils.CELSIUS){
 
-        }else if(sp_windSpeed_value == Utils.CELSIUS){
+            }else if(sp_windSpeed_value == Utils.FAHRENHEIT){
 
-        }else if(sp_windSpeed_value == Utils.FAHRENHEIT){
+            }else{
 
+            }
         }
 
     }

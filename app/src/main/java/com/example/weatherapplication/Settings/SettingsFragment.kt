@@ -35,7 +35,6 @@ class SettingsFragment : Fragment() {
         val radioGroupLanguage = view.findViewById<RadioGroup>(R.id.radioGroupLanguage)
         val radioGroupTemperature = view.findViewById<RadioGroup>(R.id.radioGroupTemperature)
         val radioGroupWindSpeed = view.findViewById<RadioGroup>(R.id.radioGroupWindSpeed)
-        val radioGroupNotification = view.findViewById<RadioGroup>(R.id.radioGroupNotification)
 
         // Set listeners for each RadioGroup
         radioGroupLocation.setOnCheckedChangeListener { group, checkedId ->
@@ -93,16 +92,6 @@ class SettingsFragment : Fragment() {
             Log.i("Settings", "onViewCreated: Wind Speed: $selectedWindSpeed")
         }
 
-        radioGroupNotification.setOnCheckedChangeListener { group, checkedId ->
-            val radioButton: RadioButton = view.findViewById(checkedId)
-            val selectedNotification = radioButton.text.toString()
 
-            val sharedPreferences = context?.getSharedPreferences(Utils.SHARED_PREFS_NAME, Context.MODE_PRIVATE)
-            val editor = sharedPreferences?.edit()
-            editor?.putString(Utils.NOTIFICATION_KEY, selectedNotification)
-            editor?.apply()
-
-            Log.i("Settings", "onViewCreated: Notification: $selectedNotification ")
-        }
     }
 }
