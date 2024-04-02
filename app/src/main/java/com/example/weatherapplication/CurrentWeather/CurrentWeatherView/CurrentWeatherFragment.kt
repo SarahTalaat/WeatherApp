@@ -582,7 +582,7 @@ class CurrentWeatherFragment : Fragment() {
                     android.Manifest.permission.ACCESS_COARSE_LOCATION
 
                 ),
-                REQUEST_LOCATION_CODE 
+                REQUEST_LOCATION_CODE  
             )
         }
     }
