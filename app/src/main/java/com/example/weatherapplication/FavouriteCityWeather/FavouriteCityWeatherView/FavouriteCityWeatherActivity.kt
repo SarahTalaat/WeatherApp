@@ -125,6 +125,10 @@ class FavouriteCityWeatherActivity : AppCompatActivity() {
                     is ApiState.Success_ModelTime_Local_InApiState -> {
                         Log.i("TAG", "onCreate: favouritecityweather fragment : ApiState.Success_ModelTime_Local_InApiState")
                     }
+                    is ApiState.Success_ModelForecast_Local_InApiState -> {
+                        Log.i("TAG", "onCreate: favouritecityweather fragment : ApiState.Success_ModelForecast_Local_InApiState")
+
+                    }
                     is ApiState.Success_ModelFavouriteCity_Local_InApiState -> {
                         Log.i("TAG", "onCreate: favouritecityweather fragment : ApiState.Success_ModelFavouriteCity_Local_InApiState")
                     }

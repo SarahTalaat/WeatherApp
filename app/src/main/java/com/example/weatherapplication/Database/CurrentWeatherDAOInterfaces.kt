@@ -1,11 +1,9 @@
 package com.example.weatherapplication.Database
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.weatherapplication.Model.AlertModel.MyApplicationAlertModel.Model_Time
 import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_Forecast
 import kotlinx.coroutines.flow.Flow
 
@@ -19,7 +17,7 @@ interface CurrentWeatherDAOInterfaces {
     @Insert(onConflict =  OnConflictStrategy.IGNORE)
     suspend fun insertModelForecast_InDAOInterface (modelForecast: Model_Forecast)
 
-    @Delete
-    suspend fun deleteModelForecast_InDAOInterface(modelForecast: Model_Forecast): Int
+    @Query("DELETE FROM current_weather_table")
+    suspend fun deleteAllModelForecast_InDAOInterface(modelForecast: Model_Forecast): Int
 
 }
