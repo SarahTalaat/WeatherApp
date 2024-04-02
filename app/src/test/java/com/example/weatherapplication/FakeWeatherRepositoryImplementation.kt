@@ -14,6 +14,7 @@ import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_M
 import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_Sys
 import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_Weather
 import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_WeatherArrayList
+import com.example.weatherapplication.Model.CurrentWeatherModel.MyApplicationCurrentWeatherModel.Model_Forecast_Database
 
 import com.example.weatherapplication.Model.FavouriteCityModel.MyApplicationFavouriteCityModel.Model_FavouriteCity
 import com.example.weatherapplication.Network.FakeWeatherRemoteDataSourceImplementation
@@ -184,8 +185,20 @@ class FakeWeatherRepositoryImplementation: WeatherRepositoryInterface {
         fakeLocalDataSource.deleteModelTimeFromDatabase_InLDS(modelTime)
     }
 
+    override suspend fun getAllStoredModelForecast_FromLDS_InWeatherRepository(): Flow<List<Model_Forecast_Database>> {
+        return fakeLocalDataSource.getAllStoredModelForecastFromDatabase_InLDS()
+    }
 
-     fun createFakeFavouriteCities(): List<Model_FavouriteCity> {
+    override suspend fun insertModelForecast_FromLDS_InWeatherRepository(modelForecastDatabase: Model_Forecast_Database) {
+        fakeLocalDataSource.insertModelForecastIntoDatabase_InLDS(modelForecastDatabase)
+    }
+
+    override suspend fun deleteAllModelForecast_FromLDS_InWeatherRepository() {
+        fakeLocalDataSource.deleteAllModelForecastFromDatabase_InLDS()
+    }
+
+
+    fun createFakeFavouriteCities(): List<Model_FavouriteCity> {
         return listOf(
             Model_FavouriteCity(
                 id = 1,
