@@ -11,10 +11,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import androidx.lifecycle.lifecycleScope
 import com.example.weatherapplication.Constants.Utils
 import com.example.weatherapplication.Map.MapView.MapActivity
 import com.example.weatherapplication.R
 import com.example.weatherapplication.SharedPreferences.SharedPrefrences
+import com.example.weatherapplication.TemperatureUnitManager
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 
@@ -83,8 +86,14 @@ class SettingsFragment : Fragment() {
             editor?.putString(Utils.TEMPRATURE_KEY, selectedTemperature)
             editor?.apply()
 
+            lifecycleScope.launch {
+                Log.i("Settings", "onViewCreated: Settings:  $selectedTemperature")
+                TemperatureUnitManager.updateTemperatureUnit(selectedTemperature)
+            }
+
             Log.i("Settings", "onViewCreated: Temprature: $selectedTemperature")
         }
+
 
         radioGroupWindSpeed.setOnCheckedChangeListener { group, checkedId ->
             val radioButton: RadioButton = view.findViewById(checkedId)
