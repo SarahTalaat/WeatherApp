@@ -8,6 +8,7 @@ import com.example.weatherapplication.Model.FavouriteCityModel.MyApplicationFavo
 import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_Forecast
 import com.example.weatherapplication.Model.AlertModel.APIModel.Model_Alert
 import com.example.weatherapplication.Model.AlertModel.MyApplicationAlertModel.Model_Time
+import com.example.weatherapplication.Model.CurrentWeatherModel.MyApplicationCurrentWeatherModel.Model_Forecast_Database
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -93,12 +94,12 @@ class WeatherRepositoryImplementation  constructor(
 
     }
 
-    override suspend fun getAllStoredModelForecast_FromLDS_InWeatherRepository(): Flow<List<Model_Forecast>> {
+    override suspend fun getAllStoredModelForecast_FromLDS_InWeatherRepository(): Flow<List<Model_Forecast_Database>> {
         return weatherLocalDataSourceInterface_Instance.getAllStoredModelForecastFromDatabase_InLDS()
     }
 
-    override suspend fun insertModelForecast_FromLDS_InWeatherRepository(modelForecast: Model_Forecast) {
-        weatherLocalDataSourceInterface_Instance.insertModelForecastIntoDatabase_InLDS(modelForecast)
+    override suspend fun insertModelForecast_FromLDS_InWeatherRepository(modelForecastDatabase: Model_Forecast_Database) {
+       weatherLocalDataSourceInterface_Instance.insertModelForecastIntoDatabase_InLDS(modelForecastDatabase)
     }
 
     override suspend fun deleteAllModelForecast_FromLDS_InWeatherRepository() {

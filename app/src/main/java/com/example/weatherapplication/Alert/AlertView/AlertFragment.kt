@@ -154,6 +154,9 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
                         Log.i("TAG", "onViewCreated: AlertFragment APIStateResult sucess model favourite city ")
 
                     }
+                  is ApiState.Success_ModelForecast_Local_InApiState -> {
+                      Log.i("TAG", "onViewCreated: Alert Fragment ApiState.Success_ModelForecast_Local_InApiState ")
+                  }
                 }
             }
         }
@@ -175,6 +178,10 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
                     }
                     is ApiState.Success_ModelFavouriteCity_Local_InApiState -> {
                         Log.i("TAG", "onViewCreated: AlertFragment APIStateResult sucess model favourite city 2")
+
+                    }
+                    is ApiState.Success_ModelForecast_Local_InApiState ->{
+                        Log.i("TAG", "onViewCreated: AlertFragment ApiState.Success_ModelForecast_Local_InApiState 2")
 
                     }
                     is ApiState.Failure -> {

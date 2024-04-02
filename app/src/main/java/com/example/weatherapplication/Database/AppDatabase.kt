@@ -11,12 +11,13 @@ import com.example.weatherapplication.Model.AlertModel.MyApplicationAlertModel.M
 import com.example.weatherapplication.Model.CurrentWeatherModel.MyApplicationCurrentWeatherModel.CityConverter
 import com.example.weatherapplication.Model.CurrentWeatherModel.MyApplicationCurrentWeatherModel.Converters
 import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_Forecast
+import com.example.weatherapplication.Model.CurrentWeatherModel.MyApplicationCurrentWeatherModel.ForecastConverter
 import com.example.weatherapplication.Model.CurrentWeatherModel.MyApplicationCurrentWeatherModel.Model_Forecast_Database
 import com.example.weatherapplication.Model.FavouriteCityModel.MyApplicationFavouriteCityModel.Model_FavouriteCity
 
 
 @Database(entities = arrayOf(Model_FavouriteCity::class , Model_Time::class , Model_Forecast_Database::class) , version = 7)
-@TypeConverters(Converters::class , CityConverter::class)
+@TypeConverters(Converters::class , CityConverter::class, ForecastConverter::class)
 abstract class AppDatabase: RoomDatabase() {
                 //productsDao
     abstract fun getAllFavouriteCity_FromDAO_InAppDatabase(): WeatherDAOInterface
