@@ -93,4 +93,16 @@ class WeatherRepositoryImplementation  constructor(
 
     }
 
+    override suspend fun getAllStoredModelForecast_FromLDS_InWeatherRepository(): Flow<List<Model_Forecast>> {
+        return weatherLocalDataSourceInterface_Instance.getAllStoredModelForecastFromDatabase_InLDS()
+    }
+
+    override suspend fun insertModelForecast_FromLDS_InWeatherRepository(modelForecast: Model_Forecast) {
+        weatherLocalDataSourceInterface_Instance.insertModelForecastIntoDatabase_InLDS(modelForecast)
+    }
+
+    override suspend fun deleteAllModelForecast_FromLDS_InWeatherRepository(modelForecast: Model_Forecast) {
+        weatherLocalDataSourceInterface_Instance.deleteAllModelForecastFromDatabase_InLDS(modelForecast)
+    }
+
 }

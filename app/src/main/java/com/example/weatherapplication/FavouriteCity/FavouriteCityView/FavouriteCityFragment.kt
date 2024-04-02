@@ -103,6 +103,10 @@ class FavouriteCityFragment : Fragment(), OnFavouriteCityClickListenerInterface 
                     is ApiState.Success_ModelTime_Local_InApiState -> {
                         Log.i("TAG", "onViewCreated: favourite city fragment: ApiState.Success_ModelTime_Local_InApiState ")
                     }
+                    is ApiState.Success_ModelForecast_Local_InApiState -> {
+                        Log.i("TAG", "onViewCreated: favourite city fragment: ApiState.Success_ModelForecast_Local_InApiState ")
+
+                    }
                     is ApiState.Success_ModelFavouriteCity_Local_InApiState -> {
                         progressBar.visibility = View.GONE
                         recyclerView_Instance_InFavouriteCityActivity.visibility = View.VISIBLE

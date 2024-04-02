@@ -3,6 +3,8 @@ package com.example.productsmvvm.AllProducts.AllProductsViewModel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_Forecast
+
 //import com.example.productsmvvm.Model.Products
 import com.example.weatherapplication.Repository.WeatherRepositoryInterface
 import com.example.weatherapplication.Network.ApiState
@@ -17,6 +19,11 @@ class CurrentWeatherViewModel(private val weatherRepositoryInterface_Instance_Co
 
     private var forecastMutableStateFlow_InCurrentWeatherViewModel: MutableStateFlow<ApiState> = MutableStateFlow<ApiState>(ApiState.Loading)
     val forecastStateFlow_InCurrentWeatherViewModel: StateFlow<ApiState> = forecastMutableStateFlow_InCurrentWeatherViewModel
+
+    private var forcastDatabaseMutableStateFlowList_InCurrentWeatherViewModel: MutableStateFlow<ApiState> = MutableStateFlow<ApiState>(ApiState.Loading)
+    //favouriteCity
+    val forecastDatabaseStateFlowList_InCurrentWeatherViewModel: StateFlow<ApiState> = forcastDatabaseMutableStateFlowList_InCurrentWeatherViewModel
+
 
     fun getForecast_FromRetrofit_InCurrentWeatherViewModel(lat: String, lon: String,units: String , lang: String, appid: String){
 
@@ -36,6 +43,37 @@ class CurrentWeatherViewModel(private val weatherRepositoryInterface_Instance_Co
 
         Log.i("TAG", "getForecast_FromRetrofit_InCurrentWeatherViewModel: (after the viewModelScope): lat: $lat , lon: $lon , appid: $appid")
     }
+
+
+    init {
+        getAllLocalCurrentWeather_StoredInDatabase_InCurrentWeatherViewModel()
+    }
+
+    fun deleteCurrentWeather_InCurrentWeatherViewModel(forecast: Model_Forecast){
+        viewModelScope.launch(Dispatchers.IO){
+            weatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.deleteAllModelForecast_FromLDS_InWeatherRepository(forecast)
+            getAllLocalCurrentWeather_StoredInDatabase_InCurrentWeatherViewModel()
+        }
+    }
+
+    fun insertCurrentWeather_InCurrentWeatherViewModel(forecast: Model_Forecast){
+        viewModelScope.launch(Dispatchers.IO){
+            weatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.insertModelForecast_FromLDS_InWeatherRepository(forecast)
+            getAllLocalCurrentWeather_StoredInDatabase_InCurrentWeatherViewModel()
+        }
+    }
+
+
+    fun getAllLocalCurrentWeather_StoredInDatabase_InCurrentWeatherViewModel(){
+        viewModelScope.launch(Dispatchers.IO){
+            weatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getAllStoredModelForecast_FromLDS_InWeatherRepository()
+                .catch { e ->
+                    forcastDatabaseMutableStateFlowList_InCurrentWeatherViewModel.value = ApiState.Failure(e)
+                }
+                .collect{data ->
+                    forcastDatabaseMutableStateFlowList_InCurrentWeatherViewModel.value= ApiState.Success_ModelForecast_Local_InApiState(data)
+                }
+        }
 
     /*
         private var productsMutableLiveDataList_InAllProductsViewModel: MutableLiveData<List<Products>> = MutableLiveData<List<Products>>()
@@ -180,4 +218,5 @@ class CurrentWeatherViewModel(private val weatherRepositoryInterface_Instance_Co
 */
 
 
+}
 }

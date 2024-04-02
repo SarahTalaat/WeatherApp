@@ -12,8 +12,8 @@ sealed class ApiState {
     object Loading: ApiState()
 
     class Success_ModelAlert_Remote_InApiState(val data: Model_Alert?): ApiState()
-
     class Success_ModelTime_Local_InApiState(val data: List<Model_Time>): ApiState()
     class Success_ModelFavouriteCity_Local_InApiState(val data: List<Model_FavouriteCity>): ApiState()
 
+    class Success_ModelForecast_Local_InApiState(val data: List<Model_Forecast>): ApiState()
 }

@@ -21,6 +21,13 @@ interface WeatherRepositoryInterface {
     suspend fun deleteModelTime_FromLDS_InWeatherRepository(modelTime: Model_Time)
 
 
+
+
+    suspend fun getAllStoredModelForecast_FromLDS_InWeatherRepository(): Flow<List<Model_Forecast>>
+    suspend fun insertModelForecast_FromLDS_InWeatherRepository(modelForecast: Model_Forecast)
+    suspend fun deleteAllModelForecast_FromLDS_InWeatherRepository(modelForecast: Model_Forecast)
+
+
 /*
     suspend fun getAllStoredModelForecast_FromLDS_InWeatherRepository(): Flow<List<Model_Forecast>>
     suspend fun insertModelForecast_FromLDS_InWeatherRepository(modelForecast: Model_Forecast)
