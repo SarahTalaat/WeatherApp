@@ -4,6 +4,7 @@ import com.example.weatherapplication.Model.FavouriteCityModel.MyApplicationFavo
 import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_Forecast
 import com.example.weatherapplication.Model.AlertModel.APIModel.Model_Alert
 import com.example.weatherapplication.Model.AlertModel.MyApplicationAlertModel.Model_Time
+import com.example.weatherapplication.Model.CurrentWeatherModel.MyApplicationCurrentWeatherModel.Model_Forecast_Database
 import kotlinx.coroutines.flow.Flow
 
 interface WeatherRepositoryInterface {
@@ -23,8 +24,8 @@ interface WeatherRepositoryInterface {
 
 
 
-    suspend fun getAllStoredModelForecast_FromLDS_InWeatherRepository(): Flow<List<Model_Forecast>>
-    suspend fun insertModelForecast_FromLDS_InWeatherRepository(modelForecast: Model_Forecast)
+    suspend fun getAllStoredModelForecast_FromLDS_InWeatherRepository(): Flow<List<Model_Forecast_Database>>
+    suspend fun insertModelForecast_FromLDS_InWeatherRepository(modelForecastDatabase: Model_Forecast_Database)
     suspend fun deleteAllModelForecast_FromLDS_InWeatherRepository()
 
 

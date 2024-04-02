@@ -6,6 +6,7 @@ import com.example.weatherapplication.Database.CurrentWeatherDAOInterfaces
 import com.example.weatherapplication.Database.ModelTimeDAOInterface
 import com.example.weatherapplication.Model.AlertModel.MyApplicationAlertModel.Model_Time
 import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_Forecast
+import com.example.weatherapplication.Model.CurrentWeatherModel.MyApplicationCurrentWeatherModel.Model_Forecast_Database
 import com.example.weatherapplication.Model.FavouriteCityModel.MyApplicationFavouriteCityModel.Model_FavouriteCity
 import kotlinx.coroutines.flow.Flow
 
@@ -52,15 +53,15 @@ class WeatherLocalDataSourceImplementation (context: Context) : WeatherLocalData
         return modelTimeDAOInterface_InLDSImp.getAllStoredModelTime_InDAOInterface()
     }
 
-    override suspend fun insertModelForecastIntoDatabase_InLDS(modelForecast: Model_Forecast) {
-        modelCurrentWeatherDAOInterface_InLDSImp.insertModelForecast_InDAOInterface(modelForecast)
+    override suspend fun insertModelForecastIntoDatabase_InLDS(modelForecastDatabase: Model_Forecast_Database) {
+        modelCurrentWeatherDAOInterface_InLDSImp.insertModelForecast_InDAOInterface(modelForecastDatabase)
     }
 
     override suspend fun deleteAllModelForecastFromDatabase_InLDS() {
         modelCurrentWeatherDAOInterface_InLDSImp.deleteAllModelForecast_InDAOInterface()
     }
 
-    override suspend fun getAllStoredModelForecastFromDatabase_InLDS(): Flow<List<Model_Forecast>> {
+    override suspend fun getAllStoredModelForecastFromDatabase_InLDS(): Flow<List<Model_Forecast_Database>> {
         return modelCurrentWeatherDAOInterface_InLDSImp.getAllStoredModelForecast_InDAOInterface()
     }
 

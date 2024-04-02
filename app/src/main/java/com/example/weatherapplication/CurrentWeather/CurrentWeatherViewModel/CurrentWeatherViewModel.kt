@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_Forecast
+import com.example.weatherapplication.Model.CurrentWeatherModel.MyApplicationCurrentWeatherModel.Model_Forecast_Database
 
 //import com.example.productsmvvm.Model.Products
 import com.example.weatherapplication.Repository.WeatherRepositoryInterface
@@ -56,9 +57,9 @@ class CurrentWeatherViewModel(private val weatherRepositoryInterface_Instance_Co
         }
     }
 
-    fun insertModelForecast_InCurrentWeatherViewModel(forecast: Model_Forecast){
+    fun insertModelForecast_InCurrentWeatherViewModel(forecastDatabase: Model_Forecast_Database){
         viewModelScope.launch(Dispatchers.IO){
-            weatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.insertModelForecast_FromLDS_InWeatherRepository(forecast)
+            weatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.insertModelForecast_FromLDS_InWeatherRepository(forecastDatabase)
             getAllLocalModelForecast_StoredInDatabase_InCurrentWeatherViewModel()
         }
     }

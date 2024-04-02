@@ -1,6 +1,7 @@
-package com.example.weatherapplication.Model.CurrentWeatherModel.APIModel
+package com.example.weatherapplication.Model.CurrentWeatherModel.MyApplicationCurrentWeatherModel
 
 import androidx.room.TypeConverter
+import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_WeatherArrayList
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
