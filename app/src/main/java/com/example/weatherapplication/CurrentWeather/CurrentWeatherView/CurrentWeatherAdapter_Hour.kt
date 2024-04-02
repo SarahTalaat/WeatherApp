@@ -172,7 +172,13 @@ class CurrentWeatherAdapter_Hour: RecyclerView.Adapter<CurrentWeatherAdapter_Hou
             timeListSplit =weatherArrayList_InCurrentWeatherAdapter.get(position).dtTxt?.split(" ")
             var imageIconCode: String? = weatherArrayList_InCurrentWeatherAdapter.get(position).modelWeather.get(0).icon
             var imageUrl_InMyViewHolder_InCurrentWeatherAdapter: String? = "https://openweathermap.org/img/wn/$imageIconCode@2x.png"
-            Glide.with(context_Instance_InCurrentWeatherAdapter).load(imageUrl_InMyViewHolder_InCurrentWeatherAdapter).into(holder.img_weatherStatus)
+
+        Log.i("X", "onBindViewHolder: $imageUrl_InMyViewHolder_InCurrentWeatherAdapter ")
+
+
+
+
+        Glide.with(context_Instance_InCurrentWeatherAdapter).load(imageUrl_InMyViewHolder_InCurrentWeatherAdapter).into(holder.img_weatherStatus)
             var hourText = timeListSplit?.get(1)
             if(hourText!= null){
                 when(hourText){

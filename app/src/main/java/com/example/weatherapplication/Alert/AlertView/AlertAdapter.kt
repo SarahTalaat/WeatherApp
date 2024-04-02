@@ -141,8 +141,15 @@ class AlertAdapter: RecyclerView.Adapter<AlertAdapter.MyViewHolder_InAlertAdapte
 
         Log.i("TAG", "onBindViewHolder: Day Adapter: position = " +position)
 
-        holder.tv_startDate.setText(modelTimeArrayList_InAlertAdapter.get(position).startDate)
-        holder.tv_endDate.setText(modelTimeArrayList_InAlertAdapter.get(position).endDate)
+        var startTimeList = modelTimeArrayList_InAlertAdapter.get(position).startDate.split(" ")
+        var endTimeList = modelTimeArrayList_InAlertAdapter.get(position).endDate.split(" ")
+
+        var startTime = "${startTimeList.get(0)} ${startTimeList.get(1)} ${startTimeList.get(2)} ${startTimeList.get(3)}"
+        var endTime = "${endTimeList.get(0)} ${endTimeList.get(1)} ${endTimeList.get(2)} ${endTimeList.get(3)}"
+
+
+        holder.tv_startDate.setText(startTime)
+        holder.tv_endDate.setText(endTime)
         holder.tv_specficTime.setText(modelTimeArrayList_InAlertAdapter.get(position).specificTime)
         holder.tv_city.setText(modelTimeArrayList_InAlertAdapter.get(position).city)
         holder.btn_delete.setOnClickListener(){

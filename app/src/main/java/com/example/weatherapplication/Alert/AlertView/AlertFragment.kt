@@ -350,7 +350,7 @@ class AlertFragment : Fragment() , OnAlertClickListenerInterface {
 
             val scheduledTime = calendar.time
             Log.i("TAG", "processSelectedDateTime: scheduledTime: $scheduledTime")
-            model_Time_Instance.specificTime=scheduledTime.toString()
+            model_Time_Instance.specificTime= "${selectedTime.hours} ${selectedTime.minutes}"
             //  alertViewModel_Instance_InAlertFragmet.insertModelTime_InAlertViewModel(model_Time_Instance)
             Log.i("NULL", "processSelectedDateTime: specificTime${index+1}")
 
