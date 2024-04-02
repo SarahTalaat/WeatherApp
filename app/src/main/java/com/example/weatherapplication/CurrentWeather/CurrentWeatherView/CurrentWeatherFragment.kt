@@ -45,6 +45,8 @@ import androidx.lifecycle.lifecycleScope
 import com.example.productsmvvm.Database.WeatherLocalDataSourceImplementation
 import com.example.weatherapplication.Model.CurrentWeatherModel.APIModel.Model_WeatherArrayList
 import com.example.weatherapplication.Network.ApiState
+import com.example.weatherapplication.TemperatureUnitManager
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -193,18 +195,28 @@ class CurrentWeatherFragment : Fragment() {
                         tv_date_InCurrentWeatherFagment.text = formattedDate
                         tv_weatherStatus_InCurrentWeatherFagment.setText(result.data?.modelWeatherArrayList?.get(2)?.modelWeather?.get(0)?.description)
 
-                        var temprature = result.data?.modelWeatherArrayList?.get(0)?.modelMain?.feelsLike
-                       /*
-                        var tempratureCelsius = temprature?.minus(273.15)
-                        val tempFormated = String.format("%.2f", tempratureCelsius)
-                        tv_degreeOfTemprature_InCurrentWeatherFagment.setText(tempFormated+"°C")
-                        */
-
                         val sharedPreferencesName = context?.getSharedPreferences(Utils.SHARED_PREFS_NAME, Context.MODE_PRIVATE)
                         var sp_unit_value =sharedPreferencesName?.getString(Utils.TEMPRATURE_KEY,null)
+                        var temprature = result.data?.modelWeatherArrayList?.get(0)?.modelMain?.feelsLike
+
+
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            TemperatureUnitManager.temperatureUnitFlow.collect { spUnitValue ->
+                                Log.i("Settings", "onViewCreated: CurrentWeather: $spUnitValue")
+                                val temperature = result.data?.modelWeatherArrayList?.get(0)?.modelMain?.feelsLike
+                                Log.i("Settings", "onViewCreated: currentweather temperaure: $temperature ")
+                                when (spUnitValue) {
+                                    Utils.CELSIUS -> tv_degreeOfTemprature_InCurrentWeatherFagment.setText("$temperature°C")
+                                    Utils.FAHRENHEIT -> tv_degreeOfTemprature_InCurrentWeatherFagment.setText("$temperature°F")
+                                    else -> tv_degreeOfTemprature_InCurrentWeatherFagment.setText("$temperature°K")
+                                }
+                            }
+                        }
 
 
 
+
+/*
                             if(sp_unit_value == Utils.CELSIUS){
                                 tv_degreeOfTemprature_InCurrentWeatherFagment.setText("$temprature°C")
                             }else if(sp_unit_value == Utils.FAHRENHEIT){
@@ -212,7 +224,12 @@ class CurrentWeatherFragment : Fragment() {
                             }else{
                                 tv_degreeOfTemprature_InCurrentWeatherFagment.setText("$temprature°K")
                             }
-
+                        */
+                        /*
+                          var tempratureCelsius = temprature?.minus(273.15)
+                          val tempFormated = String.format("%.2f", tempratureCelsius)
+                          tv_degreeOfTemprature_InCurrentWeatherFagment.setText(tempFormated+"°C")
+                          */
 
                         var imageIconCode = result.data?.modelWeatherArrayList?.get(0)?.modelWeather?.get(0)?.icon
                         var imageIcon = "https://openweathermap.org/img/wn/$imageIconCode@2x.png"
