@@ -18,7 +18,7 @@ interface WeatherLocalDataSourceInterface {
 
 
     suspend fun insertModelForecastIntoDatabase_InLDS(modelForecast: Model_Forecast)
-    suspend fun deleteAllModelForecastFromDatabase_InLDS(modelForecast: Model_Forecast)
+    suspend fun deleteAllModelForecastFromDatabase_InLDS()
     suspend fun getAllStoredModelForecastFromDatabase_InLDS() : Flow<List<Model_Forecast>>
 
 }

@@ -101,8 +101,8 @@ class WeatherRepositoryImplementation  constructor(
         weatherLocalDataSourceInterface_Instance.insertModelForecastIntoDatabase_InLDS(modelForecast)
     }
 
-    override suspend fun deleteAllModelForecast_FromLDS_InWeatherRepository(modelForecast: Model_Forecast) {
-        weatherLocalDataSourceInterface_Instance.deleteAllModelForecastFromDatabase_InLDS(modelForecast)
+    override suspend fun deleteAllModelForecast_FromLDS_InWeatherRepository() {
+        weatherLocalDataSourceInterface_Instance.deleteAllModelForecastFromDatabase_InLDS()
     }
 
 }

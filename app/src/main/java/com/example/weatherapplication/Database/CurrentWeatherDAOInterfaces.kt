@@ -18,6 +18,6 @@ interface CurrentWeatherDAOInterfaces {
     suspend fun insertModelForecast_InDAOInterface (modelForecast: Model_Forecast)
 
     @Query("DELETE FROM current_weather_table")
-    suspend fun deleteAllModelForecast_InDAOInterface(modelForecast: Model_Forecast): Int
+    suspend fun deleteAllModelForecast_InDAOInterface(): Int
 
 }

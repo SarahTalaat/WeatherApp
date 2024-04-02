@@ -46,25 +46,25 @@ class CurrentWeatherViewModel(private val weatherRepositoryInterface_Instance_Co
 
 
     init {
-        getAllLocalCurrentWeather_StoredInDatabase_InCurrentWeatherViewModel()
+        getAllLocalModelForecast_StoredInDatabase_InCurrentWeatherViewModel()
     }
 
-    fun deleteCurrentWeather_InCurrentWeatherViewModel(forecast: Model_Forecast){
+    fun deleteAllModelForecast_InCurrentWeatherViewModel(){
         viewModelScope.launch(Dispatchers.IO){
-            weatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.deleteAllModelForecast_FromLDS_InWeatherRepository(forecast)
-            getAllLocalCurrentWeather_StoredInDatabase_InCurrentWeatherViewModel()
+            weatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.deleteAllModelForecast_FromLDS_InWeatherRepository()
+            getAllLocalModelForecast_StoredInDatabase_InCurrentWeatherViewModel()
         }
     }
 
-    fun insertCurrentWeather_InCurrentWeatherViewModel(forecast: Model_Forecast){
+    fun insertModelForecast_InCurrentWeatherViewModel(forecast: Model_Forecast){
         viewModelScope.launch(Dispatchers.IO){
             weatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.insertModelForecast_FromLDS_InWeatherRepository(forecast)
-            getAllLocalCurrentWeather_StoredInDatabase_InCurrentWeatherViewModel()
+            getAllLocalModelForecast_StoredInDatabase_InCurrentWeatherViewModel()
         }
     }
 
 
-    fun getAllLocalCurrentWeather_StoredInDatabase_InCurrentWeatherViewModel(){
+    fun getAllLocalModelForecast_StoredInDatabase_InCurrentWeatherViewModel(){
         viewModelScope.launch(Dispatchers.IO){
             weatherRepositoryInterface_Instance_ConstructorParameter_InCurrentWeatherViewModel.getAllStoredModelForecast_FromLDS_InWeatherRepository()
                 .catch { e ->

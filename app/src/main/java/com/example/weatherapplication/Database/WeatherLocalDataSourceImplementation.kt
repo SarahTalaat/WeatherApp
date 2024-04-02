@@ -56,8 +56,8 @@ class WeatherLocalDataSourceImplementation (context: Context) : WeatherLocalData
         modelCurrentWeatherDAOInterface_InLDSImp.insertModelForecast_InDAOInterface(modelForecast)
     }
 
-    override suspend fun deleteAllModelForecastFromDatabase_InLDS(modelForecast: Model_Forecast) {
-        modelCurrentWeatherDAOInterface_InLDSImp.deleteAllModelForecast_InDAOInterface(modelForecast)
+    override suspend fun deleteAllModelForecastFromDatabase_InLDS() {
+        modelCurrentWeatherDAOInterface_InLDSImp.deleteAllModelForecast_InDAOInterface()
     }
 
     override suspend fun getAllStoredModelForecastFromDatabase_InLDS(): Flow<List<Model_Forecast>> {
